@@ -4,11 +4,16 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotateSpeed = 10f;
+    [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float gravity = -9.81f;
 
     private CharacterController controller;
     private Vector3 moveDir;
     private float verticalVelocity;
+    private const float GroundedVerticalVelocity = -2f;
+
+    public bool IsGrounded => controller.isGrounded;
+    public float VerticalVelocity => verticalVelocity;
 
     private void Awake()
     {
@@ -17,55 +22,60 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetMoveDirection(Vector3 input)
     {
-        moveDir = input;
+        moveDir = Vector3.ClampMagnitude(input, 1f);
     }
-    
+
     private void Update()
     {
+        float deltaTime = Time.deltaTime;
+
         // 중력
-        UpdateVerticalVelocity();
-        
-        // 이동
-        Vector3 moveVelocity = CalculateMoveVelocity();
-        
+        ApplyGravity(deltaTime);
+
         // 회전
-        Rotate();
-        
-        moveVelocity.y = verticalVelocity;
-        
-        controller.Move(moveVelocity * Time.deltaTime);
+        Rotate(deltaTime);
+
+        // 이동
+        Move(deltaTime);
     }
 
-    private Vector3 CalculateMoveVelocity()
+    private void ApplyGravity(float deltaTime)
     {
-        if (moveDir.sqrMagnitude > 1f)
-        {
-            moveDir.Normalize();
-        }
-
-        return moveDir * moveSpeed;
-    }
-
-    private void UpdateVerticalVelocity()
-    {
-        verticalVelocity += gravity * Time.deltaTime;
-
         if (controller.isGrounded && verticalVelocity < 0f)
         {
-            verticalVelocity = -2f;
+            verticalVelocity = GroundedVerticalVelocity;
+        }
+        else
+        {
+            verticalVelocity += gravity * deltaTime;
         }
     }
 
-    private void Rotate()
+    private void Rotate(float deltaTime)
     {
-        if (moveDir.sqrMagnitude > 0.01f)
+        if (moveDir.sqrMagnitude < 0.01f) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            rotateSpeed * deltaTime);
+    }
+
+    private void Move(float deltaTime)
+    {
+        Vector3 velocity = moveDir * moveSpeed;
+        velocity.y = verticalVelocity;
+
+        controller.Move(velocity * deltaTime);
+    }
+
+    public void Jump()
+    {
+        if (controller.isGrounded)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                rotateSpeed * Time.deltaTime);
+            verticalVelocity += Mathf.Sqrt(jumpHeight * gravity * -2f);
         }
     }
 }

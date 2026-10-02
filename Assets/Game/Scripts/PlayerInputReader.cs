@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputReader : MonoBehaviour
 {
@@ -14,11 +15,15 @@ public class PlayerInputReader : MonoBehaviour
     
     private void OnEnable()
     {
+        input.Player.Jump.performed += OnJump;
+        
         input.Enable();
     }
 
     private void OnDisable()
     {
+        input.Player.Jump.performed -= OnJump;
+        
         input.Disable();
     }
 
@@ -38,5 +43,10 @@ public class PlayerInputReader : MonoBehaviour
         Vector3 moveDir = moveInput.x * cameraRight + moveInput.y * cameraForward;
         
         controller.Move(moveDir);
+    }
+
+    private void OnJump(InputAction.CallbackContext context)
+    {
+        controller.Jump();
     }
 }

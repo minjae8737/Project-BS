@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -16,5 +17,16 @@ public class PlayerController : MonoBehaviour
     {
         movement.SetMoveDirection(moveInput);
         animationController.SetSpeed(moveInput.magnitude);
+    }
+
+    public void Jump()
+    {
+        movement.Jump();
+    }
+
+    private void LateUpdate()
+    {
+        animationController.SetGrounded(movement.IsGrounded);
+        animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }
 }
