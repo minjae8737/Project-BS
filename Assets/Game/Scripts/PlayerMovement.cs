@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float gravity = -9.81f;
@@ -10,10 +9,12 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 moveDir;
     private float verticalVelocity;
+    private float horizontalVelocity;
     private const float GroundedVerticalVelocity = -2f;
 
     public bool IsGrounded => controller.isGrounded;
     public float VerticalVelocity => verticalVelocity;
+    public float HorizontalVelocity => horizontalVelocity;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
         moveDir = Vector3.ClampMagnitude(input, 1f);
     }
 
-    public void Tick(Vector3 input, float deltaTime)
+    public void Tick(Vector3 input, float moveSpeed, float deltaTime)
     {
         SetMoveDirection(input);
         
@@ -36,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
         Rotate(deltaTime);
 
         // 이동
-        Move(deltaTime);
+        Move(moveSpeed, deltaTime);
     }
 
     private void ApplyGravity(float deltaTime)
@@ -63,9 +64,11 @@ public class PlayerMovement : MonoBehaviour
             rotateSpeed * deltaTime);
     }
 
-    private void Move(float deltaTime)
+    private void Move(float moveSpeed, float deltaTime)
     {
         Vector3 velocity = moveDir * moveSpeed;
+        horizontalVelocity = velocity.magnitude;
+        
         velocity.y = verticalVelocity;
 
         controller.Move(velocity * deltaTime);

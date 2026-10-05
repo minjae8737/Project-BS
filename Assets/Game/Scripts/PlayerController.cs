@@ -1,22 +1,25 @@
+using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
+[Serializable]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
+    private PlayerStat stat;
     
     private void Awake()
     {
         if (cameraTransform == null)
-        {
-            cameraTransform = Camera.main.transform;
-        }
+            Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
         
         inputReader = GetComponent<PlayerInputReader>();
         movement = GetComponent<PlayerMovement>();
         animationController = GetComponent<PlayerAnimationController>();
+        stat = GetComponent<PlayerStat>();
     }
 
     private void OnEnable()
@@ -39,10 +42,10 @@ public class PlayerController : MonoBehaviour
         float deltaTime = Time.deltaTime;
 
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
-        
-        movement.Tick(moveDir, deltaTime);
-        
-        animationController.SetSpeed(moveDir.magnitude);
+
+        movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
+
+        animationController.SetSpeed(movement.HorizontalVelocity, stat.BaseSpeed);
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }

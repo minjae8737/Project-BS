@@ -492,6 +492,7 @@ GameObject:
   - component: {fileID: 829059571}
   - component: {fileID: 829059575}
   - component: {fileID: 829059572}
+  - component: {fileID: 829059576}
   - component: {fileID: 829059574}
   - component: {fileID: 829059573}
   m_Layer: 0
@@ -579,7 +580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd249e6ae0994dc18823635785d55982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
   rotateSpeed: 10
   jumpHeight: 2
   gravity: -9.81
@@ -595,6 +595,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4edf7c615a14455e8acd245fbb5db007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &829059576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829059566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcf214bb3d04268ad9cff9af8cb4cc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 7a69f83b1e1884f838cf9b4ad9c8c74d, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

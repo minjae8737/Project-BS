@@ -13,8 +13,13 @@ public class PlayerAnimationController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
     }
 
-    public void SetSpeed(float value)
+    public void SetSpeed(float moveSpeed,float baseSpeed)
     {
+        float value = 0;
+        
+        if (baseSpeed != 0) 
+            value = moveSpeed / baseSpeed;
+        
         anim.SetFloat(Speed, value);
     }
 
