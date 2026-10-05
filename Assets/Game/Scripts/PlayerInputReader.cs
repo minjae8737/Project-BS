@@ -1,12 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputReader : MonoBehaviour
 {
-    [SerializeField] private PlayerController controller;
-    
-    [SerializeField] private Transform cameraTransform;
     private PlayerInputActions input;
+    
+    private Vector2 moveInput = Vector2.zero;
+
+    public Vector2 MoveInput => moveInput;
+
+    public event Action JumpPressed;
     
     private void Awake()
     {
@@ -15,6 +19,9 @@ public class PlayerInputReader : MonoBehaviour
     
     private void OnEnable()
     {
+        input.Player.Move.performed += OnMove;
+        input.Player.Move.canceled += OnMove;
+        
         input.Player.Jump.performed += OnJump;
         
         input.Enable();
@@ -22,31 +29,21 @@ public class PlayerInputReader : MonoBehaviour
 
     private void OnDisable()
     {
+        input.Player.Move.performed -= OnMove;
+        input.Player.Move.canceled -= OnMove;
+        
         input.Player.Jump.performed -= OnJump;
         
         input.Disable();
     }
 
-    private void Update()
+    private void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
-        
-        Vector3 cameraForward = cameraTransform.forward;
-        Vector3 cameraRight = cameraTransform.right;
-        
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        Vector3 moveDir = moveInput.x * cameraRight + moveInput.y * cameraForward;
-        
-        controller.Move(moveDir);
-    }
+        moveInput = context.ReadValue<Vector2>();
+    }    
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        controller.Jump();
+        JumpPressed?.Invoke();
     }
 }

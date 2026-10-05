@@ -20,15 +20,15 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    public void SetMoveDirection(Vector3 input)
+    private void SetMoveDirection(Vector3 input)
     {
         moveDir = Vector3.ClampMagnitude(input, 1f);
     }
 
-    private void Update()
+    public void Tick(Vector3 input, float deltaTime)
     {
-        float deltaTime = Time.deltaTime;
-
+        SetMoveDirection(input);
+        
         // 중력
         ApplyGravity(deltaTime);
 
@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            verticalVelocity += Mathf.Sqrt(jumpHeight * gravity * -2f);
+            verticalVelocity = Mathf.Sqrt(jumpHeight * gravity * -2f);
         }
     }
 }
