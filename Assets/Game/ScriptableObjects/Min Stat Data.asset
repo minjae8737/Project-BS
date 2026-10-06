@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5880f2fb1c5d4cef823a208f9063ebf1, type: 3}
+  m_Name: Min Stat Data
+  m_EditorClassIdentifier: 
+  Rules:
+  - StatType: 0
+    ValueType: 0
+    MinValue: 0
+  - StatType: 1
+    ValueType: 0
+    MinValue: 0
+  - StatType: 2
+    ValueType: 1
+    MinValue: 0
+  - StatType: 3
+    ValueType: 0
+    MinValue: 0
+  - StatType: 4
+    ValueType: 1
+    MinValue: 0
+  - StatType: 5
+    ValueType: 1
+    MinValue: 0

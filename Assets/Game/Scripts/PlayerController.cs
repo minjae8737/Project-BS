@@ -12,9 +12,8 @@ public class PlayerController : MonoBehaviour
     private PlayerStat stat;
     
     private void Awake()
-    {
-        if (cameraTransform == null)
-            Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
+    { 
+        Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
         
         inputReader = GetComponent<PlayerInputReader>();
         movement = GetComponent<PlayerMovement>();
@@ -43,9 +42,9 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
 
-        movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
+        // movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
 
-        animationController.SetSpeed(movement.HorizontalVelocity, stat.BaseSpeed);
+        // animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseSpeed);
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }
