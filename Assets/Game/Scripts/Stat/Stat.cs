@@ -10,7 +10,7 @@ public enum StatType
     MoveSpeed
 }
 
-public enum StatValueType
+public enum StatModifierType
 {
     Flat,
     Percent

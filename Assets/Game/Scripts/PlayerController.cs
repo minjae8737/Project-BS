@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-[Serializable]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
@@ -42,9 +40,9 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
 
-        // movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
+        movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
 
-        // animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseSpeed);
+        animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseSpeed);
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }

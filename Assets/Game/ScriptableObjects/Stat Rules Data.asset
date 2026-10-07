@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5880f2fb1c5d4cef823a208f9063ebf1, type: 3}
-  m_Name: Min Stat Data
+  m_Name: Stat Rules Data
   m_EditorClassIdentifier: 
-  Rules:
+  rules:
   - StatType: 0
-    ValueType: 0
+    StatRoundingMode: 1
     MinValue: 0
   - StatType: 1
-    ValueType: 0
+    StatRoundingMode: 1
     MinValue: 0
   - StatType: 2
-    ValueType: 1
+    StatRoundingMode: 0
     MinValue: 0
   - StatType: 3
-    ValueType: 0
-    MinValue: 0
+    StatRoundingMode: 1
+    MinValue: 1
   - StatType: 4
-    ValueType: 1
+    StatRoundingMode: 0
     MinValue: 0
   - StatType: 5
-    ValueType: 1
-    MinValue: 0
+    StatRoundingMode: 0
+    MinValue: 2
