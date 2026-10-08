@@ -3,14 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class PlayerStat : MonoBehaviour
+public class UnitStat : MonoBehaviour
 {
     [SerializeField] private StatData statData;
     private Dictionary<StatType, StatSlot> stats;
+    private static readonly StatType[] AllStatTypes = 
+        (StatType[])Enum.GetValues(typeof(StatType));
 
-    public int Hp { get; private set; }
+    private int hp;
+
+    public int Hp
+    {
+        get
+        {
+            return hp;
+        }
+        private set
+        {
+            hp = (int)Mathf.Clamp(value, 0f, stats[StatType.MaxHp].FinalValue);
+        }
+    }
     public float MoveSpeed => stats[StatType.MoveSpeed].FinalValue;
     public float BaseSpeed => stats[StatType.MoveSpeed].BaseValue;
+    public bool IsDead => hp <= 0;
+    
+    public event Action Died;
+    public event Action Damaged;
 
     private void Awake()
     {
@@ -21,7 +39,7 @@ public class PlayerStat : MonoBehaviour
     
     public void Init(StatRulesData statRulesData)
     {
-        foreach (StatType statType in Enum.GetValues(typeof(StatType)))
+        foreach (StatType statType in AllStatTypes)
         {
             StatRule rule = statRulesData.GetRule(statType);
             Stat stat = statData.GetStat(statType);
@@ -38,6 +56,19 @@ public class PlayerStat : MonoBehaviour
             }
         }
 
-        Hp = (int)stats[StatType.MaxHp].FinalValue;
+        hp = (int)stats[StatType.MaxHp].FinalValue;
+    }
+
+    public void TakeDamage(float rawDamage)
+    {
+        if (IsDead) return;
+
+        int damage = DamageCalculator.CalculateDamage(rawDamage, stats[StatType.Defence].FinalValue);
+        Hp -= damage;
+        
+        Damaged?.Invoke();
+        
+        if (IsDead) 
+            Died?.Invoke();
     }
 }

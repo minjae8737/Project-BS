@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,7 +7,7 @@ public class UnitManager : Singleton<UnitManager>
     private float[] statMinValueArr;
 
     //FIXME 임시 코드 
-    [SerializeField] private PlayerStat playerStat;
+    [SerializeField] private UnitStat unitStat;
 
     protected override void Awake()
     {
@@ -20,9 +19,9 @@ public class UnitManager : Singleton<UnitManager>
     private void Start()
     {
         //FIXME 임시 코드
-        if (playerStat != null)
+        if (unitStat != null)
         {
-            playerStat.Init(statRulesData);
+            unitStat.Init(statRulesData);
         }
     }
 }

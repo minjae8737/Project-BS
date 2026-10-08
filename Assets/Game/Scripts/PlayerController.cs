@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
-    private PlayerStat stat;
+    private UnitStat stat;
     
     private void Awake()
     { 
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         inputReader = GetComponent<PlayerInputReader>();
         movement = GetComponent<PlayerMovement>();
         animationController = GetComponent<PlayerAnimationController>();
-        stat = GetComponent<PlayerStat>();
+        stat = GetComponent<UnitStat>();
     }
 
     private void OnEnable()
