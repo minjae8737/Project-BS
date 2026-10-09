@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MonsterMovement : MonoBehaviour
@@ -13,7 +12,8 @@ public class MonsterMovement : MonoBehaviour
 
     private void SetMoveDirection(Vector3 input)
     {
-        moveDir = Vector3.ClampMagnitude(input, 1f);
+        input.y = 0;
+        moveDir = input.normalized;
     }
     
     public void Tick(Vector3 input, float moveSpeed)

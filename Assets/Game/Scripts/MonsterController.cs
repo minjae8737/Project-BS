@@ -5,8 +5,9 @@ public class MonsterController : MonoBehaviour
     private MonsterMovement movement;
     private UnitStat stat;
 
-    //FIXME 임시코드
-    [SerializeField] private Transform target;
+    [SerializeField, Min(0)] private float separationRadius;
+
+    public float SeparationRadius => separationRadius;
     
     private void Awake()
     {
@@ -14,11 +15,13 @@ public class MonsterController : MonoBehaviour
         stat = GetComponent<UnitStat>();
     }
 
-    private void FixedUpdate()
+    public void Init(StatRulesData statRulesData)
     {
-        Vector3 dir = target.position - transform.position;
-        dir.y = 0;
+        stat.Init(statRulesData);
+    }
 
-        movement.Tick(dir, 2);
+    public void Tick(Vector3 moveDir)
+    {
+        movement.Tick(moveDir, stat.MoveSpeed);
     }
 }

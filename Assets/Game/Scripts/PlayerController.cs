@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
         stat = GetComponent<UnitStat>();
     }
 
+    public void Init(StatRulesData statRulesData)
+    {
+        stat.Init(statRulesData);
+    }
+
     private void OnEnable()
     {
         inputReader.JumpPressed += Jump;
