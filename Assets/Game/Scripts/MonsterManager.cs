@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MonsterManager : MonoBehaviour
 {
+    [SerializeField, Min(0f)] private float separationWeight = 1f;
+    
     private PlayerController player;
     private List<MonsterController> monsters = new();
-    [SerializeField] private float separationWeight = 1f;
     
     private Vector3[] monstersPosBuffer;
     private Vector3[] separationBuffer;
@@ -20,6 +21,15 @@ public class MonsterManager : MonoBehaviour
         Vector3 targetPosition = player.transform.position;
         targetPosition.y = 0f;
 
+        CachePositions();
+
+        CalculateSeparation();
+        
+        MoveMonsters(targetPosition);
+    }
+
+    private void CachePositions()
+    {
         //FIXME monsters는 활성화된 몬스터만있는 List로 되어있음. -> 나중에 활성화되지않은 몬스터들이 있을 수 있음. 
         if (monstersPosBuffer == null || separationBuffer == null || monstersPosBuffer.Length < monsters.Count)
         {
@@ -35,7 +45,10 @@ public class MonsterManager : MonoBehaviour
             monstersPosBuffer[i] = monsterPos;
             separationBuffer[i] = Vector3.zero;
         }
+    }
 
+    private void CalculateSeparation()
+    {
         for (int i = 0; i < monsters.Count; i++)
         {
             for (int j = i + 1; j < monsters.Count; j++)
@@ -56,7 +69,10 @@ public class MonsterManager : MonoBehaviour
                 }
             }
         }
-        
+    }
+
+    private void MoveMonsters(Vector3 targetPosition)
+    {
         for (int i = monsters.Count - 1; i >= 0; i--)
         {
             Vector3 direction = (targetPosition - monstersPosBuffer[i]).normalized;
