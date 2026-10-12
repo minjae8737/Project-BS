@@ -23,6 +23,7 @@ public class UnitStat : MonoBehaviour
             hp = (int)Mathf.Clamp(value, 0f, stats[StatType.MaxHp].FinalValue);
         }
     }
+    public float AttackPower => stats[StatType.AttackPower].FinalValue;
     public float MoveSpeed => stats[StatType.MoveSpeed].FinalValue;
     public float BaseSpeed => stats[StatType.MoveSpeed].BaseValue;
     public bool IsDead => hp <= 0;
@@ -65,6 +66,8 @@ public class UnitStat : MonoBehaviour
 
         int damage = DamageCalculator.CalculateDamage(rawDamage, stats[StatType.Defence].FinalValue);
         Hp -= damage;
+
+        Debug.Log($"{name} Hp : {hp}");
         
         Damaged?.Invoke();
         

@@ -10,15 +10,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDir;
     private float verticalVelocity;
     private float horizontalVelocity;
+    private float radius;
     private const float GroundedVerticalVelocity = -2f;
 
+    public float Radius => radius;
     public bool IsGrounded => controller.isGrounded;
     public float VerticalVelocity => verticalVelocity;
     public float HorizontalVelocity => horizontalVelocity;
+    
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        radius = controller.radius;
     }
 
     private void SetMoveDirection(Vector3 input)

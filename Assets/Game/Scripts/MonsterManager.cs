@@ -18,14 +18,16 @@ public class MonsterManager : MonoBehaviour
     
     private void Update()
     {
+        float deltaTime = Time.deltaTime;
+
         Vector3 targetPosition = player.transform.position;
         targetPosition.y = 0f;
 
         CachePositions();
 
         CalculateSeparation();
-        
-        MoveMonsters(targetPosition);
+
+        TickMonsters(targetPosition, deltaTime);
     }
 
     private void CachePositions()
@@ -71,12 +73,18 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    private void MoveMonsters(Vector3 targetPosition)
+    private void TickMonsters(Vector3 targetPosition, float deltaTime)
     {
+        float playerRadius = player.Radius;
+        
         for (int i = monsters.Count - 1; i >= 0; i--)
         {
-            Vector3 direction = (targetPosition - monstersPosBuffer[i]).normalized;
-            monsters[i].Tick(direction + separationBuffer[i] * separationWeight);
+            Vector3 diff = targetPosition - monstersPosBuffer[i];
+            float distance = diff.magnitude;
+            Vector3 direction = distance > 0.00001f ? diff / distance : Vector3.zero;
+            Vector3 moveDir = direction + separationBuffer[i] * separationWeight;
+
+            monsters[i].Tick(moveDir, distance, playerRadius, deltaTime);
         }
     }
 

@@ -26,14 +26,12 @@ public class UnitManager : Singleton<UnitManager>
     { 
         //FIXME 임시 코드
         monsterManager.Init(playerController);
-        if (playerController != null)
-        {
-            playerController.Init(statRulesData);
-        }
+
+        playerController.Init(statRulesData);
 
         foreach (var monster in monsters)
         {
-            monster.Init(statRulesData);
+            monster.Init(statRulesData, playerController);
             monsterManager.AddMonster(monster);
         }
     }

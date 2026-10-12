@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimationController animationController;
     private UnitStat stat;
     
+    public float Radius => movement.Radius;
+    
     private void Awake()
     { 
         Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
@@ -64,5 +66,10 @@ public class PlayerController : MonoBehaviour
         cameraRight.Normalize();
         
         return  moveInput.x * cameraRight + moveInput.y * cameraForward;
+    }
+    
+    public void TakeDamage(float rawDamage)
+    {
+        stat.TakeDamage(rawDamage);
     }
 }
