@@ -79,6 +79,12 @@ public class MonsterManager : MonoBehaviour
         
         for (int i = monsters.Count - 1; i >= 0; i--)
         {
+            if (monsters[i].IsDead)
+            {
+                RemoveMonster(i);
+                continue;
+            }
+            
             Vector3 diff = targetPosition - monstersPosBuffer[i];
             float distance = diff.magnitude;
             Vector3 direction = distance > 0.00001f ? diff / distance : Vector3.zero;
@@ -91,5 +97,18 @@ public class MonsterManager : MonoBehaviour
     public void AddMonster(MonsterController monster)
     {
         monsters.Add(monster);
+    }
+
+    private void RemoveMonster(int removeIndex)
+    {
+        int lastIndex = monsters.Count - 1;
+
+        SwapMonster(lastIndex, removeIndex);
+        monsters.RemoveAt(lastIndex);
+    }
+
+    private void SwapMonster(int lastIndex, int i)
+    {
+        (monsters[lastIndex], monsters[i]) = (monsters[i], monsters[lastIndex]);
     }
 }

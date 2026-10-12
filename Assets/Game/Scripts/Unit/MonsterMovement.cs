@@ -35,4 +35,9 @@ public class MonsterMovement : MonoBehaviour
 
         rigid.linearVelocity = velocity;
     }
+    
+    public void ChangeIsKinematic(bool isKinematic)
+    {
+        rigid.isKinematic = isKinematic;
+    }
 }
