@@ -32,7 +32,7 @@ public class UnitManager : Singleton<UnitManager>
         foreach (var monster in monsters)
         {
             monster.Init(statRulesData, playerController);
-            monster.EndDeathClip += HandleDeathMonster;
+            monster.DeathFinished += HandleDeathMonster;
             monsterManager.AddMonster(monster);
         }
     }
@@ -40,7 +40,7 @@ public class UnitManager : Singleton<UnitManager>
     private void HandleDeathMonster(MonsterController monster)
     {
         //TODO PoolManager로 반환시키도록 변경 할 것
-        monster.EndDeathClip -= HandleDeathMonster;
+        monster.DeathFinished -= HandleDeathMonster;
         monster.gameObject.SetActive(false);
     }
 }

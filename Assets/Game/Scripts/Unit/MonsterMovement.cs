@@ -13,7 +13,7 @@ public class MonsterMovement : MonoBehaviour
     private void SetMoveDirection(Vector3 input)
     {
         input.y = 0;
-        moveDir = input.normalized;
+        moveDir = Vector3.ClampMagnitude(input, 1f);
     }
     
     public void Tick(Vector3 input, float moveSpeed)
@@ -35,8 +35,14 @@ public class MonsterMovement : MonoBehaviour
 
         rigid.linearVelocity = velocity;
     }
+
+    public void Stop()
+    {
+        SetMoveDirection(Vector3.zero);
+        Move(0);
+    }
     
-    public void ChangeIsKinematic(bool isKinematic)
+    public void SetKinematic(bool isKinematic)
     {
         rigid.isKinematic = isKinematic;
     }

@@ -1,13 +1,12 @@
 using System;
 using UnityEngine;
 
-
 public class StateTimeEventBehaviour : StateMachineBehaviour
 {
     [Serializable]
     private struct TimedEvent
     {
-        public string eventName;  //TODO enum형으로 교체 고려(오타 방지)
+        public AniClipEventName eventName;
         [Range(0f, 1f)] public float normalizedTime;
     }
 

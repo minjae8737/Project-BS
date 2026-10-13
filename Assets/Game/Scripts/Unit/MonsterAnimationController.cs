@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class MonsterAnimationController : MonoBehaviour
 {
-    [SerializeField] private AnimationEventRelay eventRelay;
-
     private Animator anim;
+    private AnimationEventRelay eventRelay;
 
     private static readonly int Speed = Animator.StringToHash("Speed");
     private static readonly int LocomotionSpeedMultiplier = Animator.StringToHash("LocomotionSpeedMultiplier");
@@ -16,6 +15,7 @@ public class MonsterAnimationController : MonoBehaviour
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
+        eventRelay = GetComponentInChildren<AnimationEventRelay>();
     }
 
     private void OnEnable()
@@ -44,9 +44,9 @@ public class MonsterAnimationController : MonoBehaviour
         anim.SetTrigger(Die);
     }
 
-    private void HandleAnimationEvent(string eventName)
+    private void HandleAnimationEvent(AniClipEventName eventName)
     {
-        if (eventName == "Die")
+        if (eventName == AniClipEventName.Die)
         {
             DiedClipEnd?.Invoke();
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AnimationEventRelay : MonoBehaviour, IStateTimeEventReceiver
 {
-    public event Action<string> EventRaised;
+    public event Action<AniClipEventName> EventRaised;
 
-    public void OnStateTimeEvent(string eventName) => EventRaised?.Invoke(eventName);
+    public void OnStateTimeEvent(AniClipEventName eventName) => EventRaised?.Invoke(eventName);
 }

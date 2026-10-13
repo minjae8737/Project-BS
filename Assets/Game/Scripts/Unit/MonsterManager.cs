@@ -32,7 +32,6 @@ public class MonsterManager : MonoBehaviour
 
     private void CachePositions()
     {
-        //FIXME monsters는 활성화된 몬스터만있는 List로 되어있음. -> 나중에 활성화되지않은 몬스터들이 있을 수 있음. 
         if (monstersPosBuffer == null || separationBuffer == null || monstersPosBuffer.Length < monsters.Count)
         {
             monstersPosBuffer = new Vector3[monsters.Count * 2];

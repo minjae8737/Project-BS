@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private UnitStat stat;
     
     public float Radius => movement.Radius;
+    public bool IsDead => stat.IsDead;
     
     private void Awake()
     { 
@@ -29,11 +30,13 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         inputReader.JumpPressed += Jump;
+        stat.Died += HandleDeath;
     }
 
     private void OnDisable()
     {
         inputReader.JumpPressed -= Jump;
+        stat.Died -= HandleDeath;
     }
 
     private void Jump()
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsDead) return;
+        
         float deltaTime = Time.deltaTime;
 
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
@@ -71,5 +76,14 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float rawDamage)
     {
         stat.TakeDamage(rawDamage);
+    }
+    
+    private void HandleDeath()
+    {
+        animationController.PlayDeathClip();
+    }
+
+    private void HandleDeathClipEndEvent()
+    {
     }
 }

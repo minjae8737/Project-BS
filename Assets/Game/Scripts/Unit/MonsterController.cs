@@ -17,7 +17,7 @@ public class MonsterController : MonoBehaviour
     public float SeparationRadius => separationRadius;
     public bool IsDead => stat.IsDead;
 
-    public event Action<MonsterController> EndDeathClip;
+    public event Action<MonsterController> DeathFinished;
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class MonsterController : MonoBehaviour
         target = playerController;
 
         col.enabled = true;
-        movement.ChangeIsKinematic(false);
+        movement.SetKinematic(false);
         attackTimer = 0f;
     }
 
@@ -79,15 +79,15 @@ public class MonsterController : MonoBehaviour
 
     private void HandleDeath()
     {
-        movement.Tick(Vector3.zero, 0f);
+        movement.Stop();
         
         col.enabled = false;
-        movement.ChangeIsKinematic(true);
+        movement.SetKinematic(true);
         animationController.PlayDeathClip();
     }
 
     private void HandleDeathClipEndEvent()
     {
-        EndDeathClip?.Invoke(this);
+        DeathFinished?.Invoke(this);
     }
 }
