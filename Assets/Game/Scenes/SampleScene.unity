@@ -547,7 +547,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3decce1a20ca4c0dbdca0fad15246529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventRelay: {fileID: 919132148519742506}
+--- !u!1 &427922014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427922015}
+  - component: {fileID: 427922016}
+  m_Layer: 0
+  m_Name: DamageTextSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &427922015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427922014}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &427922016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427922014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3b1a64db8d4f9183f128a48e3e9bb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  persistAcrossScenes: 0
+  cameraTransform: {fileID: 330585546}
+  damageTextPrefab: {fileID: 8679244818720950989, guid: 80c3190e923724dc09991a02114cf759, type: 3}
 --- !u!1 &543404985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1057,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2071874651}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Monsters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1500,6 +1546,7 @@ GameObject:
   - component: {fileID: 543450652187653778}
   - component: {fileID: 919132148519742505}
   - component: {fileID: 919132148519742506}
+  - component: {fileID: 919132148519742507}
   m_Layer: 7
   m_Name: PinkBlob
   m_TagString: Untagged
@@ -1541,6 +1588,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2d33186fb24e5ea972010eb1965066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &919132148519742507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148519742504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847b31daeeb74dbb91db9c2d95e0399e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: a8cb6f59cb8d841d8bcc96ea818a2d74, type: 2}
+  delay: 0.2
 --- !u!1 &919132149497498956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,6 +1613,7 @@ GameObject:
   - component: {fileID: 543450653230422006}
   - component: {fileID: 5866666021573430668}
   - component: {fileID: 5866666021573430669}
+  - component: {fileID: 5866666021573430670}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -2769,6 +2831,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2d33186fb24e5ea972010eb1965066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5866666021573430670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149497498956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847b31daeeb74dbb91db9c2d95e0399e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: a8cb6f59cb8d841d8bcc96ea818a2d74, type: 2}
+  delay: 0.2
 --- !u!1 &5898190253992221670
 GameObject:
   m_ObjectHideFlags: 0
@@ -3561,3 +3637,4 @@ SceneRoots:
   - {fileID: 819205694}
   - {fileID: 829059570}
   - {fileID: 2071874651}
+  - {fileID: 427922015}

@@ -4,6 +4,8 @@ using UnityEngine.Assertions;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
+    [SerializeField, Min(0)] private float Height;     
+    
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
@@ -31,12 +33,14 @@ public class PlayerController : MonoBehaviour
     {
         inputReader.JumpPressed += Jump;
         stat.Died += HandleDeath;
+        stat.Damaged += HandleDameged;
     }
 
     private void OnDisable()
     {
         inputReader.JumpPressed -= Jump;
         stat.Died -= HandleDeath;
+        stat.Damaged -= HandleDameged;
     }
 
     private void Jump()
@@ -76,6 +80,14 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float rawDamage)
     {
         stat.TakeDamage(rawDamage);
+    }
+    
+    private void HandleDameged(int damage)
+    {
+        Vector3 position = transform.position;
+        position.y += Height;
+        
+        DamageTextSpawner.Instance.Show(position, damage);
     }
     
     private void HandleDeath()

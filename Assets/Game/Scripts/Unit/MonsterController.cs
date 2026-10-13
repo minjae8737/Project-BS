@@ -5,14 +5,17 @@ public class MonsterController : MonoBehaviour
 {
     private MonsterMovement movement;
     private MonsterAnimationController animationController;
-    private Collider col;
     private UnitStat stat;
+    private Collider col;
+    private HitFlash hitFlash;
 
     private PlayerController target;
     private float attackTimer;
 
     [SerializeField, Min(0)] private float separationRadius;
     [SerializeField, Min(0)] private float attackCooldown;
+    [SerializeField, Min(0)] private float Height; 
+
 
     public float SeparationRadius => separationRadius;
     public bool IsDead => stat.IsDead;
@@ -23,6 +26,7 @@ public class MonsterController : MonoBehaviour
     {
         movement = GetComponent<MonsterMovement>();
         animationController = GetComponent<MonsterAnimationController>();
+        hitFlash = GetComponentInChildren<HitFlash>();
         col = GetComponent<Collider>();
         stat = GetComponent<UnitStat>();
     }
@@ -30,18 +34,21 @@ public class MonsterController : MonoBehaviour
     private void OnEnable()
     {
         stat.Died += HandleDeath;
+        stat.Damaged += HandleDamaged;
         animationController.DiedClipEnd += HandleDeathClipEndEvent;
     }
 
     private void OnDisable()
     {
         stat.Died -= HandleDeath;
+        stat.Damaged -= HandleDamaged;
         animationController.DiedClipEnd -= HandleDeathClipEndEvent;
     }
 
     public void Init(StatRulesData statRulesData, PlayerController playerController)
     {
         stat.Init(statRulesData);
+        hitFlash.Stop();
         target = playerController;
 
         col.enabled = true;
@@ -75,6 +82,15 @@ public class MonsterController : MonoBehaviour
     public void TakeDamage(float rawDamage)
     {
         stat.TakeDamage(rawDamage);
+    }
+    
+    private void HandleDamaged(int damage)
+    {
+        Vector3 position = transform.position;
+        position.y += Height;
+        
+        hitFlash.Play();
+        DamageTextSpawner.Instance.Show(position, damage);
     }
 
     private void HandleDeath()

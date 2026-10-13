@@ -29,7 +29,7 @@ public class UnitStat : MonoBehaviour
     public bool IsDead => hp <= 0;
     
     public event Action Died;
-    public event Action Damaged;
+    public event Action<int> Damaged;
 
     private void Awake()
     {
@@ -69,7 +69,7 @@ public class UnitStat : MonoBehaviour
 
         Debug.Log($"{name} Hp : {hp}");
         
-        Damaged?.Invoke();
+        Damaged?.Invoke(damage);
         
         if (IsDead) 
             Died?.Invoke();
