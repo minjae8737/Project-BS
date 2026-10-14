@@ -535,6 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   separationRadius: 2
   attackCooldown: 1
+  Height: 3
 --- !u!114 &419536396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,6 +595,7 @@ MonoBehaviour:
   persistAcrossScenes: 0
   cameraTransform: {fileID: 330585546}
   damageTextPrefab: {fileID: 8679244818720950989, guid: 80c3190e923724dc09991a02114cf759, type: 3}
+  texts: []
 --- !u!1 &543404985
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 330585546}
+  Height: 3
 --- !u!114 &829059573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,7 +1604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: a8cb6f59cb8d841d8bcc96ea818a2d74, type: 2}
-  delay: 0.2
+  duration: 0.2
 --- !u!1 &919132149497498956
 GameObject:
   m_ObjectHideFlags: 0
@@ -2844,7 +2847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: a8cb6f59cb8d841d8bcc96ea818a2d74, type: 2}
-  delay: 0.2
+  duration: 0.2
 --- !u!1 &5898190253992221670
 GameObject:
   m_ObjectHideFlags: 0

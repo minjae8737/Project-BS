@@ -8,7 +8,7 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private GameObject damageTextPrefab;
     
-    private List<TextMeshPro> texts;
+    [SerializeField] private List<DamageText> texts;
 
     protected override void Awake()
     {
@@ -17,10 +17,10 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
         Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
     }
 
-    private TextMeshPro GetText()
+    private DamageText GetText()
     {
         GameObject newTextObj = Instantiate(damageTextPrefab, transform);
-        TextMeshPro newText = newTextObj.GetComponent<TextMeshPro>();
+        DamageText newText = newTextObj.GetComponent<DamageText>();
         texts.Add(newText);
 
         return newText;
@@ -28,8 +28,27 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
 
     public void Show(Vector3 position, int damage)
     {
-        TextMeshPro text = GetText();
-        text.SetText(damage + "");
-        text.transform.position = position;
+        DamageText text = GetText();
+        text.SetDamageText(damage, position);
+        text.gameObject.SetActive(true);
+    }
+
+    private void LateUpdate()
+    {
+        float deltaTime = Time.deltaTime;
+
+        Quaternion cameraRotation = cameraTransform.rotation;
+
+        for (int i = texts.Count - 1; i >= 0; i--)
+        {
+            bool isEnd = texts[i].Tick(deltaTime, cameraRotation);
+
+            if (isEnd)
+            {
+                (texts[i], texts[texts.Count - 1]) = (texts[texts.Count - 1], texts[i]);
+                //TODO PoolManager에 반납 코드추가
+                texts.RemoveAt(texts.Count - 1);
+            }
+        }
     }
 }
