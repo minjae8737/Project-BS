@@ -535,7 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   separationRadius: 2
   attackCooldown: 1
-  Height: 3
+  height: 3
 --- !u!114 &419536396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,8 +594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistAcrossScenes: 0
   cameraTransform: {fileID: 330585546}
-  damageTextPrefab: {fileID: 8679244818720950989, guid: 80c3190e923724dc09991a02114cf759, type: 3}
-  texts: []
+  damageTextPrefab: {fileID: -8453627175931920367, guid: 80c3190e923724dc09991a02114cf759, type: 3}
 --- !u!1 &543404985
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,7 +735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 330585546}
-  Height: 3
+  height: 3
 --- !u!114 &829059573
 MonoBehaviour:
   m_ObjectHideFlags: 0

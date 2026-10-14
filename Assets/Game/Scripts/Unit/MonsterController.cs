@@ -14,7 +14,7 @@ public class MonsterController : MonoBehaviour
 
     [SerializeField, Min(0)] private float separationRadius;
     [SerializeField, Min(0)] private float attackCooldown;
-    [SerializeField, Min(0)] private float Height; 
+    [SerializeField, Min(0)] private float height; 
 
 
     public float SeparationRadius => separationRadius;
@@ -87,7 +87,7 @@ public class MonsterController : MonoBehaviour
     private void HandleDamaged(int damage)
     {
         Vector3 position = transform.position;
-        position.y += Height;
+        position.y += height;
         
         hitFlash.Play();
         DamageTextSpawner.Instance.Show(position, damage);

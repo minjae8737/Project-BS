@@ -4,22 +4,21 @@ using UnityEngine;
 public class DamageText : MonoBehaviour
 {
     [SerializeField] private TextMeshPro text;
-    private float speed;
-    private float duration;
+    [SerializeField] private float height = 1f;
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float duration = 0.7f;
     private float elapsed;
     private Vector3 targetPos;
+    public bool IsEnd => elapsed > duration;
 
-    public bool IsEnd => elapsed < duration;
-
-    public void SetDamageText(int damage, Vector3 startPos, float speed = 5f, float duration = 0.7f)
+    public void SetDamageText(int damage, Vector3 startPos)
     {
         transform.position = startPos;
-        startPos.y += 5f;
+        
+        startPos.y += height;
 
-        text.SetText(damage + "");
+        text.SetText("{0}", damage);
         targetPos = startPos;
-        this.speed = speed;
-        this.duration = duration;
 
         elapsed = 0f;
     }
@@ -29,7 +28,7 @@ public class DamageText : MonoBehaviour
         elapsed += deltaTime;
 
         transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * deltaTime);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, speed * deltaTime);
+        transform.rotation = rotation;
 
         return IsEnd;
     }

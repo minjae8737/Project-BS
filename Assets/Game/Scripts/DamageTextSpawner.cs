@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 public class DamageTextSpawner : Singleton<DamageTextSpawner>
 {
     [SerializeField] private Transform cameraTransform;
-    [SerializeField] private GameObject damageTextPrefab;
+    [SerializeField] private DamageText damageTextPrefab;
     
-    [SerializeField] private List<DamageText> texts;
+    private List<DamageText> texts;
 
     protected override void Awake()
     {
@@ -19,8 +18,7 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
 
     private DamageText GetText()
     {
-        GameObject newTextObj = Instantiate(damageTextPrefab, transform);
-        DamageText newText = newTextObj.GetComponent<DamageText>();
+        DamageText newText = Instantiate(damageTextPrefab, transform);
         texts.Add(newText);
 
         return newText;
@@ -45,9 +43,11 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
 
             if (isEnd)
             {
-                (texts[i], texts[texts.Count - 1]) = (texts[texts.Count - 1], texts[i]);
+                int lastIndex = texts.Count - 1;
+                (texts[i], texts[lastIndex]) = (texts[lastIndex], texts[i]);
                 //TODO PoolManager에 반납 코드추가
-                texts.RemoveAt(texts.Count - 1);
+                texts[lastIndex].gameObject.SetActive(false);
+                texts.RemoveAt(lastIndex);
             }
         }
     }
