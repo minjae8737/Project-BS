@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
     private UnitStat stat;
+    private PlayerSkills skills;
     
     public float Radius => movement.Radius;
     public bool IsDead => stat.IsDead;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         animationController = GetComponent<PlayerAnimationController>();
         stat = GetComponent<UnitStat>();
+        skills = GetComponent<PlayerSkills>();
     }
 
     public void Init(StatRulesData statRulesData)
@@ -53,11 +55,16 @@ public class PlayerController : MonoBehaviour
         if (IsDead) return;
         
         float deltaTime = Time.deltaTime;
-
+        
+        // 스킬
+        skills.Tick(transform.position, deltaTime);
+        
+        // 이동
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
 
         movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
 
+        // 애니메이션
         animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseSpeed);
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
