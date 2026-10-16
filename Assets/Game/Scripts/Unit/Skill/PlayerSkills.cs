@@ -1,25 +1,27 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public class PlayerSkills : MonoBehaviour
 {
     [SerializeField] private List<SkillData> datas;
     private List<Skill> skills = new();
-    
-    
 
-    public void TryExecute(float deltaTime)
+    public void Init()
     {
-        foreach (Skill skill in skills)
+        foreach (SkillData data in datas)
         {
-            skill.TryExecute(deltaTime);
+            var skill = data.CreateSkill();
+            skills.Add(skill);
         }
     }
 
     public void Tick(Vector3 caster, float deltaTime)
     {
-        TryExecute(deltaTime);
+        SkillContext context = new SkillContext { Caster = caster };
+
+        foreach (Skill skill in skills)
+        {
+            skill.Tick(context, deltaTime);
+        }
     }
 }

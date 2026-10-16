@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SkillContext
+public struct SkillContext
 {
-    public Vector3 caster;
+    public Vector3 Caster;
 }

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef9e4e6b08e46af9eafa950a6848066, type: 3}
   m_Name: Projectile Skill Data
   m_EditorClassIdentifier: 
-  DamagePer: 1.5
-  Cooldown: 1
-  Range: 5
-  Speed: 5
-  MaxDistance: 7
-  Penetration: 0
+  damagePer: 1.5
+  cooldown: 1
+  range: 10
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  speed: 8
+  maxDistance: 20
+  penetration: 0
   projectilePrefab: {fileID: 3268986765273442530, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}

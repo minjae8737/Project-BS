@@ -1,18 +1,20 @@
-using System;
-using UnityEngine;
-
-[Serializable]
-public class Skill
+public abstract class Skill
 {
-    [SerializeField] protected SkillData data;
+    protected SkillData data;
     protected float elapsed;
 
-    protected virtual bool CanExecute(float deltaTime)
+    public Skill(SkillData data)
+    {
+        this.data = data;
+        elapsed = 0f;
+    }
+
+    protected virtual bool CanExecute(SkillContext context, float deltaTime)
     {
         elapsed += deltaTime;
 
         return data.Cooldown < elapsed;
     }
 
-    public virtual void TryExecute(float deltaTime) { }
+    public abstract void Tick(SkillContext context, float deltaTime);
 }

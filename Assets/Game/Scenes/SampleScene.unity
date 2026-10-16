@@ -801,8 +801,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8098a2b05e1411aabf5cf62a4f4c445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skills:
-  - data: {fileID: 11400000, guid: 369104db8eaac483aa90031d5dd10b14, type: 2}
+  datas:
+  - {fileID: 11400000, guid: 369104db8eaac483aa90031d5dd10b14, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,6 +1357,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 390720050714563219, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8922704210949720328, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.66
