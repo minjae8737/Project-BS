@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private Transform modelTr;
     private Vector3 moveDir;
     private float speed;
     private float maxDistance;
@@ -14,8 +15,8 @@ public class Projectile : MonoBehaviour
     public void Init(Vector3 caster, Vector3 moveDir, float speed, float maxDistance, int penetration, LayerMask targetLayer)
     {
         transform.position = caster;
-        transform.LookAt(moveDir);
-        
+        modelTr.rotation = Quaternion.LookRotation(moveDir);
+
         this.moveDir = moveDir;
         this.speed = speed;
         this.maxDistance = maxDistance;
@@ -26,9 +27,6 @@ public class Projectile : MonoBehaviour
 
     public void Tick(float deltaTime)
     {
-        if (moveDistance > maxDistance) 
-            return;
-        
         float deltaDistance = speed * deltaTime;
         moveDistance += deltaDistance;
 
@@ -39,10 +37,9 @@ public class Projectile : MonoBehaviour
     {
         if (penetration < 0) return;
 
-        if (other.gameObject.layer == targetLayer)
+        if ((targetLayer.value & (1 << other.gameObject.layer)) != 0)
         {
             penetration--;
-
             // 데미지 로직
             // SkillEffect
         }

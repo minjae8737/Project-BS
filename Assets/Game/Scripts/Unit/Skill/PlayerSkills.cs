@@ -17,6 +17,7 @@ public class PlayerSkills : MonoBehaviour
 
     public void Tick(Vector3 caster, float deltaTime)
     {
+        caster.y += 1f;
         SkillContext context = new SkillContext { Caster = caster };
 
         foreach (Skill skill in skills)

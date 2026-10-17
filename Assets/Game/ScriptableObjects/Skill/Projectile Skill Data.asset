@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePer: 1.5
   cooldown: 1
-  range: 10
+  range: 40
   targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  speed: 8
-  maxDistance: 20
+  speed: 15
+  maxDistance: 100
   penetration: 0
   projectilePrefab: {fileID: 3268986765273442530, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}

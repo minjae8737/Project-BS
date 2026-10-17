@@ -7,17 +7,11 @@ public class ProjectileSkill : Skill
     private Collider[] targets = new Collider[32];
 
     private ProjectileSkillData projectileData;
-    private float speed;
-    private float maxDistance;
-    private int penetration;
     private int targetCount;
     
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
         projectileData = data;
-        speed = data.Speed;
-        maxDistance = data.MaxDistance;
-        penetration = data.Penetration;
     }
 
     private Projectile GetProjectile()
@@ -28,18 +22,12 @@ public class ProjectileSkill : Skill
         return newProjectile;
     }
 
-    protected override bool CanExecute(SkillContext context, float deltaTime)
-    {
-        return data.Cooldown < elapsed;
-    }
-
     public override void Tick(SkillContext context, float deltaTime)
     {
         if (CanExecute(context, deltaTime))
         {
             targetCount = Physics.OverlapSphereNonAlloc(context.Caster, projectileData.Range, targets, projectileData.TargetLayer);
-
-            elapsed += deltaTime;
+            
             if (targetCount <= 0) return;
             elapsed -= data.Cooldown;
             
@@ -61,23 +49,23 @@ public class ProjectileSkill : Skill
             newProjectile.Init(
                 context.Caster,
                 moveDir,
-                speed,
-                maxDistance,
-                penetration,
+                projectileData.Speed,
+                projectileData.MaxDistance,
+                projectileData.Penetration,
                 projectileData.TargetLayer);
             
-            int lastIndex = projectiles.Count - 1;
-            
-            for (int i = lastIndex; i >= 0; i--)
+        }
+        
+        for (int i = projectiles.Count - 1; i >= 0; i--)
+        {
+            projectiles[i].Tick(deltaTime);
+
+            if (projectiles[i].IsReached)
             {
-                projectiles[i].Tick(deltaTime);
-                
-                if (projectiles[i].IsReached)
-                {
-                    (projectiles[i], projectiles[lastIndex]) = (projectiles[lastIndex], projectiles[i]);
-                    projectiles[i].gameObject.SetActive(false);
-                    projectiles.RemoveAt(lastIndex);
-                }
+                int lastIndex = projectiles.Count - 1;
+                (projectiles[i], projectiles[lastIndex]) = (projectiles[lastIndex], projectiles[i]);
+                projectiles[lastIndex].gameObject.SetActive(false);
+                projectiles.RemoveAt(lastIndex);
             }
         }
     }

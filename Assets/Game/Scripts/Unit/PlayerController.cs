@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public void Init(StatRulesData statRulesData)
     {
         stat.Init(statRulesData);
+        skills.Init(); //TODO 스킬은 얻어서 초기화해야하므로 초기화 구조가 바뀔것 
     }
 
     private void OnEnable()

@@ -11,8 +11,8 @@ public abstract class Skill
 
     protected virtual bool CanExecute(SkillContext context, float deltaTime)
     {
+        if (data.Cooldown < elapsed) return true;
         elapsed += deltaTime;
-
         return data.Cooldown < elapsed;
     }
 
