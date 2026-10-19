@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerSkills : MonoBehaviour
 {
     [SerializeField] private List<SkillData> datas;
+    [SerializeField] private Vector3 skillStartOffset;
     private List<Skill> skills = new();
 
     public void Init()
@@ -15,10 +16,14 @@ public class PlayerSkills : MonoBehaviour
         }
     }
 
-    public void Tick(Vector3 caster, float deltaTime)
+    public void Tick(Vector3 caster, float attackPower, float deltaTime)
     {
-        caster.y += 1f;
-        SkillContext context = new SkillContext { Caster = caster };
+        SkillContext context = new SkillContext
+        {
+            Caster = caster,
+            SkillStartPos = caster + skillStartOffset,
+            AttackPower = attackPower
+        };
 
         foreach (Skill skill in skills)
         {

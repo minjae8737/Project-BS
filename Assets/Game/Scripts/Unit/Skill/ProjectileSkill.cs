@@ -7,8 +7,7 @@ public class ProjectileSkill : Skill
     private Collider[] targets = new Collider[32];
 
     private ProjectileSkillData projectileData;
-    private int targetCount;
-    
+
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
         projectileData = data;
@@ -21,41 +20,57 @@ public class ProjectileSkill : Skill
 
         return newProjectile;
     }
-
-    public override void Tick(SkillContext context, float deltaTime)
+    
+    protected override bool TryExecute(SkillContext context)
     {
-        if (CanExecute(context, deltaTime))
+        int targetCount = Physics.OverlapSphereNonAlloc(context.SkillStartPos, projectileData.Range, targets, projectileData.TargetLayer);
+
+        if (targetCount > 0)
         {
-            targetCount = Physics.OverlapSphereNonAlloc(context.Caster, projectileData.Range, targets, projectileData.TargetLayer);
-            
-            if (targetCount <= 0) return;
-            elapsed -= data.Cooldown;
-            
-            Collider nearestTarget = targets[0];
-            float nearestSqr = (nearestTarget.transform.position - context.Caster).sqrMagnitude;
+            var nearestTarget = FindNearestTarget(context, targetCount);
 
-            for (int i = 1; i < targetCount; i++)
-            {
-                float targetSqr = (targets[i].transform.position - context.Caster).sqrMagnitude;
-                if (nearestSqr > targetSqr)
-                {
-                    nearestTarget = targets[i];
-                    nearestSqr = targetSqr;
-                }
-            }
-
-            Projectile newProjectile = GetProjectile();
-            Vector3 moveDir = (nearestTarget.transform.position - context.Caster).normalized;
-            newProjectile.Init(
-                context.Caster,
-                moveDir,
-                projectileData.Speed,
-                projectileData.MaxDistance,
-                projectileData.Penetration,
-                projectileData.TargetLayer);
-            
+            SpawnProjectile(context, nearestTarget);
+            return true;
         }
         
+        return false;
+    }
+
+    private Collider FindNearestTarget(SkillContext context, int targetCount)
+    {
+        Collider nearestTarget = targets[0];
+        float nearestSqr = (nearestTarget.transform.position - context.SkillStartPos).sqrMagnitude;
+
+        for (int i = 1; i < targetCount; i++)
+        {
+            float targetSqr = (targets[i].transform.position - context.SkillStartPos).sqrMagnitude;
+            if (nearestSqr > targetSqr)
+            {
+                nearestTarget = targets[i];
+                nearestSqr = targetSqr;
+            }
+        }
+
+        return nearestTarget;
+    }
+
+    private void SpawnProjectile(SkillContext context, Collider nearestTarget)
+    {
+        Projectile newProjectile = GetProjectile();
+        Vector3 moveDir = (nearestTarget.transform.position - context.SkillStartPos).normalized;
+        newProjectile.Init(
+            context.AttackPower * projectileData.DamagePer,
+            context.SkillStartPos,
+            moveDir,
+            projectileData.Speed,
+            projectileData.MaxDistance,
+            projectileData.Penetration,
+            projectileData.TargetLayer,
+            projectileData.ObstacleLayer);
+    }
+
+    protected override void OnTick(float deltaTime)
+    {
         for (int i = projectiles.Count - 1; i >= 0; i--)
         {
             projectiles[i].Tick(deltaTime);

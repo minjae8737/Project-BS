@@ -1,7 +1,7 @@
 public abstract class Skill
 {
     protected SkillData data;
-    protected float elapsed;
+    private float elapsed;
 
     public Skill(SkillData data)
     {
@@ -9,12 +9,27 @@ public abstract class Skill
         elapsed = 0f;
     }
 
-    protected virtual bool CanExecute(SkillContext context, float deltaTime)
+    private bool CanExecute(float deltaTime)
     {
         if (data.Cooldown < elapsed) return true;
         elapsed += deltaTime;
         return data.Cooldown < elapsed;
     }
 
-    public abstract void Tick(SkillContext context, float deltaTime);
+    public void Tick(SkillContext context, float deltaTime)
+    {
+        if (CanExecute(deltaTime))
+        {
+            bool isSuccess = TryExecute(context);
+            
+            if (isSuccess)
+                elapsed -= data.Cooldown;
+        }
+        
+        OnTick(deltaTime);
+    }
+
+    protected abstract bool TryExecute(SkillContext context);
+
+    protected virtual void OnTick(float deltaTime) { }
 }

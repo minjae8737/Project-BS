@@ -17,8 +17,11 @@ MonoBehaviour:
   range: 40
   targetLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4096
   speed: 15
   maxDistance: 100
   penetration: 0
   projectilePrefab: {fileID: 3268986765273442530, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 768

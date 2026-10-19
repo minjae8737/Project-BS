@@ -8,11 +8,14 @@ public class ProjectileSkillData : SkillData
     [SerializeField, Min(0)] private float maxDistance;
     [SerializeField, Min(0)] private int penetration;
     [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private LayerMask obstacleLayer;
+
 
     public float Speed => speed;
     public float MaxDistance => maxDistance;
     public int Penetration => penetration;
     public Projectile ProjectilePrefab => projectilePrefab;
+    public LayerMask ObstacleLayer => obstacleLayer;
 
     public override Skill CreateSkill()
     {

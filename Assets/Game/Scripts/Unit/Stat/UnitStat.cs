@@ -66,8 +66,6 @@ public class UnitStat : MonoBehaviour
 
         int damage = DamageCalculator.CalculateDamage(rawDamage, stats[StatType.Defence].FinalValue);
         Hp -= damage;
-
-        Debug.Log($"{name} Hp : {hp}");
         
         Damaged?.Invoke(damage);
         

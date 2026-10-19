@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class MonsterController : MonoBehaviour
+public class MonsterController : MonoBehaviour, IDamageable
 {
     private MonsterMovement movement;
     private MonsterAnimationController animationController;
     private UnitStat stat;
     private Collider col;
     private HitFlash hitFlash;
+    private SkillTarget skillTarget;
 
     private PlayerController target;
     private float attackTimer;
@@ -29,6 +31,9 @@ public class MonsterController : MonoBehaviour
         hitFlash = GetComponentInChildren<HitFlash>();
         col = GetComponent<Collider>();
         stat = GetComponent<UnitStat>();
+        skillTarget = GetComponentInChildren<SkillTarget>();
+        
+        Assert.IsNotNull(skillTarget, $"{gameObject.name} 에 skillTarget이 할당 되어야합니다.");
     }
 
     private void OnEnable()
@@ -48,6 +53,8 @@ public class MonsterController : MonoBehaviour
     public void Init(StatRulesData statRulesData, PlayerController playerController)
     {
         stat.Init(statRulesData);
+        skillTarget.SetActive(true);
+        skillTarget.Init(this);
         hitFlash.Stop();
         target = playerController;
 
@@ -98,6 +105,7 @@ public class MonsterController : MonoBehaviour
         movement.Stop();
         
         col.enabled = false;
+        skillTarget.SetActive(false);
         movement.SetKinematic(true);
         animationController.PlayDeathClip();
     }

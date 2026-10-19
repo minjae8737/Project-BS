@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2419281524310785975}
   - component: {fileID: 4645837124054089035}
   - component: {fileID: 6784598965451909284}
-  - component: {fileID: 390720050714563219}
-  m_Layer: 0
+  - component: {fileID: 7126617392072293947}
+  m_Layer: 10
   m_Name: arrow_bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &390720050714563219
+--- !u!135 &7126617392072293947
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
