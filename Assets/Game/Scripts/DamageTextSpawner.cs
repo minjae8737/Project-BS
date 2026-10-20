@@ -14,11 +14,12 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
         base.Awake();
         texts = new();
         Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
+        Assert.IsNotNull(damageTextPrefab, $"{gameObject.name} 에 damageTextPrefab이 할당 되어야합니다.");
     }
 
     private DamageText GetText()
     {
-        DamageText newText = Instantiate(damageTextPrefab, transform);
+        DamageText newText = PoolManager.Instance.Get(damageTextPrefab);
         texts.Add(newText);
 
         return newText;
@@ -28,7 +29,6 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
     {
         DamageText text = GetText();
         text.SetDamageText(damage, position);
-        text.gameObject.SetActive(true);
     }
 
     private void LateUpdate()
@@ -45,8 +45,7 @@ public class DamageTextSpawner : Singleton<DamageTextSpawner>
             {
                 int lastIndex = texts.Count - 1;
                 (texts[i], texts[lastIndex]) = (texts[lastIndex], texts[i]);
-                //TODO PoolManager에 반납 코드추가
-                texts[lastIndex].gameObject.SetActive(false);
+                PoolManager.Instance.Release(texts[lastIndex]);
                 texts.RemoveAt(lastIndex);
             }
         }
