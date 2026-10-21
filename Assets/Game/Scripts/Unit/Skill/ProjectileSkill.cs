@@ -15,7 +15,7 @@ public class ProjectileSkill : Skill
 
     private Projectile GetProjectile()
     {
-        Projectile newProjectile = GameObject.Instantiate(projectileData.ProjectilePrefab);
+        Projectile newProjectile = PoolManager.Instance.Get(projectileData.ProjectilePrefab);
         projectiles.Add(newProjectile);
 
         return newProjectile;
@@ -79,7 +79,7 @@ public class ProjectileSkill : Skill
             {
                 int lastIndex = projectiles.Count - 1;
                 (projectiles[i], projectiles[lastIndex]) = (projectiles[lastIndex], projectiles[i]);
-                projectiles[lastIndex].gameObject.SetActive(false);
+                PoolManager.Instance.Release(projectiles[lastIndex]);
                 projectiles.RemoveAt(lastIndex);
             }
         }
