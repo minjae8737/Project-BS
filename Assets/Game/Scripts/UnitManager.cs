@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 public class UnitManager : Singleton<UnitManager>
 {
     [SerializeField] private StatRulesData statRulesData;
+    [SerializeField] private SpawnPositionCalculator posCalculator;
     private MonsterManager monsterManager;
 
     //FIXME 임시 코드 
