@@ -14,11 +14,13 @@ public class MonsterController : MonoBehaviour, IDamageable
     private PlayerController target;
     private float attackTimer;
 
+    [SerializeField] private MonsterType type;
     [SerializeField, Min(0)] private float separationRadius;
     [SerializeField, Min(0)] private float attackCooldown;
-    [SerializeField, Min(0)] private float height; 
+    [SerializeField, Min(0)] private float height;
 
 
+    public MonsterType Type => type;
     public float SeparationRadius => separationRadius;
     public bool IsDead => stat.IsDead;
 
@@ -50,7 +52,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         animationController.DiedClipEnd -= HandleDeathClipEndEvent;
     }
 
-    public void Init(StatRulesData statRulesData, PlayerController playerController)
+    public void Init(StatRulesData statRulesData, PlayerController playerController, Vector3 position)
     {
         stat.Init(statRulesData);
         skillTarget.SetActive(true);
@@ -58,6 +60,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         hitFlash.Stop();
         target = playerController;
 
+        transform.position = position;
         col.enabled = true;
         movement.SetKinematic(false);
         attackTimer = 0f;

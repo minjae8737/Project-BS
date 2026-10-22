@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -6,11 +5,11 @@ public class UnitManager : Singleton<UnitManager>
 {
     [SerializeField] private StatRulesData statRulesData;
     [SerializeField] private SpawnPositionCalculator posCalculator;
+    [SerializeField, Min(0)] private float spawnRange = 10f;
     private MonsterManager monsterManager;
 
     //FIXME 임시 코드 
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private List<MonsterController> monsters;
 
     protected override void Awake()
     {
@@ -25,23 +24,30 @@ public class UnitManager : Singleton<UnitManager>
 
     private void Start()
     { 
-        //FIXME 임시 코드
-        monsterManager.Init(playerController);
-
+        monsterManager.Init(statRulesData, playerController);
         playerController.Init(statRulesData);
+        
+        //FIXME 임시 코드
+        Test();
+    }
 
-        foreach (var monster in monsters)
+    public void SpawnMonster(MonsterType type)
+    {
+        if (posCalculator.TryGetMonsterPosition(playerController.transform.position, spawnRange, out var position))
         {
-            monster.Init(statRulesData, playerController);
-            monster.DeathFinished += HandleDeathMonster;
-            monsterManager.AddMonster(monster);
+            monsterManager.Spawn(type, position);
+        }
+        else
+        {
+            Debug.LogWarning("[UnitManager] 몬스터 소환에 실패했습니다.");
         }
     }
 
-    private void HandleDeathMonster(MonsterController monster)
+    public void Test()
     {
-        //TODO PoolManager로 반환시키도록 변경 할 것
-        monster.DeathFinished -= HandleDeathMonster;
-        monster.gameObject.SetActive(false);
+        for (int i = 0; i < 10; i++)
+        {
+            SpawnMonster(MonsterType.PinkBlob);
+        }
     }
 }

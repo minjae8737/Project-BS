@@ -6,22 +6,24 @@ using Random = UnityEngine.Random;
 public class SpawnPositionCalculator
 {
     [SerializeField] private Vector3 playerSpawnBound;
-    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private LayerMask surfaceLayer;
+    [SerializeField] private LayerMask obstacleLayer;
 
-    private const float MinSpawnDistance = 10f;
-    private const float MaxRayDistance = 1500f;
-    private const int MaxReTryCount = 4;
-
-
+    [SerializeField] private float minSpawnDistance = 10f;
+    [SerializeField] private float maxRayDistance = 1500f;
+    [SerializeField] private float rayHeight = 1000f;
+    [SerializeField] private float checkRadius = 2f;
+    [SerializeField] private int maxAttempts = 10;
+    
     public bool TryGetPlayerPosition(out Vector3 playerPos)
     {
         playerPos = Vector3.zero;
         
-        for (int i = 0; i < MaxReTryCount; i++)
+        for (int i = 0; i < maxAttempts; i++)
         {
             float randX = Random.Range(-playerSpawnBound.x, playerSpawnBound.x);
             float randZ = Random.Range(-playerSpawnBound.z, playerSpawnBound.z);
-            Vector3 randPos = new Vector3(randX, 1000f, randZ);
+            Vector3 randPos = new Vector3(randX, rayHeight, randZ);
 
             if (TryRayCastPosition(randPos, out Vector3 hitPoint))
             {
@@ -33,17 +35,19 @@ public class SpawnPositionCalculator
         return false;
     }
 
-    public bool TryGetMonsterPosition(Vector3 playerPos, float range, out Vector3 monsterPos)
+    public bool TryGetMonsterPosition(Vector3 centerPos, float range, out Vector3 monsterPos)
     {
         monsterPos = Vector3.zero;
         
-        for (int i = 0; i < MaxReTryCount; i++)
+        for (int i = 0; i < maxAttempts; i++)
         {
-            float playerAreaX = playerPos.x + MinSpawnDistance;
-            float playerAreaZ = playerPos.z + MinSpawnDistance;
-            float randX = Random.Range(playerAreaX, playerAreaX + range) * (Random.value < 0.5f ? -1 : 1);
-            float randZ = Random.Range(playerAreaZ, playerAreaZ + range) * (Random.value < 0.5f ? -1 : 1);
-            Vector3 randPos = new Vector3(randX, 1000f, randZ);
+            Vector2 randDir = Random.insideUnitCircle.normalized;
+            float randDistance = Random.Range(minSpawnDistance, minSpawnDistance + range);
+
+            Vector3 randPos = new Vector3(
+                centerPos.x + randDir.x * randDistance, 
+                rayHeight,
+                centerPos.z + randDir.y * randDistance);
 
             if (TryRayCastPosition(randPos, out Vector3 hitPoint))
             {
@@ -59,8 +63,14 @@ public class SpawnPositionCalculator
     {
         hitPoint = Vector3.zero;
 
-        if (Physics.Raycast(targetPos, Vector3.down, out RaycastHit hit, MaxRayDistance, targetLayer))
+        if (Physics.Raycast(targetPos, Vector3.down, out RaycastHit hit, maxRayDistance, surfaceLayer))
         {
+            if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0) 
+                return false;
+            
+            if (Physics.CheckSphere(hit.point, checkRadius,obstacleLayer))
+                return false;
+
             hitPoint = hit.point;
             return true;
         }

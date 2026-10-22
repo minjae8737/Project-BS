@@ -45,5 +45,6 @@ public class PlayerInputReader : MonoBehaviour
     private void OnJump(InputAction.CallbackContext context)
     {
         JumpPressed?.Invoke();
+        // UnitManager.Instance.Test();
     }
 }

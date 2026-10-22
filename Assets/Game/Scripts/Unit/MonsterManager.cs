@@ -1,21 +1,43 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class MonsterManager : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float separationWeight = 1f;
-    
+    [SerializeField] private List<MonsterController> prefabs;
+
+    private StatRulesData statRulesData;
     private PlayerController player;
-    private List<MonsterController> monsters = new();
-    
+    private Dictionary<MonsterType, MonsterController> prefabDic;
+    private List<MonsterController> monsters;
+
     private Vector3[] monstersPosBuffer;
     private Vector3[] separationBuffer;
-    
-    public void Init(PlayerController playerController)
+
+    private void Awake()
     {
+        prefabDic = new();
+        monsters = new();
+        
+        for (int i = 0; i < prefabs.Count; i++)
+        {
+            if (prefabs[i].Type == MonsterType.None)
+                continue;
+
+            if (!prefabDic.TryAdd(prefabs[i].Type, prefabs[i]))
+            {
+                Debug.LogError($"[MonsterManager] {prefabs[i].gameObject.name} 의 MonsterType이 중복됩니다.");
+            }
+        }
+    }
+
+    public void Init(StatRulesData statRulesData, PlayerController playerController)
+    {
+        this.statRulesData = statRulesData;
         player = playerController;
     }
-    
+
     private void Update()
     {
         float deltaTime = Time.deltaTime;
@@ -42,7 +64,7 @@ public class MonsterManager : MonoBehaviour
         {
             Vector3 monsterPos = monsters[i].transform.position;
             monsterPos.y = 0f;
-            
+
             monstersPosBuffer[i] = monsterPos;
             separationBuffer[i] = Vector3.zero;
         }
@@ -64,7 +86,7 @@ public class MonsterManager : MonoBehaviour
                     float distance = Mathf.Sqrt(sqrMagnitude);
                     float overlapRatio = (targetDistance - distance) / targetDistance;
                     Vector3 direction = distance > 0.00001f ? diff / distance : Vector3.right;
-                    
+
                     separationBuffer[i] += direction * overlapRatio;
                     separationBuffer[j] += -direction * overlapRatio;
                 }
@@ -75,7 +97,7 @@ public class MonsterManager : MonoBehaviour
     private void TickMonsters(Vector3 targetPosition, float deltaTime)
     {
         float playerRadius = player.Radius;
-        
+
         for (int i = monsters.Count - 1; i >= 0; i--)
         {
             if (monsters[i].IsDead)
@@ -83,7 +105,7 @@ public class MonsterManager : MonoBehaviour
                 RemoveMonster(i);
                 continue;
             }
-            
+
             Vector3 diff = targetPosition - monstersPosBuffer[i];
             float distance = diff.magnitude;
             Vector3 direction = distance > 0.00001f ? diff / distance : Vector3.zero;
@@ -93,9 +115,25 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    public void AddMonster(MonsterController monster)
+    public void Spawn(MonsterType type, Vector3 position)
     {
-        monsters.Add(monster);
+        if (prefabDic.TryGetValue(type, out MonsterController prefab))
+        {
+            MonsterController monster = PoolManager.Instance.Get(prefab);
+            monster.Init(statRulesData, player, position);
+            monster.DeathFinished += HandleDeathMonster;
+            monsters.Add(monster);
+        }
+        else
+        {
+            Debug.LogError($"[MonsterManager] {type} prefab이 등록되어있지 않습니다.");
+        }
+    }
+
+
+    private void SwapMonster(int lastIndex, int i)
+    {
+        (monsters[lastIndex], monsters[i]) = (monsters[i], monsters[lastIndex]);
     }
 
     private void RemoveMonster(int removeIndex)
@@ -106,8 +144,9 @@ public class MonsterManager : MonoBehaviour
         monsters.RemoveAt(lastIndex);
     }
 
-    private void SwapMonster(int lastIndex, int i)
+    private void HandleDeathMonster(MonsterController monster)
     {
-        (monsters[lastIndex], monsters[i]) = (monsters[i], monsters[lastIndex]);
+        monster.DeathFinished -= HandleDeathMonster;
+        PoolManager.Instance.Release(monster);
     }
 }
