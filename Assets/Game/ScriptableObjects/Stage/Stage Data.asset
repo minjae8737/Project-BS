@@ -12,17 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a1a9b81a274398b65cee4e8c892a8b, type: 3}
   m_Name: Stage Data
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  remitTime: 0
+  limitTime: 60
   waves:
   - startTime: 0
-    data:
-      types: 01000000
-      spawnDelay: 1
-      minMonsterCount: 10
+    data: {fileID: 11400000, guid: 06142dc10a756447bb226d68951ab1a7, type: 2}
+  - startTime: 30
+    data: {fileID: 11400000, guid: db4ba197db007476abdd777b9acdeb8e, type: 2}
   events:
   - startTime: 30
     endTime: 30
-    data:
-      type: 1
-      spawnCount: 10
-      interval: 1
+    data: {fileID: 11400000, guid: 9cefceb86a6a243798b6efaca364bf42, type: 2}

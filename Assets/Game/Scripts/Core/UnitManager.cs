@@ -8,6 +8,8 @@ public class UnitManager : Singleton<UnitManager>
     [SerializeField, Min(0)] private float spawnRange = 10f;
     private MonsterManager monsterManager;
 
+    public int MonsterCount => monsterManager.MonsterCount;
+
     //FIXME 임시 코드 
     [SerializeField] private PlayerController playerController;
 
@@ -26,9 +28,6 @@ public class UnitManager : Singleton<UnitManager>
     { 
         monsterManager.Init(statRulesData, playerController);
         playerController.Init(statRulesData);
-        
-        //FIXME 임시 코드
-        Test();
     }
 
     public void SpawnMonster(MonsterType type)
@@ -40,14 +39,6 @@ public class UnitManager : Singleton<UnitManager>
         else
         {
             Debug.LogWarning("[UnitManager] 몬스터 소환에 실패했습니다.");
-        }
-    }
-
-    public void Test()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            SpawnMonster(MonsterType.PinkBlob);
         }
     }
 }

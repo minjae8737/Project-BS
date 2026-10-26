@@ -15,6 +15,8 @@ public class MonsterManager : MonoBehaviour
     private Vector3[] monstersPosBuffer;
     private Vector3[] separationBuffer;
 
+    public int MonsterCount => monsters.Count;
+
     private void Awake()
     {
         prefabDic = new();
