@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Stage")]
 public class StageData :ScriptableObject
 {
-    [SerializeField] private float limitTime;
+    [SerializeField, Min(0)] private float limitTime;
     [SerializeField] private List<Wave> waves;
     [SerializeField] private List<SpawnEvent> events;
     

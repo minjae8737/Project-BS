@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Spawn Event Data
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEventData
   type: 1
-  spawnCount: 30
-  interval: 1
+  spawnCount: 5
+  interval: 0
+  repeat: 0

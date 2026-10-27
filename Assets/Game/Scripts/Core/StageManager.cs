@@ -6,20 +6,17 @@ using UnityEngine.Assertions;
 public class StageManager : Singleton<StageManager>
 {
     [SerializeField] private StageData stageData;
-    private WaveManager waveManager;
+    [SerializeField] private WaveManager waveManager;
 
     private float stageElapsed;
 
     protected override void Awake()
     {
         base.Awake();
-
-        waveManager = new WaveManager();
-
         Assert.IsNotNull(stageData, "[StageManager] stageData가 null 입니다.");
     }
 
-    private void Start()
+    public void Init()
     {
         //FIXME Test 코드
         StageRoutine(destroyCancellationToken).Forget();
@@ -27,22 +24,34 @@ public class StageManager : Singleton<StageManager>
 
     public async UniTaskVoid StageRoutine(CancellationToken token)
     {
-        CancellationTokenSource timerCts = CancellationTokenSource.CreateLinkedTokenSource(token);
+        CancellationTokenSource stageCts = CancellationTokenSource.CreateLinkedTokenSource(token);
 
-        TickTimer(timerCts.Token).Forget();
+        waveManager.WaveRoutine(stageCts.Token, stageData).Forget();
+        waveManager.SpawnEventRoutine(stageCts.Token, stageData);
 
-        await waveManager.WaveRoutine(token, stageData);
+        try
+        {
+            await TickTimer(stageCts.Token);
+        }
+        finally
+        {
+            stageCts.Cancel();
+            stageCts.Dispose();
+        }
     }
 
     private async UniTask TickTimer(CancellationToken token)
     {
         stageElapsed = 0f;
+        float stageLimitTime = stageData.LimitTime;
 
         while (true)
         {
             await UniTask.Yield(PlayerLoopTiming.Update, token);
             stageElapsed += Time.deltaTime;
             waveManager.SetStageElapsed(stageElapsed);
+
+            if (stageLimitTime < stageElapsed) break;
         }
     }
 }

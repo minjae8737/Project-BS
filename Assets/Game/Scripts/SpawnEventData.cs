@@ -6,10 +6,10 @@ using UnityEngine;
 public class SpawnEventData : ScriptableObject
 {
     [SerializeField] private MonsterType type;
-    [SerializeField] private int spawnCount;
-    [SerializeField] private int interval;
+    [SerializeField, Min(0)] private int spawnCount;
+    [SerializeField, Min(0)] private float interval;
 
     public MonsterType Type => type;
     public int SpawnCount => spawnCount;
-    public int Interval => interval;
+    public float Interval => interval;
 }

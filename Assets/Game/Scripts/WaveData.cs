@@ -7,8 +7,8 @@ using UnityEngine;
 public class WaveData : ScriptableObject
 {
     [SerializeField] private List<MonsterType> types;
-    [SerializeField] private float spawnDelay;
-    [SerializeField] private int minMonsterCount;
+    [SerializeField, Min(0)] private float spawnDelay;
+    [SerializeField, Min(1)] private int minMonsterCount;
 
     public IReadOnlyList<MonsterType> Types => types;
     public float SpawnDelay => spawnDelay;

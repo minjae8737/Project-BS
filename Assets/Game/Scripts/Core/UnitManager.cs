@@ -24,7 +24,7 @@ public class UnitManager : Singleton<UnitManager>
         Assert.IsNotNull(playerController, $"{gameObject.name} 에 PlayerController가 할당되어야 합니다.");
     }
 
-    private void Start()
+    public void Init()
     { 
         monsterManager.Init(statRulesData, playerController);
         playerController.Init(statRulesData);

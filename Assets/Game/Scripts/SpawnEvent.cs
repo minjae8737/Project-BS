@@ -4,8 +4,8 @@ using UnityEngine;
 [Serializable]
 public struct SpawnEvent
 {
-    [SerializeField] private float startTime;
-    [SerializeField] private float endTime;
+    [SerializeField, Min(0)] private float startTime;
+    [SerializeField, Min(0)] private float endTime;
     [SerializeField] private SpawnEventData data;
     
     public float StartTime => startTime;
