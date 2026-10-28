@@ -63,7 +63,7 @@ public class WaveManager
         foreach (Wave wave in stageData.Waves)
         {
             Assert.IsTrue(preWaveStartTime <= wave.StartTime, "[WaveManager] Wave의 StartTime 순서가 맞지않습니다.");
-            Assert.IsNotNull(wave.Data, "[WaveManager] Wave 목록이 할당되지 않았습니다.");
+            Assert.IsNotNull(wave.Data, "[WaveManager] WaveData 목록이 할당되지 않았습니다.");
 
             Assert.IsTrue(0 < wave.Data.SpawnDelay, "[WaveManager] Wave의 SpawnDelay 가 0입니다.");
             Assert.IsTrue(0 < wave.Data.Types.Count, "[WaveManager] Wave의 몬스터 타입이 0입니다.");
