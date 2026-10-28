@@ -15,7 +15,7 @@ public class WaveManager
 
     public async UniTask WaveRoutine(CancellationToken token, StageData stageData)
     {
-        Assert.IsNotNull(stageData.Waves, "[WaveManager] Wave 목록이 할당되지 않았습니다.");
+        CheckWave(stageData);
 
         this.stageData = stageData;
 
@@ -43,9 +43,43 @@ public class WaveManager
 
     public void SpawnEventRoutine(CancellationToken token, StageData stageData)
     {
+        if (stageData.Events.Count <= 0) return;
+
+        CheckEvent(stageData);
+
         for (int i = 0; i < stageData.Events.Count; i++)
         {
             RunSpawnEvent(stageData.Events[i], token).Forget();
+        }
+    }
+
+    private void CheckWave(StageData stageData)
+    {
+        Assert.IsNotNull(stageData.Waves, "[WaveManager] Wave 목록이 할당되지 않았습니다.");
+        Assert.IsTrue(0 < stageData.Waves.Count, "[WaveManager] Wave 목록이 비어있습니다.");
+
+        float preWaveStartTime = 0;
+
+        foreach (Wave wave in stageData.Waves)
+        {
+            Assert.IsTrue(preWaveStartTime <= wave.StartTime, "[WaveManager] Wave의 StartTime 순서가 맞지않습니다.");
+            Assert.IsNotNull(wave.Data, "[WaveManager] Wave 목록이 할당되지 않았습니다.");
+
+            Assert.IsTrue(0 < wave.Data.SpawnDelay, "[WaveManager] Wave의 SpawnDelay 가 0입니다.");
+            Assert.IsTrue(0 < wave.Data.Types.Count, "[WaveManager] Wave의 몬스터 타입이 0입니다.");
+
+            preWaveStartTime = wave.StartTime;
+        }
+    }
+
+    private void CheckEvent(StageData stageData)
+    {
+        foreach (SpawnEvent spawnEvent in stageData.Events)
+        {
+            Assert.IsNotNull(spawnEvent.Data, "[WaveManager] SpawnEvent Data가 할당되지 않았습니다.");
+            Assert.IsTrue(spawnEvent.StartTime <= spawnEvent.EndTime,
+                "[WaveManager] SpawnEvent 의 StartTime이 EndTime보다 늦습니다.");
+            Assert.IsTrue(0f <= spawnEvent.Data.Interval, "[WaveManager] SpawnEvent 의 Interval이 0보다 작습니다.");
         }
     }
 
@@ -102,9 +136,9 @@ public class WaveManager
     private async UniTask RunSpawnEvent(SpawnEvent spawnEvent, CancellationToken token)
     {
         int frameSpawnCount = 0;
-        
+
         await UniTask.WaitUntil(() => stageElapsed > spawnEvent.StartTime, cancellationToken: token);
-        
+
         while (true)
         {
             for (int i = 0; i < spawnEvent.Data.SpawnCount; i++)
@@ -119,7 +153,7 @@ public class WaveManager
                 }
             }
 
-            if (spawnEvent.Data.Interval == 0f) break;
+            if (spawnEvent.Data.Interval <= 0f) break;
 
             await UniTask.Delay(TimeSpan.FromSeconds(spawnEvent.Data.Interval), cancellationToken: token);
 

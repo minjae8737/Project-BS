@@ -13,6 +13,7 @@ public class StageManager : Singleton<StageManager>
     protected override void Awake()
     {
         base.Awake();
+        
         Assert.IsNotNull(stageData, "[StageManager] stageData가 null 입니다.");
     }
 
