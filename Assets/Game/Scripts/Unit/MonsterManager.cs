@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class MonsterManager : MonoBehaviour
 {
@@ -14,8 +14,11 @@ public class MonsterManager : MonoBehaviour
 
     private Vector3[] monstersPosBuffer;
     private Vector3[] separationBuffer;
+    private float relocateRange;
 
     public int MonsterCount => monsters.Count;
+
+    public event Action<MonsterController> MonsterOutOfRange; 
 
     private void Awake()
     {
@@ -34,10 +37,11 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    public void Init(StatRulesData statRulesData, PlayerController playerController)
+    public void Init(StatRulesData statRulesData, PlayerController playerController, float relocateRange)
     {
         this.statRulesData = statRulesData;
         player = playerController;
+        this.relocateRange = relocateRange;
     }
 
     private void Update()
@@ -114,6 +118,8 @@ public class MonsterManager : MonoBehaviour
             Vector3 moveDir = direction + separationBuffer[i] * separationWeight;
 
             monsters[i].Tick(moveDir, distance, playerRadius, deltaTime);
+
+            if (distance > relocateRange) MonsterOutOfRange?.Invoke(monsters[i]);
         }
     }
 
@@ -144,6 +150,11 @@ public class MonsterManager : MonoBehaviour
 
         SwapMonster(lastIndex, removeIndex);
         monsters.RemoveAt(lastIndex);
+    }
+
+    public void Relocate(MonsterController monster, Vector3 position)
+    {
+        monster.SetPosition(position);
     }
 
     private void HandleDeathMonster(MonsterController monster)

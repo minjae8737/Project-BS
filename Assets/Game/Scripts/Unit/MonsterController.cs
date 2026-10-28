@@ -60,10 +60,15 @@ public class MonsterController : MonoBehaviour, IDamageable
         hitFlash.Stop();
         target = playerController;
 
-        transform.position = position;
+        SetPosition(position);
         col.enabled = true;
         movement.SetKinematic(false);
         attackTimer = 0f;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
     }
 
     public void Tick(Vector3 moveDir, float distance, float targetRadius, float deltaTime)

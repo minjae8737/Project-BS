@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     private UnitStat stat;
     private PlayerSkills skills;
     private SkillTarget skillTarget;
-    
+
+    public Vector3 MoveDir => movement.MoveDir;
     public float Radius => movement.Radius;
     public bool IsDead => stat.IsDead;
     

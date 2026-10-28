@@ -9,16 +9,19 @@ public class SpawnPositionCalculator
     [SerializeField] private LayerMask surfaceLayer;
     [SerializeField] private LayerMask obstacleLayer;
 
-    [SerializeField] private float minSpawnDistance = 10f;
+    [SerializeField] private float minSpawnDistance = 20f;
     [SerializeField] private float maxRayDistance = 1500f;
+    [SerializeField, Range(0f, 360f)] private float relocateAngle = 160f;
     [SerializeField] private float rayHeight = 1000f;
     [SerializeField] private float checkRadius = 2f;
     [SerializeField] private int maxAttempts = 10;
-    
+
+    public float MinSpawnDistance => minSpawnDistance;
+
     public bool TryGetPlayerPosition(out Vector3 playerPos)
     {
         playerPos = Vector3.zero;
-        
+
         for (int i = 0; i < maxAttempts; i++)
         {
             float randX = Random.Range(-playerSpawnBound.x, playerSpawnBound.x);
@@ -38,14 +41,14 @@ public class SpawnPositionCalculator
     public bool TryGetMonsterPosition(Vector3 centerPos, float range, out Vector3 monsterPos)
     {
         monsterPos = Vector3.zero;
-        
+
         for (int i = 0; i < maxAttempts; i++)
         {
             Vector2 randDir = Random.insideUnitCircle.normalized;
             float randDistance = Random.Range(minSpawnDistance, minSpawnDistance + range);
 
             Vector3 randPos = new Vector3(
-                centerPos.x + randDir.x * randDistance, 
+                centerPos.x + randDir.x * randDistance,
                 rayHeight,
                 centerPos.z + randDir.y * randDistance);
 
@@ -55,7 +58,7 @@ public class SpawnPositionCalculator
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -65,14 +68,50 @@ public class SpawnPositionCalculator
 
         if (Physics.Raycast(targetPos, Vector3.down, out RaycastHit hit, maxRayDistance, surfaceLayer))
         {
-            if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0) 
+            if ((obstacleLayer.value & (1 << hit.collider.gameObject.layer)) != 0)
                 return false;
-            
-            if (Physics.CheckSphere(hit.point, checkRadius,obstacleLayer))
+
+            if (Physics.CheckSphere(hit.point, checkRadius, obstacleLayer))
                 return false;
 
             hitPoint = hit.point;
             return true;
+        }
+
+        return false;
+    }
+
+    public bool TryGetMonsterRelocatePosition(Vector3 centerPos, Vector3 moveDir, float range, out Vector3 monsterPos)
+    {
+        monsterPos = Vector3.zero;
+        moveDir.y = 0f;
+        
+        if (moveDir.sqrMagnitude > 0.00001f)
+        {
+            float halfAngle = relocateAngle * 0.5f;
+
+            for (int i = 0; i < maxAttempts; i++)
+            {
+                float randomAngle = Random.Range(-halfAngle, halfAngle);
+                Vector3 randDir = (Quaternion.AngleAxis(randomAngle, Vector3.up) * moveDir).normalized;
+                float randDistance = Random.Range(minSpawnDistance, minSpawnDistance + range);
+
+                Vector3 randPos = new Vector3(
+                    centerPos.x + randDir.x * randDistance,
+                    rayHeight,
+                    centerPos.z + randDir.z * randDistance);
+
+
+                if (TryRayCastPosition(randPos, out Vector3 hitPoint))
+                {
+                    monsterPos = hitPoint;
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            return TryGetMonsterPosition(centerPos, range, out monsterPos);
         }
 
         return false;

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
     [SerializeField] private float rotateSpeed = 10f;
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float gravity = -9.81f;
@@ -13,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private float radius;
     private const float GroundedVerticalVelocity = -2f;
 
+    public Vector3 MoveDir => moveDir;
     public float Radius => radius;
     public bool IsGrounded => controller.isGrounded;
     public float VerticalVelocity => verticalVelocity;
