@@ -1,33 +1,39 @@
+using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class UnitManager : Singleton<UnitManager>
+public class UnitManager : MonoBehaviour
 {
     [SerializeField] private StatRulesData statRulesData;
     [SerializeField] private SpawnPositionCalculator posCalculator;
     [SerializeField, Min(0)] private float spawnRange = 20f;
     [SerializeField, Min(0)] private float relocateRange = 50f;
     private MonsterManager monsterManager;
+    private PlayerController playerController;
 
     public int MonsterCount => monsterManager.MonsterCount;
 
-    //FIXME 임시 코드 
-    [SerializeField] private PlayerController playerController;
-
-    protected override void Awake()
+    public event Action<MonsterController> MonsterDeathFinished
     {
-        base.Awake();
-        
+        add => monsterManager.MonsterDeathFinished += value;
+        remove => monsterManager.MonsterDeathFinished -= value;
+    }
+
+    private void Awake()
+    {
         monsterManager = GetComponent<MonsterManager>();
         
         Assert.IsNotNull(monsterManager, $"{gameObject.name} 에 MonsterManager가 할당되어야 합니다.");
         Assert.IsNotNull(statRulesData, $"{gameObject.name} 에 MinStatData가 할당되어야 합니다.");
-        Assert.IsNotNull(playerController, $"{gameObject.name} 에 PlayerController가 할당되어야 합니다.");
         Assert.IsTrue(spawnRange + posCalculator.MinSpawnDistance + 10f <= relocateRange, $"{gameObject.name} relocateRange가 (spawnRange + MinSpawnDistance) 보다 짧습니다.");
     }
 
-    public void Init()
-    { 
+    public void Init(PlayerController playerController)
+    {
+        this.playerController = playerController;
+        
+        Assert.IsNotNull(playerController, $"{gameObject.name} 에 PlayerController가 할당되어야 합니다.");
+        
         monsterManager.Init(statRulesData, playerController, relocateRange);
         playerController.Init(statRulesData);
     }

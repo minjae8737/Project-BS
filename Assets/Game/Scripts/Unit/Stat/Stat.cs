@@ -7,7 +7,8 @@ public enum StatType
     CriticalRate,
     MaxHp,
     HpRegeneration,
-    MoveSpeed
+    MoveSpeed,
+    PickupRadius
 }
 
 public enum StatModifierType

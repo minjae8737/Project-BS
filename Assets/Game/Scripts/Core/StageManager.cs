@@ -6,8 +6,13 @@ using UnityEngine.Assertions;
 public class StageManager : Singleton<StageManager>
 {
     [SerializeField] private StageData stageData;
+    [SerializeField] private UnitManager unitManager;
     [SerializeField] private WaveManager waveManager;
+    [SerializeField] private LevelManager levelManager;
+    [SerializeField] private ExpItemSpawner expItemSpawner;
 
+    [SerializeField] private PlayerController playerController;
+    
     private float stageElapsed;
 
     protected override void Awake()
@@ -17,8 +22,22 @@ public class StageManager : Singleton<StageManager>
         Assert.IsNotNull(stageData, "[StageManager] stageData가 null 입니다.");
     }
 
+    private void OnEnable()
+    {
+        unitManager.MonsterDeathFinished += HandleMonsterDeathFinished;
+    }
+
+    private void OnDisable()
+    {
+        unitManager.MonsterDeathFinished -= HandleMonsterDeathFinished;
+    }
+
     public void Init()
     {
+        unitManager.Init(playerController);
+        waveManager.Init(unitManager);
+        expItemSpawner.Init(playerController);
+        
         //FIXME Test 코드
         StageRoutine(destroyCancellationToken).Forget();
     }
@@ -54,5 +73,13 @@ public class StageManager : Singleton<StageManager>
 
             if (stageLimitTime < stageElapsed) break;
         }
+    }
+
+    private void HandleMonsterDeathFinished(MonsterController monster)
+    {
+        //FIXME 
+        int exp = 1;
+        
+        expItemSpawner.Spawn(monster.transform.position, exp);
     }
 }

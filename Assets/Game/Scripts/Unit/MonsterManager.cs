@@ -18,7 +18,8 @@ public class MonsterManager : MonoBehaviour
 
     public int MonsterCount => monsters.Count;
 
-    public event Action<MonsterController> MonsterOutOfRange; 
+    public event Action<MonsterController> MonsterOutOfRange;
+    public event Action<MonsterController> MonsterDeathFinished;
 
     private void Awake()
     {
@@ -129,7 +130,7 @@ public class MonsterManager : MonoBehaviour
         {
             MonsterController monster = PoolManager.Instance.Get(prefab);
             monster.Init(statRulesData, player, position);
-            monster.DeathFinished += HandleDeathMonster;
+            monster.DeathFinished += HandleDeathFinishedMonster;
             monsters.Add(monster);
         }
         else
@@ -157,9 +158,10 @@ public class MonsterManager : MonoBehaviour
         monster.SetPosition(position);
     }
 
-    private void HandleDeathMonster(MonsterController monster)
+    private void HandleDeathFinishedMonster(MonsterController monster)
     {
-        monster.DeathFinished -= HandleDeathMonster;
+        monster.DeathFinished -= HandleDeathFinishedMonster;
+        MonsterDeathFinished?.Invoke(monster);
         PoolManager.Instance.Release(monster);
     }
 }

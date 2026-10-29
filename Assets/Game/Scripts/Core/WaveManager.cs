@@ -9,10 +9,16 @@ public class WaveManager
 {
     private StageData stageData;
     private float stageElapsed;
+    private UnitManager unitManager;
 
     [SerializeField] private int maxMonsterCount = 200;
     [SerializeField] private int maxSpawnPerFrame = 5;
 
+    public void Init(UnitManager unitManager)
+    {
+        this.unitManager = unitManager;
+    }
+    
     public async UniTask WaveRoutine(CancellationToken token, StageData stageData)
     {
         CheckWave(stageData);
@@ -27,7 +33,7 @@ public class WaveManager
 
             if (CanSpawn())
             {
-                if (minMonsterCount > UnitManager.Instance.MonsterCount)
+                if (minMonsterCount > unitManager.MonsterCount)
                 {
                     await SpawnMinCount(wave, token);
                 }
@@ -85,7 +91,7 @@ public class WaveManager
 
     private bool CanSpawn()
     {
-        return UnitManager.Instance.MonsterCount < maxMonsterCount;
+        return unitManager.MonsterCount < maxMonsterCount;
     }
 
     private int FindWaveIndex()
@@ -103,26 +109,26 @@ public class WaveManager
     {
         foreach (MonsterType type in wave.Data.Types)
         {
-            if (UnitManager.Instance.MonsterCount >= maxMonsterCount) break;
+            if (unitManager.MonsterCount >= maxMonsterCount) break;
 
-            UnitManager.Instance.SpawnMonster(type);
+            unitManager.SpawnMonster(type);
         }
     }
 
     private async UniTask SpawnMinCount(Wave wave, CancellationToken token)
     {
         int minMonsterCount = wave.Data.MinMonsterCount;
-        int spawnCount = minMonsterCount - UnitManager.Instance.MonsterCount;
+        int spawnCount = minMonsterCount - unitManager.MonsterCount;
 
         int frameSpawnCount = 0;
 
         for (int i = 0; i < spawnCount; i++)
         {
-            if (minMonsterCount <= UnitManager.Instance.MonsterCount) break;
+            if (minMonsterCount <= unitManager.MonsterCount) break;
 
             int typeIndex = i % wave.Data.Types.Count;
 
-            UnitManager.Instance.SpawnMonster(wave.Data.Types[typeIndex]);
+            unitManager.SpawnMonster(wave.Data.Types[typeIndex]);
             frameSpawnCount++;
 
             if (frameSpawnCount >= maxSpawnPerFrame)
@@ -143,7 +149,7 @@ public class WaveManager
         {
             for (int i = 0; i < spawnEvent.Data.SpawnCount; i++)
             {
-                UnitManager.Instance.SpawnMonster(spawnEvent.Data.Type);
+                unitManager.SpawnMonster(spawnEvent.Data.Type);
                 frameSpawnCount++;
 
                 if (frameSpawnCount >= maxSpawnPerFrame)
