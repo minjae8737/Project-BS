@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5880f2fb1c5d4cef823a208f9063ebf1, type: 3}
+  m_Name: Stat Rules Data
+  m_EditorClassIdentifier: 
+  rules:
+  - StatType: 0
+    StatRoundingMode: 1
+    MinValue: 0
+  - StatType: 1
+    StatRoundingMode: 1
+    MinValue: 0
+  - StatType: 2
+    StatRoundingMode: 0
+    MinValue: 0
+  - StatType: 3
+    StatRoundingMode: 1
+    MinValue: 1
+  - StatType: 4
+    StatRoundingMode: 0
+    MinValue: 0
+  - StatType: 5
+    StatRoundingMode: 0
+    MinValue: 2
+  - StatType: 6
+    StatRoundingMode: 0
+    MinValue: 1
