@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public Vector3 MoveDir => movement.MoveDir;
     public float Radius => movement.Radius;
     public bool IsDead => stat.IsDead;
+    public float PickupRadius => stat.PickupRadius;
     
     private void Awake()
     { 

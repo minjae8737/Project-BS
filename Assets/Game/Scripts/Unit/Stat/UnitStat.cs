@@ -26,6 +26,7 @@ public class UnitStat : MonoBehaviour
     public float AttackPower => stats[StatType.AttackPower].FinalValue;
     public float MoveSpeed => stats[StatType.MoveSpeed].FinalValue;
     public float BaseSpeed => stats[StatType.MoveSpeed].BaseValue;
+    public float PickupRadius => stats[StatType.PickupRadius].FinalValue;
     public bool IsDead => hp <= 0;
     
     public event Action Died;

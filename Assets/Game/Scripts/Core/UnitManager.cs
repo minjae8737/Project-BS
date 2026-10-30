@@ -13,11 +13,7 @@ public class UnitManager : MonoBehaviour
 
     public int MonsterCount => monsterManager.MonsterCount;
 
-    public event Action<MonsterController> MonsterDeathFinished
-    {
-        add => monsterManager.MonsterDeathFinished += value;
-        remove => monsterManager.MonsterDeathFinished -= value;
-    }
+    public event Action<MonsterController> MonsterDeathFinished;
 
     private void Awake()
     {
@@ -41,11 +37,13 @@ public class UnitManager : MonoBehaviour
     private void OnEnable()
     {
         monsterManager.MonsterOutOfRange += HandleMonsterOutOfRange;
+        monsterManager.MonsterDeathFinished += MonsterDeathFinished;
     }
 
     private void OnDisable()
     {
         monsterManager.MonsterOutOfRange -= HandleMonsterOutOfRange;
+        monsterManager.MonsterDeathFinished -= MonsterDeathFinished;
     }
 
     public void SpawnMonster(MonsterType type)
