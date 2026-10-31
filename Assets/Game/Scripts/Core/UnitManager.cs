@@ -37,13 +37,13 @@ public class UnitManager : MonoBehaviour
     private void OnEnable()
     {
         monsterManager.MonsterOutOfRange += HandleMonsterOutOfRange;
-        monsterManager.MonsterDeathFinished += MonsterDeathFinished;
+        monsterManager.MonsterDeathFinished += HandleMonsterDeathFinished;
     }
 
     private void OnDisable()
     {
         monsterManager.MonsterOutOfRange -= HandleMonsterOutOfRange;
-        monsterManager.MonsterDeathFinished -= MonsterDeathFinished;
+        monsterManager.MonsterDeathFinished -= HandleMonsterDeathFinished;
     }
 
     public void SpawnMonster(MonsterType type)
@@ -70,5 +70,10 @@ public class UnitManager : MonoBehaviour
         {
             monsterManager.Relocate(monster, position);
         }
+    }
+
+    private void HandleMonsterDeathFinished(MonsterController monster)
+    {
+        MonsterDeathFinished?.Invoke(monster);
     }
 }

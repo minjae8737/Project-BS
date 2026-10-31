@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float Radius => movement.Radius;
     public bool IsDead => stat.IsDead;
     public float PickupRadius => stat.PickupRadius;
+    public Vector3 TargetPos => skillTarget.transform.position;
+    public Vector3 Pos => transform.position;
     
     private void Awake()
     { 

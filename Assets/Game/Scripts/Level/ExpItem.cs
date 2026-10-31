@@ -3,59 +3,53 @@ using UnityEngine;
 public enum DropItemState
 {
     Idle,
-    PickUp,
+    Attracting,
 }
 
 public class ExpItem : MonoBehaviour
 {
-    [SerializeField] private float duration;
-    
     private int exp;
     private DropItemState state;
-    private bool isReached;
-    private Vector3 startPos;
-    private AnimationCurve curve;
-    private float elapsed;
+    private bool isArrived;
+    private Vector3 attractStartPos;
+    private AnimationCurve attractCurve;
+    private float attractDuration;
+    private float attractElapsed;
 
     public DropItemState State => state;
-    public bool IsReached => isReached;
+    public bool IsArrived => isArrived;
 
     public void Init(Vector3 position, int exp, AnimationCurve curve, float duration)
     {
         transform.position = position;
-        startPos = position;
         this.exp = exp;
-        if (this.curve == null) this.curve = curve;
-        this.duration = duration;
+        attractCurve = curve;
+        attractDuration = duration;
 
         state = DropItemState.Idle;
-        isReached = false;
-        elapsed = 0f;
+        isArrived = false;
+        attractElapsed = 0f;
     }
 
     public void Tick(Vector3 playerPos, float deltaTime)
     {
-        switch (state)
-        {
-            case DropItemState.Idle:
-                break;
-            case DropItemState.PickUp:
-                MoveToTarget(playerPos, deltaTime);
-                break;
-        }
+        if (state == DropItemState.Idle) return;
+        
+        MoveToTarget(playerPos, deltaTime);
     }
 
-    public void SetStatePickUp()
+    public void StartAttract(Vector3 targetPos)
     {
-        state = DropItemState.PickUp;
+        state = DropItemState.Attracting;
+        attractStartPos = targetPos;
     }
 
     private void MoveToTarget(Vector3 targetPos, float deltaTime)
     {
-        elapsed += deltaTime;
+        attractElapsed += deltaTime;
 
-        float t = Mathf.Clamp01(elapsed / duration);
-        transform.position = Vector3.LerpUnclamped(startPos, targetPos, curve.Evaluate(t));
-        isReached = t >= 1f;
+        float t = Mathf.Clamp01(attractElapsed / attractDuration);
+        transform.position = Vector3.LerpUnclamped(attractStartPos, targetPos, attractCurve.Evaluate(t));
+        isArrived = t >= 1f;
     }
 }

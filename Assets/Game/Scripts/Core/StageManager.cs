@@ -9,7 +9,7 @@ public class StageManager : Singleton<StageManager>
     [SerializeField] private UnitManager unitManager;
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private LevelManager levelManager;
-    [SerializeField] private ExpItemSpawner expItemSpawner;
+    [SerializeField] private ExpItemManager expItemManager;
 
     [SerializeField] private PlayerController playerController;
     
@@ -36,7 +36,7 @@ public class StageManager : Singleton<StageManager>
     {
         unitManager.Init(playerController);
         waveManager.Init(unitManager);
-        expItemSpawner.Init(playerController);
+        expItemManager.Init(playerController);
         
         //FIXME Test 코드
         StageRoutine(destroyCancellationToken).Forget();
@@ -80,6 +80,6 @@ public class StageManager : Singleton<StageManager>
         //FIXME 
         int exp = 1;
         
-        expItemSpawner.Spawn(monster.transform.position, exp);
+        expItemManager.Spawn(monster.transform.position, exp);
     }
 }

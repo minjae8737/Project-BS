@@ -8,7 +8,7 @@ public class MonsterManager : MonoBehaviour
     [SerializeField] private List<MonsterController> prefabs;
 
     private StatRulesData statRulesData;
-    private PlayerController player;
+    private PlayerController playerController;
     private Dictionary<MonsterType, MonsterController> prefabDic;
     private List<MonsterController> monsters;
 
@@ -41,7 +41,7 @@ public class MonsterManager : MonoBehaviour
     public void Init(StatRulesData statRulesData, PlayerController playerController, float relocateRange)
     {
         this.statRulesData = statRulesData;
-        player = playerController;
+        this.playerController = playerController;
         this.relocateRange = relocateRange;
     }
 
@@ -49,7 +49,7 @@ public class MonsterManager : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
 
-        Vector3 targetPosition = player.transform.position;
+        Vector3 targetPosition = playerController.transform.position;
         targetPosition.y = 0f;
 
         CachePositions();
@@ -103,7 +103,7 @@ public class MonsterManager : MonoBehaviour
 
     private void TickMonsters(Vector3 targetPosition, float deltaTime)
     {
-        float playerRadius = player.Radius;
+        float playerRadius = playerController.Radius;
 
         for (int i = monsters.Count - 1; i >= 0; i--)
         {
@@ -129,7 +129,7 @@ public class MonsterManager : MonoBehaviour
         if (prefabDic.TryGetValue(type, out MonsterController prefab))
         {
             MonsterController monster = PoolManager.Instance.Get(prefab);
-            monster.Init(statRulesData, player, position);
+            monster.Init(statRulesData, playerController, position);
             monster.DeathFinished += HandleDeathFinishedMonster;
             monsters.Add(monster);
         }
