@@ -16,6 +16,7 @@ public class ExpItem : MonoBehaviour
     private float attractDuration;
     private float attractElapsed;
 
+    public int Exp => exp;
     public DropItemState State => state;
     public bool IsArrived => isArrived;
 
@@ -38,10 +39,10 @@ public class ExpItem : MonoBehaviour
         MoveToTarget(playerPos, deltaTime);
     }
 
-    public void StartAttract(Vector3 targetPos)
+    public void StartAttract()
     {
         state = DropItemState.Attracting;
-        attractStartPos = targetPos;
+        attractStartPos = transform.position;
     }
 
     private void MoveToTarget(Vector3 targetPos, float deltaTime)

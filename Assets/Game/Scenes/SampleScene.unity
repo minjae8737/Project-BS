@@ -375,6 +375,17 @@ MonoBehaviour:
   waveManager:
     maxMonsterCount: 200
     maxSpawnPerFrame: 5
+  levelManager:
+    requiredExpSegments:
+    - startLevel: 1
+      startRequiredExp: 5
+      increment: 10
+    - startLevel: 10
+      startRequiredExp: 95
+      increment: 50
+    - startLevel: 20
+      startRequiredExp: 600
+      increment: 100
   expItemManager: {fileID: 1923950333}
   playerController: {fileID: 829059572}
 --- !u!1 &410087039

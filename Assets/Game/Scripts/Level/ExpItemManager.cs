@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -9,8 +10,9 @@ public class ExpItemManager : MonoBehaviour
     [SerializeField] private float duration = 1f;
 
     private PlayerController playerController;
-
     private List<ExpItem> expItems;
+
+    public event Action<int> ExpCollected;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class ExpItemManager : MonoBehaviour
     {
         if (playerController == null) return;
 
+        int collectedExp = 0;
         Vector3 playerPos = playerController.Pos;
         Vector3 playerTargetPos = playerController.TargetPos;
         float pickupRadius = playerController.PickupRadius;
@@ -45,9 +48,14 @@ public class ExpItemManager : MonoBehaviour
 
             if (expItem.IsArrived)
             {
-                Collect(expItem);
+                collectedExp = Collect(expItem, collectedExp);
                 ReleaseAt(i);
             }
+        }
+
+        if (collectedExp > 0)
+        {
+            ExpCollected?.Invoke(collectedExp);
         }
     }
 
@@ -66,12 +74,13 @@ public class ExpItemManager : MonoBehaviour
         if (expItem.State == DropItemState.Idle &&
             (playerPos - expItem.transform.position).sqrMagnitude <= sqrPickupRadius)
         {
-            expItem.StartAttract(playerPos);
+            expItem.StartAttract();
         }
     }
 
-    private void Collect(ExpItem expItem)
+    private int Collect(ExpItem expItem, int collectedExp)
     {
+        return collectedExp += expItem.Exp;
     }
 
     private void ReleaseAt(int index)

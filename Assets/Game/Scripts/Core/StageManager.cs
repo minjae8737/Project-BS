@@ -25,11 +25,13 @@ public class StageManager : Singleton<StageManager>
     private void OnEnable()
     {
         unitManager.MonsterDeathFinished += HandleMonsterDeathFinished;
+        expItemManager.ExpCollected += HandleExpCollected;
     }
 
     private void OnDisable()
     {
         unitManager.MonsterDeathFinished -= HandleMonsterDeathFinished;
+        expItemManager.ExpCollected -= HandleExpCollected;
     }
 
     public void Init()
@@ -37,6 +39,7 @@ public class StageManager : Singleton<StageManager>
         unitManager.Init(playerController);
         waveManager.Init(unitManager);
         expItemManager.Init(playerController);
+        levelManager.Init();
         
         //FIXME Test 코드
         StageRoutine(destroyCancellationToken).Forget();
@@ -77,9 +80,11 @@ public class StageManager : Singleton<StageManager>
 
     private void HandleMonsterDeathFinished(MonsterController monster)
     {
-        //FIXME 
-        int exp = 1;
-        
-        expItemManager.Spawn(monster.transform.position, exp);
+        expItemManager.Spawn(monster.transform.position, monster.DropExp);
+    }
+
+    private void HandleExpCollected(int exp)
+    {
+        levelManager.AddExp(exp);
     }
 }

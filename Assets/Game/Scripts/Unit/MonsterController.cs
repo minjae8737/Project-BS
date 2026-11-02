@@ -15,12 +15,14 @@ public class MonsterController : MonoBehaviour, IDamageable
     private float attackTimer;
 
     [SerializeField] private MonsterType type;
+    [SerializeField, Min(1)] private int dropExp = 1;
     [SerializeField, Min(0)] private float separationRadius;
     [SerializeField, Min(0)] private float attackCooldown;
     [SerializeField, Min(0)] private float height;
 
 
     public MonsterType Type => type;
+    public int DropExp => dropExp;
     public float SeparationRadius => separationRadius;
     public bool IsDead => stat.IsDead;
 
