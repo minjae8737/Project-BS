@@ -12,8 +12,9 @@ public class WaveManager
     private UnitManager unitManager;
 
     [SerializeField] private int maxMonsterCount = 200;
-    [SerializeField] private int maxSpawnPerFrame = 5;
-
+    [SerializeField] private int maxSpawnPerDelay = 5;
+    [SerializeField] private float maxSpawnDelay = 0.02f;
+        
     public void Init(UnitManager unitManager)
     {
         this.unitManager = unitManager;
@@ -131,10 +132,10 @@ public class WaveManager
             unitManager.SpawnMonster(wave.Data.Types[typeIndex]);
             frameSpawnCount++;
 
-            if (frameSpawnCount >= maxSpawnPerFrame)
+            if (frameSpawnCount >= maxSpawnPerDelay)
             {
                 frameSpawnCount = 0;
-                await UniTask.NextFrame(token);
+                await UniTask.Delay(TimeSpan.FromSeconds(maxSpawnDelay), cancellationToken: token);
             }
         }
     }
@@ -152,10 +153,10 @@ public class WaveManager
                 unitManager.SpawnMonster(spawnEvent.Data.Type);
                 frameSpawnCount++;
 
-                if (frameSpawnCount >= maxSpawnPerFrame)
+                if (frameSpawnCount >= maxSpawnPerDelay)
                 {
                     frameSpawnCount = 0;
-                    await UniTask.NextFrame(token);
+                    await UniTask.Delay(TimeSpan.FromSeconds(maxSpawnDelay), cancellationToken: token);
                 }
             }
 

@@ -20,6 +20,10 @@ public class GameManager : Singleton<GameManager>
         //FIXME
         InputAction testAction = InputSystem.actions.FindAction(InputActionNames.TestInteractName, throwIfNotFound: true);
         testAction.performed += Test;
+        
+        //FIXME 씬 추가되면 변경
+        playerActionMap.Enable();
+        uiActionMap.Disable();
 
         StageManager.Instance.Init();
     }
@@ -45,8 +49,7 @@ public class GameManager : Singleton<GameManager>
             pauseCount = 0;
             Debug.LogError("[GameManager] 중복된 Resume 요청이 있습니다.", this);
         }
-
-        if (pauseCount == 0)
+        else if (pauseCount == 0)
         {
             Time.timeScale = 1;
             playerActionMap.Enable();
