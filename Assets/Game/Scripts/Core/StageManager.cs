@@ -7,9 +7,13 @@ public class StageManager : Singleton<StageManager>
 {
     [SerializeField] private StageData stageData;
     [SerializeField] private UnitManager unitManager;
+    [Header("## WaveManager")]
     [SerializeField] private WaveManager waveManager;
+    [Header("## LevelManager")]
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private ExpItemManager expItemManager;
+    [Header("## LevelUpRewardManager")]
+    [SerializeField] private LevelUpRewardManager levelUpRewardManager;
 
     [SerializeField] private PlayerController playerController;
     
@@ -26,12 +30,14 @@ public class StageManager : Singleton<StageManager>
     {
         unitManager.MonsterDeathFinished += HandleMonsterDeathFinished;
         expItemManager.ExpCollected += HandleExpCollected;
+        levelManager.LeveledUp += HandleLeveledUp;
     }
 
     private void OnDisable()
     {
         unitManager.MonsterDeathFinished -= HandleMonsterDeathFinished;
         expItemManager.ExpCollected -= HandleExpCollected;
+        levelManager.LeveledUp -= HandleLeveledUp;
     }
 
     public void Init()
@@ -86,5 +92,10 @@ public class StageManager : Singleton<StageManager>
     private void HandleExpCollected(int exp)
     {
         levelManager.AddExp(exp);
+    }
+    
+    private void HandleLeveledUp(int level)
+    {
+        levelUpRewardManager.AddRewardCount();
     }
 }

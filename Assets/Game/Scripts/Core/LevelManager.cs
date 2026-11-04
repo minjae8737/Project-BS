@@ -63,7 +63,7 @@ public class LevelManager
         level++;
         requiredExp = CalculateRequiredExp(level);
         LeveledUp?.Invoke(level);
-
+        
         return true;
     }
 
