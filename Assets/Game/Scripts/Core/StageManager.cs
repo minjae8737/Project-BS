@@ -7,16 +7,19 @@ public class StageManager : Singleton<StageManager>
 {
     [SerializeField] private StageData stageData;
     [SerializeField] private UnitManager unitManager;
+    [SerializeField] private ExpItemManager expItemManager;
+    [SerializeField] private PlayerController playerController;
+    
     [Header("## WaveManager")]
     [SerializeField] private WaveManager waveManager;
+
     [Header("## LevelManager")]
     [SerializeField] private LevelManager levelManager;
-    [SerializeField] private ExpItemManager expItemManager;
+
     [Header("## LevelUpRewardManager")]
     [SerializeField] private LevelUpRewardManager levelUpRewardManager;
 
-    [SerializeField] private PlayerController playerController;
-    
+    private CancellationTokenSource stageCts;
     private float stageElapsed;
 
     protected override void Awake()
@@ -42,18 +45,20 @@ public class StageManager : Singleton<StageManager>
 
     public void Init()
     {
+        stageCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+
         unitManager.Init(playerController);
         waveManager.Init(unitManager);
         expItemManager.Init(playerController);
         levelManager.Init();
+        levelUpRewardManager.Init(stageCts.Token);
         
         //FIXME Test 코드
-        StageRoutine(destroyCancellationToken).Forget();
+        StageRoutine(stageCts.Token).Forget();
     }
 
     public async UniTaskVoid StageRoutine(CancellationToken token)
     {
-        CancellationTokenSource stageCts = CancellationTokenSource.CreateLinkedTokenSource(token);
 
         waveManager.WaveRoutine(stageCts.Token, stageData).Forget();
         waveManager.SpawnEventRoutine(stageCts.Token, stageData);
@@ -96,6 +101,6 @@ public class StageManager : Singleton<StageManager>
     
     private void HandleLeveledUp(int level)
     {
-        levelUpRewardManager.AddRewardCount();
+        levelUpRewardManager.AddPendingReward();
     }
 }

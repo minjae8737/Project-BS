@@ -372,6 +372,8 @@ MonoBehaviour:
   persistAcrossScenes: 0
   stageData: {fileID: 11400000, guid: 8336dc8caf5d140a28c00cf9d7430626, type: 2}
   unitManager: {fileID: 842580332}
+  expItemManager: {fileID: 1923950333}
+  playerController: {fileID: 829059572}
   waveManager:
     maxMonsterCount: 200
     maxSpawnPerDelay: 5
@@ -387,10 +389,8 @@ MonoBehaviour:
     - startLevel: 20
       startRequiredExp: 600
       increment: 100
-  expItemManager: {fileID: 1923950333}
   levelUpRewardManager:
     levelUpRewardPanel: {fileID: 1421588646}
-  playerController: {fileID: 829059572}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +649,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1421588646}
         m_TargetAssemblyTypeName: LevelUpRewardPanel, Assembly-CSharp
-        m_MethodName: OnClickCard
+        m_MethodName: OnCardClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1567,7 +1567,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1421588646}
         m_TargetAssemblyTypeName: LevelUpRewardPanel, Assembly-CSharp
-        m_MethodName: OnClickCard
+        m_MethodName: OnCardClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1753,7 +1753,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1421588646}
         m_TargetAssemblyTypeName: LevelUpRewardPanel, Assembly-CSharp
-        m_MethodName: OnClickCard
+        m_MethodName: OnCardClicked
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

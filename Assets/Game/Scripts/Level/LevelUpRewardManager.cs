@@ -8,73 +8,77 @@ public class LevelUpRewardManager
 {
     [SerializeField] private LevelUpRewardPanel levelUpRewardPanel;
 
+    private CancellationToken token;
     private UniTaskCompletionSource<int> selectionTcs;
-    private int remainRewardCount;
-    private bool ongoing;
-
-    public bool Ongoing => ongoing;
-
-    public void Init()
+    private int pendingRewardCount;
+    private bool isRunning;
+    
+    public void Init(CancellationToken token)
     {
-        levelUpRewardPanel.SelectedReward += HandleSelectedReward;
+        this.token = token;
+        pendingRewardCount = 0;
     }
 
-    public void AddRewardCount()
+    public void AddPendingReward()
     {
-        remainRewardCount++;
+        pendingRewardCount++;
 
-        if (ongoing) return;
-        // Routine(token).Forget();
+        if (isRunning) return;
+
+        levelUpRewardPanel.RewardSelected += HandleRewardSelected;
+        RewardRoutine(token).Forget();
     }
 
-    private async UniTaskVoid Routine(CancellationToken token)
+    private async UniTaskVoid RewardRoutine(CancellationToken token)
     {
         GameManager.Instance.RequestPause();
-        ongoing = true;
-
-        selectionTcs?.TrySetCanceled();
+        isRunning = true;
+        
         UniTaskCompletionSource<int> tcs = null;
 
         try
         {
-            while (remainRewardCount > 0)
+            while (pendingRewardCount > 0)
             {
                 tcs = new UniTaskCompletionSource<int>();
                 selectionTcs = tcs;
 
-                CreateReward();
-                ShowReward();
+                CreateRewardOptions();
+                ShowOptions();
 
-                await tcs.Task.AttachExternalCancellation(token);
+                int rewardIndex = await tcs.Task.AttachExternalCancellation(token);
 
                 //reward 적용
-                remainRewardCount--;
+                Debug.Log($"Apply Reward Index {rewardIndex}");
+                pendingRewardCount--;
             }
         }
         finally
         {
             if (selectionTcs == tcs) selectionTcs = null;
-            HideReward();
-            ongoing = false;
-            GameManager.Instance.RequestResume();
+            HidePanel();
+            isRunning = false;
+            if (GameManager.HasInstance)
+                GameManager.Instance.RequestResume();
+            levelUpRewardPanel.RewardSelected -= HandleRewardSelected;
         }
     }
 
-    private void CreateReward()
+    private void CreateRewardOptions()
     {
     }
 
-    private void ShowReward()
+    private void ShowOptions()
     {
-        levelUpRewardPanel.OpenReward();
+        levelUpRewardPanel.Show();
     }
 
-    private void HideReward()
+    private void HidePanel()
     {
-        levelUpRewardPanel.ClosePanel();
+        levelUpRewardPanel.Hide();
     }
 
-    private void HandleSelectedReward(int rewardIndex)
+    private void HandleRewardSelected(int rewardIndex)
     {
         selectionTcs?.TrySetResult(rewardIndex);
     }

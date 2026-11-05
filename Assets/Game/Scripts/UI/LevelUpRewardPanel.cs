@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class LevelUpRewardPanel : MonoBehaviour
 {
-    public event Action<int> SelectedReward;
+    public event Action<int> RewardSelected;
 
-    public void OpenReward()
+    public void Show()
     {
         gameObject.SetActive(true);
     }
 
-    public void ClosePanel()
+    public void Hide()
     {
         gameObject.SetActive(false);
     }
     
-    public void OnClickCard(int cardIndex)
+    public void OnCardClicked(int cardIndex)
     {
-        SelectedReward?.Invoke(cardIndex);
+        RewardSelected?.Invoke(cardIndex);
     }
 }

@@ -1040,17 +1040,6 @@
                 },
                 {
                     "name": "",
-                    "id": "a32b16d0-1f25-4549-9db0-c95fc456dbf8",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e6589f71-1558-4ba1-8831-d5cb57f3e825",
                     "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
