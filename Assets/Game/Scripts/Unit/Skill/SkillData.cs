@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public abstract class SkillData : ScriptableObject
+public abstract class SkillData : AbilityData
 {
     [SerializeField, Min(0)] private float damagePer;
     [SerializeField, Min(0)] private float cooldown;
-    [SerializeField, Min(0)] private float range;
+    [SerializeField, Min(0)] private float attackRange;
     [SerializeField] private LayerMask targetLayer;
 
     public float DamagePer => damagePer;
     public float Cooldown => cooldown;
-    public float Range => range;
+    public float AttackRange => attackRange;
     public LayerMask TargetLayer => targetLayer;
 
     public abstract Skill CreateSkill();

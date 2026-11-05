@@ -12,16 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef9e4e6b08e46af9eafa950a6848066, type: 3}
   m_Name: Projectile Skill Data
   m_EditorClassIdentifier: 
+  displayName: 
+  icon: {fileID: 0}
+  description: 
   damagePer: 1.5
   cooldown: 1
-  range: 40
+  attackRange: 40
   targetLayer:
     serializedVersion: 2
     m_Bits: 4096
+  quantity: 1
   speed: 15
   maxDistance: 100
+  range: 0
   penetration: 0
   projectilePrefab: {fileID: 3268986765273442530, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 768
+  levelOptions:
+  - damagePer: 0
+    cooldown: 0
+    speed: 0
+    quantity: 0
+    penetration: 0
+    range: 0
+    description: 
+  - damagePer: 0
+    cooldown: 0
+    speed: 0
+    quantity: 0
+    penetration: 0
+    range: 0
+    description: 
+  - damagePer: 0
+    cooldown: 0
+    speed: 0
+    quantity: 0
+    penetration: 0
+    range: 0
+    description: 
+  - damagePer: 0
+    cooldown: 0
+    speed: 0
+    quantity: 0
+    penetration: 0
+    range: 0
+    description: 

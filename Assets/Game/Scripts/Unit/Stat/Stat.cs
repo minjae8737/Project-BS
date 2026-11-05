@@ -8,7 +8,9 @@ public enum StatType
     MaxHp,
     HpRegeneration,
     MoveSpeed,
-    PickupRadius
+    PickupRadius,
+    AttackSpeed,
+    SkillRange
 }
 
 public enum StatModifierType

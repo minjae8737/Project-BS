@@ -23,7 +23,7 @@ public class ProjectileSkill : Skill
     
     protected override bool TryExecute(SkillContext context)
     {
-        int targetCount = Physics.OverlapSphereNonAlloc(context.SkillStartPos, projectileData.Range, targets, projectileData.TargetLayer);
+        int targetCount = Physics.OverlapSphereNonAlloc(context.SkillStartPos, projectileData.AttackRange, targets, projectileData.TargetLayer);
 
         if (targetCount > 0)
         {
