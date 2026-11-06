@@ -5,9 +5,11 @@ using UnityEngine;
 [Serializable]
 public class PassiveLevelBonus
 {
-    [SerializeField] private List<Stat> stats;
-
+    [SerializeField, Tooltip("이 레벨에서 더해지는 양")] private List<StatModifier> modifiers;
     [SerializeField, TextArea, Tooltip("레벨별 증가량")] private string description;
+    
+    public IReadOnlyList<StatModifier> Modifiers => modifiers;
+    public string Description => description;
 }
 
 [CreateAssetMenu(menuName = "Ability/Passive")]
@@ -17,7 +19,7 @@ public class PassiveData : AbilityData
 
     public IReadOnlyList<PassiveLevelBonus> LevelBonus => levelBonus;
 
-    private static int maxOptionCount = maxLevel;
+    private static int maxOptionCount = MaxLevel;
 
     private void OnValidate()
     {

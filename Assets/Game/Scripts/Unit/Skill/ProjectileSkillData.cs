@@ -12,22 +12,48 @@ public struct ProjectileLevelBonus
     [SerializeField, Min(0)] private int penetration;
     [SerializeField, Min(0)] private float sizePercent;
     [SerializeField, TextArea] private string description;
+
+    public float DamagePercent
+    {
+        get => damagePercent / 100f;
+    }
+
+    public float CooldownPercent
+    {
+        get => cooldownPercent / 100f;
+    }
+
+    public float SpeedPercent
+    {
+        get => speedPercent / 100f;
+    }
+
+    public int Quantity => quantity;
+
+    public int Penetration => penetration;
+
+    public float SizePercent
+    {
+        get => sizePercent / 100f;
+    }
+
+    public string Description => description;
 }
 
 [CreateAssetMenu(menuName = "Ability/Projectile")]
 public class ProjectileSkillData : SkillData
 {
     [Header("Projectile Info")] 
-    [SerializeField, Min(1)] private int quantity;
+    [SerializeField, Min(1)] private int quantity = 1;
     [SerializeField, Min(0)] private float speed;
     [SerializeField, Min(0)] private float maxDistance;
-    [SerializeField, Min(1f)] private float size;
+    [SerializeField, Min(0.1f)] private float size = 1f;
     [SerializeField, Min(0)] private int penetration;
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private List<ProjectileLevelBonus> levelBonus;
-    
-    private static int maxOptionCount = maxLevel - 1;
+
+    private static int maxOptionCount = MaxLevel - 1;
 
     public int Quantity => quantity;
     public float Speed => speed;
@@ -38,7 +64,7 @@ public class ProjectileSkillData : SkillData
     public LayerMask ObstacleLayer => obstacleLayer;
     public IReadOnlyList<ProjectileLevelBonus> LevelBonus => levelBonus;
 
-    
+
     public override Skill CreateSkill()
     {
         return new ProjectileSkill(this);
@@ -56,7 +82,7 @@ public class ProjectileSkillData : SkillData
         else if (levelBonus.Count < maxOptionCount)
         {
             int diffCount = maxOptionCount - levelBonus.Count;
-            
+
             for (int i = 0; i < diffCount; i++)
             {
                 levelBonus.Add(new ProjectileLevelBonus());

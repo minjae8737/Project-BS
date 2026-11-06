@@ -72,10 +72,10 @@ public class StatSlot
                 switch (modifier.StatModifierType)
                 {
                     case StatModifierType.Flat:
-                        flatValue += modifier.Value;
+                        flatValue += modifier.AppliedValue;
                         break;
                     case StatModifierType.Percent:
-                        percentValue += modifier.Value;
+                        percentValue += modifier.AppliedValue;
                         break;
                 }
             }
