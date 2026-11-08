@@ -7,6 +7,7 @@ using UnityEngine;
 public class LevelUpRewardManager
 {
     [SerializeField] private LevelUpRewardPanel levelUpRewardPanel;
+    [SerializeField] private RewardOptionGenerator rewardOptionGenerator;
 
     private CancellationToken token;
     private UniTaskCompletionSource<int> selectionTcs;

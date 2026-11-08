@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
+    private PlayerAbilities abilities;
     private UnitStat stat;
     private PlayerSkills skills;
     private SkillTarget skillTarget;

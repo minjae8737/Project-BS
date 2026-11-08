@@ -391,6 +391,8 @@ MonoBehaviour:
       increment: 100
   levelUpRewardManager:
     levelUpRewardPanel: {fileID: 1421588646}
+    rewardOptionGenerator:
+      catalog: {fileID: 11400000, guid: 7cbeb32b5e02e4060a4e3763722f4309, type: 2}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

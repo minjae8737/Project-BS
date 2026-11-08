@@ -18,8 +18,8 @@ public class PassiveData : AbilityData
     [SerializeField] private List<PassiveLevelBonus> levelBonus;
 
     public IReadOnlyList<PassiveLevelBonus> LevelBonus => levelBonus;
-
     private static int maxOptionCount = MaxLevel;
+    public override AbilityType Type => AbilityType.Passive;
 
     private void OnValidate()
     {
