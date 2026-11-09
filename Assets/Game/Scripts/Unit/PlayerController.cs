@@ -4,8 +4,8 @@ using UnityEngine.Assertions;
 public class PlayerController : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform cameraTransform;
-    [SerializeField, Min(0)] private float height;     
-    
+    [SerializeField, Min(0)] private float height;
+
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
     private PlayerAnimationController animationController;
@@ -20,22 +20,25 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float PickupRadius => stat.PickupRadius;
     public Vector3 TargetPos => skillTarget.transform.position;
     public Vector3 Pos => transform.position;
-    
+
     private void Awake()
-    { 
+    {
         inputReader = GetComponent<PlayerInputReader>();
         movement = GetComponent<PlayerMovement>();
         animationController = GetComponent<PlayerAnimationController>();
         stat = GetComponent<UnitStat>();
         skills = GetComponent<PlayerSkills>();
         skillTarget = GetComponentInChildren<SkillTarget>();
-        
+
         Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
         Assert.IsNotNull(skillTarget, $"{gameObject.name} 에 skillTarget이 할당 되어야합니다.");
     }
 
     public void Init(StatRulesData statRulesData)
     {
+        abilities = new();
+        
+        abilities.Init();
         stat.Init(statRulesData);
         skills.Init(); //TODO 스킬은 얻어서 초기화해야하므로 초기화 구조가 바뀔것 
         skillTarget.SetActive(true);
@@ -64,12 +67,12 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Update()
     {
         if (IsDead) return;
-        
+
         float deltaTime = Time.deltaTime;
-        
+
         // 스킬
         skills.Tick(transform.position, stat.AttackPower, deltaTime);
-        
+
         // 이동
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);
 
@@ -80,26 +83,56 @@ public class PlayerController : MonoBehaviour, IDamageable
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }
-    
+
     private Vector3 ToWorldDirection(Vector2 moveInput)
     {
         Vector3 cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
-        
+
         cameraForward.y = 0f;
         cameraRight.y = 0f;
-        
+
         cameraForward.Normalize();
         cameraRight.Normalize();
-        
-        return  moveInput.x * cameraRight + moveInput.y * cameraForward;
+
+        return moveInput.x * cameraRight + moveInput.y * cameraForward;
     }
-    
+
     public void TakeDamage(float rawDamage)
     {
         stat.TakeDamage(rawDamage);
     }
-    
+
+    public void ApplyAbility(AbilityData abilityData)
+    {
+        if (abilities.TryLevelUp(abilityData, out int level))
+        {
+            switch (abilityData.Type)
+            {
+                case AbilityType.Active:
+                    break;
+                case AbilityType.Passive:
+                    break;
+            }
+        }
+        else if (abilities.TryAcquire(abilityData))
+        {
+            level = 1;
+            
+            switch (abilityData.Type)
+            {
+                case AbilityType.Active:
+                    break;
+                case AbilityType.Passive:
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogError($"[PlayerController] ApplyAbility 실패.\n", this);
+        }
+    }
+
     private void HandleDamaged(int damage)
     {
         Vector3 position = transform.position;
@@ -107,7 +140,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         DamageTextSpawner.Instance.Show(position, damage);
     }
-    
+
     private void HandleDeath()
     {
         animationController.PlayDeathClip();

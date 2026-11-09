@@ -29,6 +29,13 @@ public abstract class Skill
         OnTick(deltaTime);
     }
 
+    public void SetLevel(int level)
+    {
+        
+    }
+    
+    public abstract void OnLevelChanged(int level);
+
     protected abstract bool TryExecute(SkillContext context);
 
     protected virtual void OnTick(float deltaTime) { }

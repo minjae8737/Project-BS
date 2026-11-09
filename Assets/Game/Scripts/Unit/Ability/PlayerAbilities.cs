@@ -2,15 +2,13 @@ using System.Collections.Generic;
 
 public class PlayerAbilities
 {
-    private AbilityCatalogData catalog;
     private List<AbilitySlot> abilitySlots;
 
     private const int MaxActiveSlotCount = 3;
     private const int MaxPassiveSlotCount = 3;
 
-    public void Init(AbilityCatalogData abilityCatalogData)
+    public void Init()
     {
-        catalog = abilityCatalogData;
         abilitySlots = new();
     }
 
@@ -40,18 +38,38 @@ public class PlayerAbilities
                 count++;
         }
 
-        return count < (abilityType == AbilityType.Skill ? MaxActiveSlotCount : MaxPassiveSlotCount);
+        return count < (abilityType == AbilityType.Active ? MaxActiveSlotCount : MaxPassiveSlotCount);
     }
 
     public bool HasAbility(AbilityData abilityData)
     {
-        return TryFindAbilitySlot(abilityData, out var abilitySlot);
+        return TryFindAbilitySlot(abilityData, out var _);
     }
 
-    public void LevelUp()
+    public bool TryAcquire(AbilityData abilityData)
     {
-        
+        if (HasAbility(abilityData) || !HasEmptySlot(abilityData.Type))
+            return false;
+
+        AbilitySlot newSlot = new AbilitySlot(abilityData);
+        abilitySlots.Add(newSlot);
+
+        return true;
     }
-    
-    
+
+    public bool TryLevelUp(AbilityData abilityData, out int newlevel)
+    {
+        newlevel = 0;
+
+        if (!TryFindAbilitySlot(abilityData, out AbilitySlot abilitySlot))
+            return false;
+
+        if (abilitySlot.IsMaxLevel) 
+            return false;
+        
+        abilitySlot.LevelUp();
+        newlevel = abilitySlot.Level;
+
+        return true;
+    }
 }

@@ -5,36 +5,36 @@ using UnityEngine;
 [Serializable]
 public struct ProjectileLevelBonus
 {
-    [SerializeField, Min(0)] private float damagePercent;
-    [SerializeField, Min(0)] private float cooldownPercent;
-    [SerializeField, Min(0)] private float speedPercent;
+    [SerializeField, Min(0)] private float damageRate;
+    [SerializeField, Min(0)] private float cooldownReductionRate;
+    [SerializeField, Min(0)] private float speedRate;
     [SerializeField, Min(0)] private int quantity;
     [SerializeField, Min(0)] private int penetration;
-    [SerializeField, Min(0)] private float sizePercent;
+    [SerializeField, Min(0)] private float sizeRate;
     [SerializeField, TextArea] private string description;
 
-    public float DamagePercent
+    public float DamageRate
     {
-        get => damagePercent / 100f;
+        get => damageRate / 100f;
     }
 
-    public float CooldownPercent
+    public float CooldownReductionRate
     {
-        get => cooldownPercent / 100f;
+        get => cooldownReductionRate / 100f;
     }
 
-    public float SpeedPercent
+    public float SpeedRate
     {
-        get => speedPercent / 100f;
+        get => speedRate / 100f;
     }
 
     public int Quantity => quantity;
 
     public int Penetration => penetration;
 
-    public float SizePercent
+    public float SizeRate
     {
-        get => sizePercent / 100f;
+        get => sizeRate / 100f;
     }
 
     public string Description => description;
@@ -53,7 +53,7 @@ public class ProjectileSkillData : SkillData
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private List<ProjectileLevelBonus> levelBonus;
 
-    private static int maxOptionCount = MaxLevel - 1;
+    private const int BonusRowCount = MaxLevel - 1;
 
     public int Quantity => quantity;
     public float Speed => speed;
@@ -72,21 +72,42 @@ public class ProjectileSkillData : SkillData
 
     private void OnValidate()
     {
-        if (levelBonus.Count > maxOptionCount)
+        if (levelBonus.Count > BonusRowCount)
         {
-            for (int i = levelBonus.Count - 1; i >= maxOptionCount; i--)
+            for (int i = levelBonus.Count - 1; i >= BonusRowCount; i--)
             {
                 levelBonus.RemoveAt(i);
             }
         }
-        else if (levelBonus.Count < maxOptionCount)
+        else if (levelBonus.Count < BonusRowCount)
         {
-            int diffCount = maxOptionCount - levelBonus.Count;
+            int diffCount = BonusRowCount - levelBonus.Count;
 
             for (int i = 0; i < diffCount; i++)
             {
                 levelBonus.Add(new ProjectileLevelBonus());
             }
         }
+    }
+
+    public bool TryCalculateSkillStats(int level, out ProjectileSkillStats skillStats)
+    {
+        skillStats = new(this);
+
+        if (level < 0 || level > MaxLevel) return false;
+
+        int bonusIndex = level - 2;
+
+        for (int i = 0; i < bonusIndex; i++)
+        {
+            skillStats.DamagePer += levelBonus[i].DamageRate;
+            skillStats.Cooldown += levelBonus[i].CooldownReductionRate;
+            skillStats.Quantity += levelBonus[i].Quantity;
+            skillStats.Speed += levelBonus[i].SpeedRate;
+            skillStats.Size += levelBonus[i].SizeRate;
+            skillStats.Penetration += levelBonus[i].Penetration;
+        }
+
+        return true;
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum AbilityType
 {
-    Skill,
+    Active,
     Passive
 }
 

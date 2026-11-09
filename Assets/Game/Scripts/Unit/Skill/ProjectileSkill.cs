@@ -7,6 +7,7 @@ public class ProjectileSkill : Skill
     private Collider[] targets = new Collider[32];
 
     private ProjectileSkillData projectileData;
+    private ProjectileSkillStats currentStats;
 
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
@@ -20,7 +21,15 @@ public class ProjectileSkill : Skill
 
         return newProjectile;
     }
-    
+
+    public override void OnLevelChanged(int level)
+    {
+        if (projectileData.TryCalculateSkillStats(level, out var newFinalValue))
+        {
+            currentStats = newFinalValue;
+        }
+    }
+
     protected override bool TryExecute(SkillContext context)
     {
         int targetCount = Physics.OverlapSphereNonAlloc(context.SkillStartPos, projectileData.AttackRange, targets, projectileData.TargetLayer);
@@ -59,12 +68,12 @@ public class ProjectileSkill : Skill
         Projectile newProjectile = GetProjectile();
         Vector3 moveDir = (nearestTarget.transform.position - context.SkillStartPos).normalized;
         newProjectile.Init(
-            context.AttackPower * projectileData.DamagePer,
+            context.AttackPower * currentStats.DamagePer,
             context.SkillStartPos,
             moveDir,
-            projectileData.Speed,
-            projectileData.MaxDistance,
-            projectileData.Penetration,
+            currentStats.Speed,
+            currentStats.MaxDistance,
+            currentStats.Penetration,
             projectileData.TargetLayer,
             projectileData.ObstacleLayer);
     }

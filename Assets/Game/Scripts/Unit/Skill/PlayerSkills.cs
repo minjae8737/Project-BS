@@ -5,10 +5,15 @@ public class PlayerSkills : MonoBehaviour
 {
     [SerializeField] private List<SkillData> datas;
     [SerializeField] private Vector3 skillStartOffset;
+    
     private List<Skill> skills = new();
+    private Dictionary<SkillData, Skill> skillsByData = new();
 
     public void Init()
     {
+        skills.Clear();
+        skillsByData.Clear();
+        
         foreach (SkillData data in datas)
         {
             var skill = data.CreateSkill();
@@ -29,5 +34,24 @@ public class PlayerSkills : MonoBehaviour
         {
             skill.Tick(context, deltaTime);
         }
+    }
+
+    public void AddSkill(SkillData skillData)
+    {
+        Skill newSkill = skillData.CreateSkill();
+        
+        skills.Add(newSkill);
+        skillsByData.Add(skillData, newSkill);
+    }
+
+    public void SetSkillLevel(SkillData skillData, int level)
+    {
+        if (!skillsByData.TryGetValue(skillData, out Skill skill))
+        {
+            Debug.LogError($"[PlayerSkills] {skillData.DisplayName} 은 등록되지 않은 스킬입니다.", this);
+            return;
+        }
+
+        skill.OnLevelChanged(level);
     }
 }
