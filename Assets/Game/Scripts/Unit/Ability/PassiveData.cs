@@ -18,26 +18,40 @@ public class PassiveData : AbilityData
     [SerializeField] private List<PassiveLevelBonus> levelBonus;
 
     public IReadOnlyList<PassiveLevelBonus> LevelBonus => levelBonus;
-    private static int maxOptionCount = MaxLevel;
+    private const int BonusRowCount = MaxLevel;
     public override AbilityType Type => AbilityType.Passive;
 
     private void OnValidate()
     {
-        if (levelBonus.Count > maxOptionCount)
+        if (levelBonus.Count > BonusRowCount)
         {
-            for (int i = levelBonus.Count - 1; i >= maxOptionCount; i--)
+            for (int i = levelBonus.Count - 1; i >= BonusRowCount; i--)
             {
                 levelBonus.RemoveAt(i);
             }
         }
-        else if (levelBonus.Count < maxOptionCount)
+        else if (levelBonus.Count < BonusRowCount)
         {
-            int diffCount = maxOptionCount - levelBonus.Count;
+            int diffCount = BonusRowCount - levelBonus.Count;
             
             for (int i = 0; i < diffCount; i++)
             {
                 levelBonus.Add(new PassiveLevelBonus());
             }
         }
+    }
+    
+    public bool TryGetLevelBonus(int level, out IReadOnlyList<StatModifier> statModifiers)
+    {
+        statModifiers = null;
+
+        if (level < 1 || level > MaxLevel) return false;
+
+        int bonusIndex = level - 1;
+        if (bonusIndex >= LevelBonus.Count) return false;
+        
+        statModifiers = LevelBonus[bonusIndex].Modifiers;
+
+        return true;
     }
 }

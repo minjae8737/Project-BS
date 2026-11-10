@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerSkills : MonoBehaviour
 {
-    [SerializeField] private List<SkillData> datas;
     [SerializeField] private Vector3 skillStartOffset;
     
     private List<Skill> skills = new();
@@ -13,12 +12,6 @@ public class PlayerSkills : MonoBehaviour
     {
         skills.Clear();
         skillsByData.Clear();
-        
-        foreach (SkillData data in datas)
-        {
-            var skill = data.CreateSkill();
-            skills.Add(skill);
-        }
     }
 
     public void Tick(Vector3 caster, float attackPower, float deltaTime)
@@ -52,6 +45,6 @@ public class PlayerSkills : MonoBehaviour
             return;
         }
 
-        skill.OnLevelChanged(level);
+        skill.SetLevel(level);
     }
 }

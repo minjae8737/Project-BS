@@ -9,9 +9,12 @@ public class ProjectileSkill : Skill
     private ProjectileSkillData projectileData;
     private ProjectileSkillStats currentStats;
 
+    public override float CurrentCooldown => currentStats.Cooldown;
+
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
         projectileData = data;
+        SetLevel(1);
     }
 
     private Projectile GetProjectile()
@@ -22,11 +25,15 @@ public class ProjectileSkill : Skill
         return newProjectile;
     }
 
-    public override void OnLevelChanged(int level)
+    protected override void OnLevelChanged(int level)
     {
-        if (projectileData.TryCalculateSkillStats(level, out var newFinalValue))
+        if (projectileData.TryCalculateSkillStats(level, out var newStats))
         {
-            currentStats = newFinalValue;
+            currentStats = newStats;
+        }
+        else
+        {
+            Debug.LogError($"[ProjectileSkill] {projectileData.DisplayName} 레벨 변경 실패. 실패 Level : {level}");
         }
     }
 

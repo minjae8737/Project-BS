@@ -4,6 +4,8 @@ public class PlayerAbilities
 {
     private List<AbilitySlot> abilitySlots;
 
+    public IReadOnlyList<AbilitySlot> AbilitySlots => abilitySlots;
+
     private const int MaxActiveSlotCount = 3;
     private const int MaxPassiveSlotCount = 3;
 

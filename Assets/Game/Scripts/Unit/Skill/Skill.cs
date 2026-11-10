@@ -2,6 +2,7 @@ public abstract class Skill
 {
     protected SkillData data;
     private float elapsed;
+    public abstract float CurrentCooldown { get; }
 
     public Skill(SkillData data)
     {
@@ -11,9 +12,9 @@ public abstract class Skill
 
     private bool CanExecute(float deltaTime)
     {
-        if (data.Cooldown < elapsed) return true;
+        if (CurrentCooldown < elapsed) return true;
         elapsed += deltaTime;
-        return data.Cooldown < elapsed;
+        return CurrentCooldown < elapsed;
     }
 
     public void Tick(SkillContext context, float deltaTime)
@@ -23,7 +24,7 @@ public abstract class Skill
             bool isSuccess = TryExecute(context);
             
             if (isSuccess)
-                elapsed -= data.Cooldown;
+                elapsed -= CurrentCooldown;
         }
         
         OnTick(deltaTime);
@@ -31,10 +32,10 @@ public abstract class Skill
 
     public void SetLevel(int level)
     {
-        
+        OnLevelChanged(level);
     }
     
-    public abstract void OnLevelChanged(int level);
+    protected abstract void OnLevelChanged(int level);
 
     protected abstract bool TryExecute(SkillContext context);
 

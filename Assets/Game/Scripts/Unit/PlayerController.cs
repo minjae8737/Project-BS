@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -5,6 +6,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform cameraTransform;
     [SerializeField, Min(0)] private float height;
+
+    //FIXME 임시 시작 스킬
+    [SerializeField] private List<AbilityData> startingAbilities;
 
     private PlayerInputReader inputReader;
     private PlayerMovement movement;
@@ -37,12 +41,18 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Init(StatRulesData statRulesData)
     {
         abilities = new();
-        
+
         abilities.Init();
         stat.Init(statRulesData);
-        skills.Init(); //TODO 스킬은 얻어서 초기화해야하므로 초기화 구조가 바뀔것 
+        skills.Init();
         skillTarget.SetActive(true);
         skillTarget.Init(this);
+
+        //FIXME 임시 코드
+        foreach (AbilityData data in startingAbilities)
+        {
+            ApplyAbility(data);
+        }
     }
 
     private void OnEnable()
@@ -105,31 +115,40 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void ApplyAbility(AbilityData abilityData)
     {
-        if (abilities.TryLevelUp(abilityData, out int level))
+        bool leveledUp = abilities.TryLevelUp(abilityData, out int newLevel);
+
+        if (!leveledUp)
         {
-            switch (abilityData.Type)
+            bool acquired = abilities.TryAcquire(abilityData);
+
+            if (acquired)
             {
-                case AbilityType.Active:
-                    break;
-                case AbilityType.Passive:
-                    break;
+                newLevel = 1;
+            }
+            else
+            {
+                Debug.LogError($"[PlayerController] ApplyAbility {abilityData.DisplayName} 실패.\n", this);
+                return;
             }
         }
-        else if (abilities.TryAcquire(abilityData))
+        
+        switch (abilityData)
         {
-            level = 1;
-            
-            switch (abilityData.Type)
-            {
-                case AbilityType.Active:
-                    break;
-                case AbilityType.Passive:
-                    break;
-            }
-        }
-        else
-        {
-            Debug.LogError($"[PlayerController] ApplyAbility 실패.\n", this);
+            case SkillData skillData:
+                if (leveledUp)
+                    skills.SetSkillLevel(skillData, newLevel);
+                else
+                    skills.AddSkill(skillData);
+                break;
+            case PassiveData passiveData:
+                if (passiveData.TryGetLevelBonus(newLevel, out var statModifiers))
+                    stat.AddModifiers(statModifiers);
+                else 
+                    Debug.LogError($"[PlayerController] statModifiers의 데이터가 비어있습니다.", this);
+                break;
+            default:
+                Debug.LogError($"[PlayerController] ApplyAbility {abilityData.DisplayName} 잘못된 데이터 타입입니다.", this);
+                break;
         }
     }
 

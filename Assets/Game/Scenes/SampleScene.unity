@@ -855,6 +855,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 330585546}
   height: 3
+  startingAbilities:
+  - {fileID: 11400000, guid: 3317e26c99e494a2a903ebcad96aedc7, type: 2}
+  - {fileID: 11400000, guid: 369104db8eaac483aa90031d5dd10b14, type: 2}
 --- !u!114 &829059573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -919,8 +922,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8098a2b05e1411aabf5cf62a4f4c445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  datas:
-  - {fileID: 11400000, guid: 369104db8eaac483aa90031d5dd10b14, type: 2}
   skillStartOffset: {x: 0, y: 1, z: 0}
 --- !u!1 &832575517
 GameObject:

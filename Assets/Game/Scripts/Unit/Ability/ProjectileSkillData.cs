@@ -89,24 +89,40 @@ public class ProjectileSkillData : SkillData
             }
         }
     }
-
+    
     public bool TryCalculateSkillStats(int level, out ProjectileSkillStats skillStats)
     {
         skillStats = new(this);
 
-        if (level < 0 || level > MaxLevel) return false;
+        if (level < 1 || level > MaxLevel) return false;
 
-        int bonusIndex = level - 2;
+        int lastBonusIndex = level - 2;
 
-        for (int i = 0; i < bonusIndex; i++)
+        float damageRateSum = 0f;
+        float cooldownReductionRate = 0f;
+        int QuantitySum = 0;
+        float SpeedRateSum = 0f;
+        float SizeRateSum = 0f;
+        int PenetrationSum = 0;
+
+        for (int i = 0; i <= lastBonusIndex; i++)
         {
-            skillStats.DamagePer += levelBonus[i].DamageRate;
-            skillStats.Cooldown += levelBonus[i].CooldownReductionRate;
-            skillStats.Quantity += levelBonus[i].Quantity;
-            skillStats.Speed += levelBonus[i].SpeedRate;
-            skillStats.Size += levelBonus[i].SizeRate;
-            skillStats.Penetration += levelBonus[i].Penetration;
+            damageRateSum += levelBonus[i].DamageRate;
+            cooldownReductionRate += levelBonus[i].CooldownReductionRate;
+            QuantitySum += levelBonus[i].Quantity;
+            SpeedRateSum += levelBonus[i].SpeedRate;
+            SizeRateSum += levelBonus[i].SizeRate;
+            PenetrationSum += levelBonus[i].Penetration;
         }
+
+        cooldownReductionRate = Math.Min(cooldownReductionRate, 0.9f);
+        
+        skillStats.DamagePer *= (1 + damageRateSum);
+        skillStats.Cooldown *= (1 - cooldownReductionRate);
+        skillStats.Quantity += QuantitySum;
+        skillStats.Speed *= (1 + SpeedRateSum);
+        skillStats.Size *= (1 + SizeRateSum);
+        skillStats.Penetration += PenetrationSum;
 
         return true;
     }

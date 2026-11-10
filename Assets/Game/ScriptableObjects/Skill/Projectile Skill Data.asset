@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef9e4e6b08e46af9eafa950a6848066, type: 3}
   m_Name: Projectile Skill Data
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: "\uD654\uC0B4"
   icon: {fileID: 0}
   description: 
   damagePer: 1.5
@@ -24,38 +24,38 @@ MonoBehaviour:
   quantity: 1
   speed: 15
   maxDistance: 100
-  range: 0
+  size: 1
   penetration: 0
   projectilePrefab: {fileID: 3268986765273442530, guid: 80d6b0df3884e4d4a9fa3df4da017800, type: 3}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 768
-  levelOptions:
-  - damagePer: 0
-    cooldown: 0
-    speed: 0
-    quantity: 0
-    penetration: 0
-    range: 0
+  levelBonus:
+  - damageRate: 20
+    cooldownReductionRate: 10
+    speedRate: 0
+    quantity: 2
+    penetration: 1
+    sizeRate: 0
     description: 
-  - damagePer: 0
-    cooldown: 0
-    speed: 0
-    quantity: 0
-    penetration: 0
-    range: 0
+  - damageRate: 20
+    cooldownReductionRate: 10
+    speedRate: 0
+    quantity: 2
+    penetration: 1
+    sizeRate: 0
     description: 
-  - damagePer: 0
-    cooldown: 0
-    speed: 0
-    quantity: 0
-    penetration: 0
-    range: 0
+  - damageRate: 20
+    cooldownReductionRate: 10
+    speedRate: 0
+    quantity: 2
+    penetration: 1
+    sizeRate: 0
     description: 
-  - damagePer: 0
-    cooldown: 0
-    speed: 0
-    quantity: 0
-    penetration: 0
-    range: 0
+  - damageRate: 20
+    cooldownReductionRate: 10
+    speedRate: 0
+    quantity: 2
+    penetration: 1
+    sizeRate: 0
     description: 

@@ -73,4 +73,12 @@ public class UnitStat : MonoBehaviour
         if (IsDead) 
             Died?.Invoke();
     }
+
+    public void AddModifiers(IReadOnlyList<StatModifier> passiveModifiers)
+    {
+        for (int i = 0; i < passiveModifiers.Count; i++)
+        {
+            stats[passiveModifiers[i].StatType].AddModifier(passiveModifiers[i]);
+        }
+    }
 }
