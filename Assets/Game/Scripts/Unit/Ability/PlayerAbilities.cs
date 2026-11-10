@@ -53,7 +53,7 @@ public class PlayerAbilities
         if (HasAbility(abilityData) || !HasEmptySlot(abilityData.Type))
             return false;
 
-        AbilitySlot newSlot = new AbilitySlot(abilityData);
+        AbilitySlot newSlot = new AbilitySlot(abilityData, 1);
         abilitySlots.Add(newSlot);
 
         return true;
@@ -68,10 +68,13 @@ public class PlayerAbilities
 
         if (abilitySlot.IsMaxLevel) 
             return false;
-        
-        abilitySlot.LevelUp();
-        newlevel = abilitySlot.Level;
 
+        newlevel = abilitySlot.Level + 1;
+        
+        AbilitySlot newSlot = new AbilitySlot(abilityData, newlevel);
+        abilitySlots.Remove(abilitySlot);
+        abilitySlots.Add(newSlot);
+        
         return true;
     }
 }

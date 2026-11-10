@@ -10,6 +10,11 @@ public class PlayerSkills : MonoBehaviour
 
     public void Init()
     {
+        foreach (Skill skill in skills)
+        {
+            skill.Reset();
+        }
+        
         skills.Clear();
         skillsByData.Clear();
     }

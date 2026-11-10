@@ -100,4 +100,14 @@ public class ProjectileSkill : Skill
             }
         }
     }
+
+    public override void Reset()
+    {
+        for (int i = 0; i < projectiles.Count; i++)
+        {
+            PoolManager.Instance.Release(projectiles[i]);
+        }
+        
+        projectiles.Clear();
+    }
 }

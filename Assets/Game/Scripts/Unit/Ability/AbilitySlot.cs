@@ -7,16 +7,9 @@ public class AbilitySlot
     public int Level => level;
     public bool IsMaxLevel => level >= AbilityData.MaxLevel;
 
-    public AbilitySlot(AbilityData data)
+    public AbilitySlot(AbilityData data, int newLevel)
     {
         this.data = data;
-        level = 1;
-    }
-
-    public void LevelUp()
-    {
-        if (IsMaxLevel) return;
-        
-        level++;
+        level = newLevel;
     }
 }

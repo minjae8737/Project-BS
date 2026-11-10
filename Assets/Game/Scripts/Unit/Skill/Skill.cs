@@ -40,4 +40,6 @@ public abstract class Skill
     protected abstract bool TryExecute(SkillContext context);
 
     protected virtual void OnTick(float deltaTime) { }
+    
+    public abstract void Reset();
 }

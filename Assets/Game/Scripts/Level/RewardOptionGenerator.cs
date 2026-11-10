@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -10,5 +9,7 @@ public class RewardOptionGenerator
     public void Init()
     {
         catalog.ValidateData();
+        
+        
     }
 }
