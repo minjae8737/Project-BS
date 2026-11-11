@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float PickupRadius => stat.PickupRadius;
     public Vector3 TargetPos => skillTarget.transform.position;
     public Vector3 Pos => transform.position;
+    public IReadOnlyPlayerAbilities Abilities => abilities;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         stat = GetComponent<UnitStat>();
         skills = GetComponent<PlayerSkills>();
         skillTarget = GetComponentInChildren<SkillTarget>();
+        abilities = new();
 
         Assert.IsNotNull(cameraTransform, $"{gameObject.name} 에 cameraTransform이 할당 되어야합니다.");
         Assert.IsNotNull(skillTarget, $"{gameObject.name} 에 skillTarget이 할당 되어야합니다.");
@@ -40,8 +42,6 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void Init(StatRulesData statRulesData)
     {
-        abilities = new();
-
         abilities.Init();
         stat.Init(statRulesData);
         skills.Init();

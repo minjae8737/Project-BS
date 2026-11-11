@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -9,15 +10,20 @@ public class LevelUpRewardManager
     [SerializeField] private LevelUpRewardPanel levelUpRewardPanel;
     [SerializeField] private RewardOptionGenerator rewardOptionGenerator;
 
+    private PlayerController playerController;
+    private IReadOnlyPlayerAbilities playerAbilities;
     private CancellationToken token;
     private UniTaskCompletionSource<int> selectionTcs;
     private int pendingRewardCount;
     private bool isRunning;
-    
-    public void Init(CancellationToken token)
+
+    public void Init(CancellationToken token, PlayerController playerController)
     {
         this.token = token;
         pendingRewardCount = 0;
+        this.playerController = playerController;
+        playerAbilities = playerController.Abilities;
+        rewardOptionGenerator.Init();
     }
 
     public void AddPendingReward()
@@ -34,7 +40,7 @@ public class LevelUpRewardManager
     {
         GameManager.Instance.RequestPause();
         isRunning = true;
-        
+
         UniTaskCompletionSource<int> tcs = null;
 
         try
@@ -44,13 +50,16 @@ public class LevelUpRewardManager
                 tcs = new UniTaskCompletionSource<int>();
                 selectionTcs = tcs;
 
-                CreateRewardOptions();
-                ShowOptions();
+                List<RewardOption> rewardOptions = ShowOptions();
 
                 int rewardIndex = await tcs.Task.AttachExternalCancellation(token);
 
                 //reward 적용
-                Debug.Log($"Apply Reward Index {rewardIndex}");
+                if (rewardOptions.Count > 0) //FIXME 무작위 스텟증가 로직 미처리로 인한 임시 로직
+                {
+                    playerController.ApplyAbility(rewardOptions[rewardIndex].Data);
+                }
+
                 pendingRewardCount--;
             }
         }
@@ -65,13 +74,28 @@ public class LevelUpRewardManager
         }
     }
 
-    private void CreateRewardOptions()
+    private List<RewardOption> CreateRewardOptions()
     {
+        if (rewardOptionGenerator.TryCreateRewardOptions(playerAbilities, out var rewardOptions))
+        {
+            levelUpRewardPanel.ShowRewardOption(rewardOptions);
+        }
+        else
+        {
+            //TODO 무작위 스텟증가 로직
+            HandleRewardSelected(-1);
+        }
+
+        return rewardOptions;
     }
 
-    private void ShowOptions()
+    private List<RewardOption> ShowOptions()
     {
+        List<RewardOption> rewardOptions = CreateRewardOptions();
+
         levelUpRewardPanel.Show();
+
+        return rewardOptions;
     }
 
     private void HidePanel()

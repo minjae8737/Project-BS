@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerAbilities
+public class PlayerAbilities : IReadOnlyPlayerAbilities
 {
     private List<AbilitySlot> abilitySlots;
 
@@ -43,14 +44,22 @@ public class PlayerAbilities
         return count < (abilityType == AbilityType.Active ? MaxActiveSlotCount : MaxPassiveSlotCount);
     }
 
-    public bool HasAbility(AbilityData abilityData)
+    public bool TryGetLevel(AbilityData abilityData, out int level)
     {
-        return TryFindAbilitySlot(abilityData, out var _);
+        level = 0;
+
+        if (TryFindAbilitySlot(abilityData, out var slot))
+        {
+            level = slot.Level;
+            return true;
+        }
+
+        return false;
     }
 
     public bool TryAcquire(AbilityData abilityData)
     {
-        if (HasAbility(abilityData) || !HasEmptySlot(abilityData.Type))
+        if (TryGetLevel(abilityData, out _) || !HasEmptySlot(abilityData.Type))
             return false;
 
         AbilitySlot newSlot = new AbilitySlot(abilityData, 1);
@@ -62,19 +71,19 @@ public class PlayerAbilities
     public bool TryLevelUp(AbilityData abilityData, out int newlevel)
     {
         newlevel = 0;
-
         if (!TryFindAbilitySlot(abilityData, out AbilitySlot abilitySlot))
             return false;
 
-        if (abilitySlot.IsMaxLevel) 
+        if (abilitySlot.IsMaxLevel)
             return false;
 
         newlevel = abilitySlot.Level + 1;
-        
+
         AbilitySlot newSlot = new AbilitySlot(abilityData, newlevel);
+        int findIndex = abilitySlots.FindIndex(slot => slot.Equals(abilitySlot));
+        abilitySlots.Insert(findIndex, newSlot);
         abilitySlots.Remove(abilitySlot);
-        abilitySlots.Add(newSlot);
-        
+
         return true;
     }
 }

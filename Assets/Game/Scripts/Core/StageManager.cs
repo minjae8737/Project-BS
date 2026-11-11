@@ -2,6 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.InputSystem;
 
 public class StageManager : Singleton<StageManager>
 {
@@ -9,15 +10,15 @@ public class StageManager : Singleton<StageManager>
     [SerializeField] private UnitManager unitManager;
     [SerializeField] private ExpItemManager expItemManager;
     [SerializeField] private PlayerController playerController;
-    
-    [Header("## WaveManager")]
-    [SerializeField] private WaveManager waveManager;
 
-    [Header("## LevelManager")]
-    [SerializeField] private LevelManager levelManager;
+    [Header("## WaveManager")] [SerializeField]
+    private WaveManager waveManager;
 
-    [Header("## LevelUpRewardManager")]
-    [SerializeField] private LevelUpRewardManager levelUpRewardManager;
+    [Header("## LevelManager")] [SerializeField]
+    private LevelManager levelManager;
+
+    [Header("## LevelUpRewardManager")] [SerializeField]
+    private LevelUpRewardManager levelUpRewardManager;
 
     private CancellationTokenSource stageCts;
     private float stageElapsed;
@@ -25,7 +26,7 @@ public class StageManager : Singleton<StageManager>
     protected override void Awake()
     {
         base.Awake();
-        
+
         Assert.IsNotNull(stageData, "[StageManager] stageData가 null 입니다.");
     }
 
@@ -51,15 +52,14 @@ public class StageManager : Singleton<StageManager>
         waveManager.Init(unitManager);
         expItemManager.Init(playerController);
         levelManager.Init();
-        levelUpRewardManager.Init(stageCts.Token);
-        
+        levelUpRewardManager.Init(stageCts.Token, playerController);
+
         //FIXME Test 코드
         StageRoutine(stageCts.Token).Forget();
     }
 
     public async UniTaskVoid StageRoutine(CancellationToken token)
     {
-
         waveManager.WaveRoutine(stageCts.Token, stageData).Forget();
         waveManager.SpawnEventRoutine(stageCts.Token, stageData);
 
@@ -98,7 +98,7 @@ public class StageManager : Singleton<StageManager>
     {
         levelManager.AddExp(exp);
     }
-    
+
     private void HandleLeveledUp(int level)
     {
         levelUpRewardManager.AddPendingReward();
