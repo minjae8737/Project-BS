@@ -89,7 +89,16 @@ public class ProjectileSkillData : SkillData
             }
         }
     }
-    
+
+    public override string GetLevelBonusDescription(int level)
+    {
+        if (level > MaxLevel || level >= LevelBonus.Count) return string.Empty;
+        if (level <= 1) return Description;
+        
+        int bonusIndex = level - 2;
+        return LevelBonus[bonusIndex].Description;
+    }
+
     public bool TryCalculateSkillStats(int level, out ProjectileSkillStats skillStats)
     {
         skillStats = new(this);
@@ -100,29 +109,29 @@ public class ProjectileSkillData : SkillData
 
         float damageRateSum = 0f;
         float cooldownReductionRate = 0f;
-        int QuantitySum = 0;
-        float SpeedRateSum = 0f;
-        float SizeRateSum = 0f;
-        int PenetrationSum = 0;
+        int quantitySum = 0;
+        float speedRateSum = 0f;
+        float sizeRateSum = 0f;
+        int penetrationSum = 0;
 
         for (int i = 0; i <= lastBonusIndex; i++)
         {
             damageRateSum += levelBonus[i].DamageRate;
             cooldownReductionRate += levelBonus[i].CooldownReductionRate;
-            QuantitySum += levelBonus[i].Quantity;
-            SpeedRateSum += levelBonus[i].SpeedRate;
-            SizeRateSum += levelBonus[i].SizeRate;
-            PenetrationSum += levelBonus[i].Penetration;
+            quantitySum += levelBonus[i].Quantity;
+            speedRateSum += levelBonus[i].SpeedRate;
+            sizeRateSum += levelBonus[i].SizeRate;
+            penetrationSum += levelBonus[i].Penetration;
         }
-
-        cooldownReductionRate = Math.Min(cooldownReductionRate, 0.9f);
+        
+        cooldownReductionRate = Mathf.Min(cooldownReductionRate, MaxCooldownReductionRate);
         
         skillStats.DamagePer *= (1 + damageRateSum);
         skillStats.Cooldown *= (1 - cooldownReductionRate);
-        skillStats.Quantity += QuantitySum;
-        skillStats.Speed *= (1 + SpeedRateSum);
-        skillStats.Size *= (1 + SizeRateSum);
-        skillStats.Penetration += PenetrationSum;
+        skillStats.Quantity += quantitySum;
+        skillStats.Speed *= (1 + speedRateSum);
+        skillStats.Size *= (1 + sizeRateSum);
+        skillStats.Penetration += penetrationSum;
 
         return true;
     }

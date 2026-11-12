@@ -15,15 +15,17 @@ public class PlayerAbilities : IReadOnlyPlayerAbilities
         abilitySlots = new();
     }
 
-    private bool TryFindAbilitySlot(AbilityData abilityData, out AbilitySlot abilitySlot)
+    private bool TryFindAbilitySlot(AbilityData abilityData, out AbilitySlot abilitySlot, out int index)
     {
         abilitySlot = null;
-
+        index = -1;
+        
         for (int i = 0; i < abilitySlots.Count; i++)
         {
             if (abilitySlots[i].Data == abilityData)
             {
                 abilitySlot = abilitySlots[i];
+                index = i;
                 return true;
             }
         }
@@ -44,11 +46,16 @@ public class PlayerAbilities : IReadOnlyPlayerAbilities
         return count < (abilityType == AbilityType.Active ? MaxActiveSlotCount : MaxPassiveSlotCount);
     }
 
+    public bool HasAbility(AbilityData abilityData)
+    {
+        return TryFindAbilitySlot(abilityData, out _, out _);
+    }
+
     public bool TryGetLevel(AbilityData abilityData, out int level)
     {
         level = 0;
 
-        if (TryFindAbilitySlot(abilityData, out var slot))
+        if (TryFindAbilitySlot(abilityData, out var slot, out _))
         {
             level = slot.Level;
             return true;
@@ -59,7 +66,7 @@ public class PlayerAbilities : IReadOnlyPlayerAbilities
 
     public bool TryAcquire(AbilityData abilityData)
     {
-        if (TryGetLevel(abilityData, out _) || !HasEmptySlot(abilityData.Type))
+        if (HasAbility(abilityData) || !HasEmptySlot(abilityData.Type))
             return false;
 
         AbilitySlot newSlot = new AbilitySlot(abilityData, 1);
@@ -68,21 +75,19 @@ public class PlayerAbilities : IReadOnlyPlayerAbilities
         return true;
     }
 
-    public bool TryLevelUp(AbilityData abilityData, out int newlevel)
+    public bool TryLevelUp(AbilityData abilityData, out int newLevel)
     {
-        newlevel = 0;
-        if (!TryFindAbilitySlot(abilityData, out AbilitySlot abilitySlot))
+        newLevel = 0;
+        if (!TryFindAbilitySlot(abilityData, out AbilitySlot abilitySlot, out var slotIndex))
             return false;
 
         if (abilitySlot.IsMaxLevel)
             return false;
 
-        newlevel = abilitySlot.Level + 1;
+        newLevel = abilitySlot.Level + 1;
 
-        AbilitySlot newSlot = new AbilitySlot(abilityData, newlevel);
-        int findIndex = abilitySlots.FindIndex(slot => slot.Equals(abilitySlot));
-        abilitySlots.Insert(findIndex, newSlot);
-        abilitySlots.Remove(abilitySlot);
+        AbilitySlot newSlot = new AbilitySlot(abilityData, newLevel);
+        abilitySlots[slotIndex] = newSlot;
 
         return true;
     }

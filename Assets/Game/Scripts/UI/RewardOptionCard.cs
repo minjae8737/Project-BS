@@ -9,6 +9,6 @@ public class RewardOptionCard : MonoBehaviour
     public void SetCard(RewardOption rewardOption)
     {
         displayNameText.text = string.Format("{0} Lv.{1}", rewardOption.Data.DisplayName, rewardOption.NextLevel);
-        descriptionText.text = rewardOption.Data.Description;
+        descriptionText.text = rewardOption.Data.GetLevelBonusDescription(rewardOption.NextLevel);
     }
 }

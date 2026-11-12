@@ -26,14 +26,20 @@ public class RewardOptionGenerator
         // 후보목록 생성
         foreach (AbilityData abilityData in catalog.Abilities)
         {
-            if (playerAbilities.TryGetLevel(abilityData, out int level) && level < AbilityData.MaxLevel)
+            if (playerAbilities.TryGetLevel(abilityData, out int level))
             {
-                allCandidates.Add(abilityData);
-                upgradeCandidates.Add(abilityData);
+                if (level < AbilityData.MaxLevel)
+                {
+                    allCandidates.Add(abilityData);
+                    upgradeCandidates.Add(abilityData);
+                }
             }
-            else if (playerAbilities.HasEmptySlot(abilityData.Type) && level < AbilityData.MaxLevel)
+            else
             {
-                allCandidates.Add(abilityData);
+                if (playerAbilities.HasEmptySlot(abilityData.Type))
+                {
+                    allCandidates.Add(abilityData);
+                }
             }
         }
 
@@ -54,9 +60,7 @@ public class RewardOptionGenerator
             chosenAbilities.Add(allCandidates[index]);
             allCandidates.RemoveAt(index);
         }
-
-        if (chosenAbilities.Count == 0) return false;
-
+        
         // 선택지 생성
         for (int i = 0; i < chosenAbilities.Count; i++)
         {

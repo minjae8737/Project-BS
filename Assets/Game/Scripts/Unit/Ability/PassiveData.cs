@@ -40,7 +40,16 @@ public class PassiveData : AbilityData
             }
         }
     }
-    
+
+    public override string GetLevelBonusDescription(int level)
+    {
+        if (level > MaxLevel || level >= LevelBonus.Count) return string.Empty;
+        if (level <= 0) return Description;
+
+        int bonusIndex = level - 1;
+        return LevelBonus[bonusIndex].Description;
+    }
+
     public bool TryGetLevelBonus(int level, out IReadOnlyList<StatModifier> statModifiers)
     {
         statModifiers = null;

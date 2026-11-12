@@ -17,4 +17,6 @@ public abstract class AbilityData : ScriptableObject
     public string DisplayName => displayName;
     public Sprite Icon => icon;
     public string Description => description;
+    
+    public abstract string GetLevelBonusDescription(int level);
 }

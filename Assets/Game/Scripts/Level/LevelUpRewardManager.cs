@@ -11,7 +11,6 @@ public class LevelUpRewardManager
     [SerializeField] private RewardOptionGenerator rewardOptionGenerator;
 
     private PlayerController playerController;
-    private IReadOnlyPlayerAbilities playerAbilities;
     private CancellationToken token;
     private UniTaskCompletionSource<int> selectionTcs;
     private int pendingRewardCount;
@@ -22,7 +21,6 @@ public class LevelUpRewardManager
         this.token = token;
         pendingRewardCount = 0;
         this.playerController = playerController;
-        playerAbilities = playerController.Abilities;
         rewardOptionGenerator.Init();
     }
 
@@ -50,12 +48,20 @@ public class LevelUpRewardManager
                 tcs = new UniTaskCompletionSource<int>();
                 selectionTcs = tcs;
 
-                List<RewardOption> rewardOptions = ShowOptions();
-
+                List<RewardOption> rewardOptions = CreateRewardOptions();
+                if (rewardOptions.Count <= 0)
+                {
+                    Debug.Log("[LevelUpRewardManager] 자동 스텟 상승.");
+                    pendingRewardCount -= 1;
+                    continue;
+                }
+                
+                ShowOptions(rewardOptions);
+                
                 int rewardIndex = await tcs.Task.AttachExternalCancellation(token);
 
                 //reward 적용
-                if (rewardOptions.Count > 0) //FIXME 무작위 스텟증가 로직 미처리로 인한 임시 로직
+                if (rewardIndex >= 0 && rewardIndex < rewardOptions.Count)
                 {
                     playerController.ApplyAbility(rewardOptions[rewardIndex].Data);
                 }
@@ -76,26 +82,14 @@ public class LevelUpRewardManager
 
     private List<RewardOption> CreateRewardOptions()
     {
-        if (rewardOptionGenerator.TryCreateRewardOptions(playerAbilities, out var rewardOptions))
-        {
-            levelUpRewardPanel.ShowRewardOption(rewardOptions);
-        }
-        else
-        {
-            //TODO 무작위 스텟증가 로직
-            HandleRewardSelected(-1);
-        }
-
+        rewardOptionGenerator.TryCreateRewardOptions(playerController.Abilities, out var rewardOptions);
         return rewardOptions;
     }
 
-    private List<RewardOption> ShowOptions()
+    private void ShowOptions(List<RewardOption> rewardOptions)
     {
-        List<RewardOption> rewardOptions = CreateRewardOptions();
-
+        levelUpRewardPanel.ShowRewardOption(rewardOptions);
         levelUpRewardPanel.Show();
-
-        return rewardOptions;
     }
 
     private void HidePanel()

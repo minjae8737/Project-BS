@@ -20,24 +20,24 @@ MonoBehaviour:
     - statType: 5
       statModifierType: 1
       inputValue: 10
-    description: "\uC774\uB3D9\uC18D\uB3C4 +10%"
+    description: "\uC774\uB3D9\uC18D\uB3C4 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 5
       statModifierType: 1
       inputValue: 10
-    description: "\uC774\uB3D9\uC18D\uB3C4 +20%"
+    description: "\uC774\uB3D9\uC18D\uB3C4 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 5
       statModifierType: 1
       inputValue: 10
-    description: "\uC774\uB3D9\uC18D\uB3C4 +30%"
+    description: "\uC774\uB3D9\uC18D\uB3C4 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 5
       statModifierType: 1
       inputValue: 10
-    description: "\uC774\uB3D9\uC18D\uB3C4 +40%"
+    description: "\uC774\uB3D9\uC18D\uB3C4 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 5
       statModifierType: 1
       inputValue: 10
-    description: "\uC774\uB3D9\uC18D\uB3C4 +50%"
+    description: "\uC774\uB3D9\uC18D\uB3C4 +10% \uC99D\uAC00"

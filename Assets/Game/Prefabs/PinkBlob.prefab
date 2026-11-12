@@ -409,7 +409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  dropExp: 100
+  dropExp: 1000
   separationRadius: 2
   attackCooldown: 1
   height: 3

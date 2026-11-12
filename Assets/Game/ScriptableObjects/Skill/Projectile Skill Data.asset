@@ -37,25 +37,33 @@ MonoBehaviour:
     quantity: 2
     penetration: 1
     sizeRate: 0
-    description: 
+    description: "\uB370\uBBF8\uC9C0 \uC99D\uAC00 +20% \n\uCFE8\uD0C0\uC784 \uAC10\uC18C
+      +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
+      \uC99D\uAC00 +1"
   - damageRate: 20
     cooldownReductionRate: 10
     speedRate: 0
     quantity: 2
     penetration: 1
     sizeRate: 0
-    description: 
+    description: "\uB370\uBBF8\uC9C0 \uC99D\uAC00 +20% \n\uCFE8\uD0C0\uC784 \uAC10\uC18C
+      +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
+      \uC99D\uAC00 +1"
   - damageRate: 20
     cooldownReductionRate: 10
     speedRate: 0
     quantity: 2
     penetration: 1
     sizeRate: 0
-    description: 
+    description: "\uB370\uBBF8\uC9C0 \uC99D\uAC00 +20% \n\uCFE8\uD0C0\uC784 \uAC10\uC18C
+      +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
+      \uC99D\uAC00 +1"
   - damageRate: 20
     cooldownReductionRate: 10
     speedRate: 0
     quantity: 2
     penetration: 1
     sizeRate: 0
-    description: 
+    description: "\uB370\uBBF8\uC9C0 \uC99D\uAC00 +20% \n\uCFE8\uD0C0\uC784 \uAC10\uC18C
+      +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
+      \uC99D\uAC00 +1"
