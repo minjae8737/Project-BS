@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileSkill : Skill
+public class ProjectileSkill : Skill, IProjectileLauncher
 {
     private List<Projectile> projectiles = new();
     private Collider[] targets = new Collider[32];
@@ -39,41 +39,45 @@ public class ProjectileSkill : Skill
 
     protected override bool TryExecute(SkillContext context)
     {
+        var nearestTarget = FindNearestTarget(context);
+
+        if (nearestTarget != null)
+        {
+            SpawnProjectile(context, context.Forward);
+            return true;
+        }
+
+        return false;
+    }
+
+    public Collider FindNearestTarget(SkillContext context)
+    {
         int targetCount = Physics.OverlapSphereNonAlloc(context.SkillStartPos, projectileData.AttackRange, targets, projectileData.TargetLayer);
 
         if (targetCount > 0)
         {
-            var nearestTarget = FindNearestTarget(context, targetCount);
+            Collider nearestTarget = targets[0];
+            float nearestSqr = (nearestTarget.transform.position - context.SkillStartPos).sqrMagnitude;
 
-            SpawnProjectile(context, nearestTarget);
-            return true;
-        }
-        
-        return false;
-    }
-
-    private Collider FindNearestTarget(SkillContext context, int targetCount)
-    {
-        Collider nearestTarget = targets[0];
-        float nearestSqr = (nearestTarget.transform.position - context.SkillStartPos).sqrMagnitude;
-
-        for (int i = 1; i < targetCount; i++)
-        {
-            float targetSqr = (targets[i].transform.position - context.SkillStartPos).sqrMagnitude;
-            if (nearestSqr > targetSqr)
+            for (int i = 1; i < targetCount; i++)
             {
-                nearestTarget = targets[i];
-                nearestSqr = targetSqr;
+                float targetSqr = (targets[i].transform.position - context.SkillStartPos).sqrMagnitude;
+                if (nearestSqr > targetSqr)
+                {
+                    nearestTarget = targets[i];
+                    nearestSqr = targetSqr;
+                }
             }
+
+            return nearestTarget;
         }
 
-        return nearestTarget;
+        return null;
     }
 
-    private void SpawnProjectile(SkillContext context, Collider nearestTarget)
+    public void SpawnProjectile(SkillContext context, Vector3 moveDir)
     {
         Projectile newProjectile = GetProjectile();
-        Vector3 moveDir = (nearestTarget.transform.position - context.SkillStartPos).normalized;
         newProjectile.Init(
             context.AttackPower * currentStats.DamagePer,
             context.SkillStartPos,
@@ -107,7 +111,7 @@ public class ProjectileSkill : Skill
         {
             PoolManager.Instance.Release(projectiles[i]);
         }
-        
+
         projectiles.Clear();
     }
 }

@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         float deltaTime = Time.deltaTime;
 
         // 스킬
-        skills.Tick(transform.position, stat.AttackPower, deltaTime);
+        skills.Tick(transform.position, transform.forward, stat.AttackPower, deltaTime);
 
         // 이동
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);

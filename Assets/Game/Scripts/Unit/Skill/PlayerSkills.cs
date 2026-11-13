@@ -19,15 +19,18 @@ public class PlayerSkills : MonoBehaviour
         skillsByData.Clear();
     }
 
-    public void Tick(Vector3 caster, float attackPower, float deltaTime)
+    public void Tick(Vector3 casterPosition, Vector3 forward, float attackPower, float deltaTime)
     {
+        forward.y = 0f;
+        
         SkillContext context = new SkillContext
         {
-            Caster = caster,
-            SkillStartPos = caster + skillStartOffset,
+            CasterPos = casterPosition,
+            Forward = forward.normalized,
+            SkillStartPos = casterPosition + skillStartOffset,
             AttackPower = attackPower
         };
-
+        
         foreach (Skill skill in skills)
         {
             skill.Tick(context, deltaTime);
