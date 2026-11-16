@@ -80,8 +80,15 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         float deltaTime = Time.deltaTime;
 
+        PlayerStatDto statDto = new PlayerStatDto(
+            attackPower: stat.AttackPower,
+            attackSpeed: stat.AttackSpeed,
+            area: stat.Area,
+            amount: stat.Amount
+        );
+        
         // 스킬
-        skills.Tick(transform.position, transform.forward, stat.AttackPower, deltaTime);
+        skills.Tick(transform.position, transform.forward, statDto, deltaTime);
 
         // 이동
         Vector3 moveDir = ToWorldDirection(inputReader.MoveInput);

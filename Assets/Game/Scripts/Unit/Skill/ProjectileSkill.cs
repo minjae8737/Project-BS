@@ -10,7 +10,7 @@ public class ProjectileSkill : Skill, IProjectileLauncher
     private ProjectileSkillStats currentStats;
     private FiringMode firingMode;
     
-    public override float CurrentCooldown => currentStats.Cooldown;
+    protected override float CurrentCooldownReductionRate => currentStats.CooldownReductionRate;
 
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
@@ -45,7 +45,7 @@ public class ProjectileSkill : Skill, IProjectileLauncher
 
         if (nearestTarget != null)
         {
-            firingMode.Execute(context, currentStats.Quantity);
+            firingMode.Execute(context, currentStats.Quantity + context.PlayerStatDto.Amount);
             return true;
         }
 
@@ -81,11 +81,12 @@ public class ProjectileSkill : Skill, IProjectileLauncher
     {
         Projectile newProjectile = GetProjectile();
         newProjectile.Init(
-            context.AttackPower * currentStats.DamagePer,
+            context.PlayerStatDto.AttackPower * currentStats.DamagePer,
             context.SkillStartPos,
             moveDir,
             currentStats.Speed,
             currentStats.MaxDistance,
+            currentStats.Size * context.PlayerStatDto.Area,
             currentStats.Penetration,
             projectileData.TargetLayer,
             projectileData.ObstacleLayer);

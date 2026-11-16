@@ -33,7 +33,7 @@ MonoBehaviour:
     m_Bits: 768
   levelBonus:
   - damageRate: 20
-    cooldownReductionRate: 10
+    cooldownReductionRate: 20
     speedRate: 0
     quantity: 2
     penetration: 1
@@ -42,7 +42,7 @@ MonoBehaviour:
       +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
       \uC99D\uAC00 +1"
   - damageRate: 20
-    cooldownReductionRate: 10
+    cooldownReductionRate: 20
     speedRate: 0
     quantity: 2
     penetration: 1
@@ -51,7 +51,7 @@ MonoBehaviour:
       +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
       \uC99D\uAC00 +1"
   - damageRate: 20
-    cooldownReductionRate: 10
+    cooldownReductionRate: 20
     speedRate: 0
     quantity: 2
     penetration: 1
@@ -60,7 +60,7 @@ MonoBehaviour:
       +10% \n\uBC1C\uC0AC\uCCB4 \uAC2F\uC218 \uC99D\uAC00 +1\n\uAD00\uD1B5\uC218
       \uC99D\uAC00 +1"
   - damageRate: 20
-    cooldownReductionRate: 10
+    cooldownReductionRate: 20
     speedRate: 0
     quantity: 2
     penetration: 1

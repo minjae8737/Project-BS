@@ -6,19 +6,24 @@ using UnityEngine;
 public class StatData : ScriptableObject
 {
     [SerializeField] private List<Stat> stats = new();
-    private Stat[] statLookup; 
+    [NonSerialized] private Stat[] statLookup;
 
-    private static readonly StatType[] AllStatTypes = 
+    private static readonly StatType[] AllStatTypes =
         (StatType[])Enum.GetValues(typeof(StatType));
+
+    private void OnValidate()
+    {
+        statLookup = null;
+    }
     
     public Stat GetStat(StatType statType)
     {
-        if (statLookup.Length < 1)
+        if (statLookup == null)
             BuildLookup();
 
         return statLookup[(int)statType];
     }
-    
+
     private void BuildLookup()
     {
         statLookup = new Stat[AllStatTypes.Length];
@@ -32,7 +37,7 @@ public class StatData : ScriptableObject
                 Debug.LogError($"[{name}] Stat 중복 : {stat.StatType}", this);
                 continue;
             }
-            
+
             statLookup[index] = stat;
         }
 

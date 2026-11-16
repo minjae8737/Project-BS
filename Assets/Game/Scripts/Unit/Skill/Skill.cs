@@ -1,30 +1,36 @@
+using UnityEngine;
+
 public abstract class Skill
 {
     protected SkillData data;
     private float elapsed;
-    public abstract float CurrentCooldown { get; }
-
+    protected abstract float CurrentCooldownReductionRate { get; }
+    protected const float MaxCooldownReductionRate = 0.9f;
+    
     public Skill(SkillData data)
     {
         this.data = data;
         elapsed = 0f;
     }
 
-    private bool CanExecute(float deltaTime)
+    private bool CanExecute(float cooldown, float deltaTime)
     {
-        if (CurrentCooldown < elapsed) return true;
+        if (cooldown < elapsed) return true;
         elapsed += deltaTime;
-        return CurrentCooldown < elapsed;
+        return cooldown < elapsed;
     }
 
     public void Tick(SkillContext context, float deltaTime)
     {
-        if (CanExecute(deltaTime))
+        float cooldownReductionRate = Mathf.Min(CurrentCooldownReductionRate + context.PlayerStatDto.AttackSpeed, MaxCooldownReductionRate);
+        float cooldown = data.Cooldown * (1 - cooldownReductionRate);
+
+        if (CanExecute(cooldown, deltaTime))
         {
             bool isSuccess = TryExecute(context);
-            
+
             if (isSuccess)
-                elapsed -= CurrentCooldown;
+                elapsed -= cooldown;
         }
         
         OnTick(deltaTime);

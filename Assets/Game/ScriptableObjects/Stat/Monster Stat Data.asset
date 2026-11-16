@@ -28,6 +28,8 @@ MonoBehaviour:
   - StatType: 6
     Value: 0
   - StatType: 7
-    Value: 1
+    Value: 0
   - StatType: 8
     Value: 1
+  - StatType: 9
+    Value: 0

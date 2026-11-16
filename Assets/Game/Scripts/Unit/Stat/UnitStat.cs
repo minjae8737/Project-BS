@@ -23,10 +23,14 @@ public class UnitStat : MonoBehaviour
             hp = (int)Mathf.Clamp(value, 0f, stats[StatType.MaxHp].FinalValue);
         }
     }
+    
     public float AttackPower => stats[StatType.AttackPower].FinalValue;
     public float MoveSpeed => stats[StatType.MoveSpeed].FinalValue;
     public float BaseSpeed => stats[StatType.MoveSpeed].BaseValue;
     public float PickupRadius => stats[StatType.PickupRadius].FinalValue;
+    public float AttackSpeed => stats[StatType.AttackSpeed].FinalValue / 100f;
+    public float Area => stats[StatType.Area].FinalValue;
+    public int Amount => (int)stats[StatType.Amount].FinalValue;
     public bool IsDead => hp <= 0;
     
     public event Action Died;

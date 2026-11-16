@@ -1,7 +1,7 @@
 public struct ProjectileSkillStats
 {
     public float DamagePer;
-    public float Cooldown;
+    public float CooldownReductionRate;
     public int Quantity;
     public float Speed;
     public float MaxDistance;
@@ -11,7 +11,7 @@ public struct ProjectileSkillStats
     public ProjectileSkillStats(ProjectileSkillData data)
     {
         DamagePer = data.DamagePer;
-        Cooldown = data.Cooldown;
+        CooldownReductionRate = data.Cooldown;
         Quantity = data.Quantity;
         Speed = data.Speed;
         MaxDistance = data.MaxDistance;

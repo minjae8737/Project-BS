@@ -6,16 +6,21 @@ using UnityEngine;
 public class StatRulesData : ScriptableObject
 {
     [SerializeField] private List<StatRule> rules = new();
-    private StatRule[] ruleLookup;
+    [NonSerialized] private StatRule[] ruleLookup;
 
-    private static readonly StatType[] AllStatTypes = 
+    private static readonly StatType[] AllStatTypes =
         (StatType[])Enum.GetValues(typeof(StatType));
-    
+
+    private void OnValidate()
+    {
+        ruleLookup = null;
+    }
+
     public StatRule GetRule(StatType statType)
     {
-        if (ruleLookup.Length < 1)
+        if (ruleLookup == null)
             BuildLookup();
-
+        
         return ruleLookup[(int)statType];
     }
 
@@ -32,7 +37,7 @@ public class StatRulesData : ScriptableObject
                 Debug.LogError($"[{name}] StatRule 중복 : {rule.StatType}", this);
                 continue;
             }
-            
+
             ruleLookup[index] = rule;
         }
 

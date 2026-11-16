@@ -12,8 +12,14 @@ public class Projectile : MonoBehaviour
     private LayerMask targetLayer;
     private LayerMask obstacleLayer;
     private bool isEnded;
+    private Vector3 originScale; 
 
     public bool IsReached => moveDistance > maxDistance || penetration < 0 || isEnded;
+
+    private void Awake()
+    {
+        originScale = modelTr.localScale;
+    }
 
     public void Init(
         float damage,
@@ -21,6 +27,7 @@ public class Projectile : MonoBehaviour
         Vector3 moveDir,
         float speed,
         float maxDistance,
+        float size,
         int penetration,
         LayerMask targetLayer,
         LayerMask obstacleLayer)
@@ -32,6 +39,7 @@ public class Projectile : MonoBehaviour
         this.moveDir = moveDir;
         this.speed = speed;
         this.maxDistance = maxDistance;
+        modelTr.localScale = originScale * size;
         this.penetration = penetration;
         this.targetLayer = targetLayer;
         this.obstacleLayer = obstacleLayer;

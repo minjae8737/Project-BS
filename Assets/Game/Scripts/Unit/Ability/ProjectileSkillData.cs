@@ -74,6 +74,11 @@ public class ProjectileSkillData : SkillData
 
     private void OnValidate()
     {
+        if (FiringModeData == null)
+        {
+            Debug.LogError($"SkillData {DisplayName} 의 FiringModeData가 비어있습니다.", this);
+        }
+        
         if (levelBonus.Count > BonusRowCount)
         {
             for (int i = levelBonus.Count - 1; i >= BonusRowCount; i--)
@@ -94,10 +99,11 @@ public class ProjectileSkillData : SkillData
 
     public override string GetLevelBonusDescription(int level)
     {
-        if (level > MaxLevel || level >= LevelBonus.Count) return string.Empty;
-        if (level <= 1) return Description;
-        
         int bonusIndex = level - 2;
+
+        if (level <= 1) return Description;
+        if (bonusIndex < 0 || bonusIndex >= LevelBonus.Count) return string.Empty;
+
         return LevelBonus[bonusIndex].Description;
     }
 
@@ -110,7 +116,7 @@ public class ProjectileSkillData : SkillData
         int lastBonusIndex = level - 2;
 
         float damageRateSum = 0f;
-        float cooldownReductionRate = 0f;
+        float cooldownReductionRateSum = 0f;
         int quantitySum = 0;
         float speedRateSum = 0f;
         float sizeRateSum = 0f;
@@ -119,17 +125,15 @@ public class ProjectileSkillData : SkillData
         for (int i = 0; i <= lastBonusIndex; i++)
         {
             damageRateSum += levelBonus[i].DamageRate;
-            cooldownReductionRate += levelBonus[i].CooldownReductionRate;
+            cooldownReductionRateSum += levelBonus[i].CooldownReductionRate;
             quantitySum += levelBonus[i].Quantity;
             speedRateSum += levelBonus[i].SpeedRate;
             sizeRateSum += levelBonus[i].SizeRate;
             penetrationSum += levelBonus[i].Penetration;
         }
         
-        cooldownReductionRate = Mathf.Min(cooldownReductionRate, MaxCooldownReductionRate);
-        
         skillStats.DamagePer *= (1 + damageRateSum);
-        skillStats.Cooldown *= (1 - cooldownReductionRate);
+        skillStats.CooldownReductionRate = cooldownReductionRateSum;
         skillStats.Quantity += quantitySum;
         skillStats.Speed *= (1 + speedRateSum);
         skillStats.Size *= (1 + sizeRateSum);

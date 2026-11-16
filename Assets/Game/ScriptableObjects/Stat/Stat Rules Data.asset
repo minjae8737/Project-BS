@@ -36,7 +36,10 @@ MonoBehaviour:
     MinValue: 1
   - StatType: 7
     StatRoundingMode: 0
-    MinValue: 1
+    MinValue: 0
   - StatType: 8
+    StatRoundingMode: 0
+    MinValue: 1
+  - StatType: 9
     StatRoundingMode: 0
     MinValue: 0
