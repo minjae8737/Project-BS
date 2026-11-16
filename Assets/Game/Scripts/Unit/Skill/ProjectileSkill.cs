@@ -8,12 +8,14 @@ public class ProjectileSkill : Skill, IProjectileLauncher
 
     private ProjectileSkillData projectileData;
     private ProjectileSkillStats currentStats;
-
+    private FiringMode firingMode;
+    
     public override float CurrentCooldown => currentStats.Cooldown;
 
     public ProjectileSkill(ProjectileSkillData data) : base(data)
     {
         projectileData = data;
+        firingMode = projectileData.FiringModeData.CreateFiringMode(this);
         SetLevel(1);
     }
 
@@ -43,7 +45,7 @@ public class ProjectileSkill : Skill, IProjectileLauncher
 
         if (nearestTarget != null)
         {
-            SpawnProjectile(context, context.Forward);
+            firingMode.Execute(context, currentStats.Quantity);
             return true;
         }
 
@@ -94,7 +96,7 @@ public class ProjectileSkill : Skill, IProjectileLauncher
         for (int i = projectiles.Count - 1; i >= 0; i--)
         {
             projectiles[i].Tick(deltaTime);
-
+            
             if (projectiles[i].IsReached)
             {
                 int lastIndex = projectiles.Count - 1;
@@ -103,6 +105,8 @@ public class ProjectileSkill : Skill, IProjectileLauncher
                 projectiles.RemoveAt(lastIndex);
             }
         }
+
+        firingMode.Tick(deltaTime);
     }
 
     public override void Reset()
@@ -111,7 +115,7 @@ public class ProjectileSkill : Skill, IProjectileLauncher
         {
             PoolManager.Instance.Release(projectiles[i]);
         }
-
         projectiles.Clear();
+        firingMode.Reset();
     }
 }

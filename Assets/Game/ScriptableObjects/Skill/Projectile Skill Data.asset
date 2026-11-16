@@ -21,6 +21,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 4096
+  firingModeData: {fileID: 11400000, guid: 6fbe2affc9cde4f6fabc9cbd6f3ccfd1, type: 2}
   quantity: 1
   speed: 15
   maxDistance: 100

@@ -44,6 +44,7 @@ public struct ProjectileLevelBonus
 public class ProjectileSkillData : SkillData
 {
     [Header("Projectile Info")] 
+    [SerializeField] private FiringModeData firingModeData;
     [SerializeField, Min(1)] private int quantity = 1;
     [SerializeField, Min(0)] private float speed;
     [SerializeField, Min(0)] private float maxDistance;
@@ -55,6 +56,7 @@ public class ProjectileSkillData : SkillData
 
     private const int BonusRowCount = MaxLevel - 1;
 
+    public FiringModeData FiringModeData => firingModeData;
     public int Quantity => quantity;
     public float Speed => speed;
     public float MaxDistance => maxDistance;
