@@ -14,6 +14,31 @@ public class StatRulesData : ScriptableObject
     private void OnValidate()
     {
         ruleLookup = null;
+
+        if (rules.Count > AllStatTypes.Length)
+        {
+            for (int i = rules.Count - 1; i >= AllStatTypes.Length; i--)
+            {
+                rules.RemoveAt(i);
+            }
+        }
+        else if (rules.Count < AllStatTypes.Length)
+        {
+            for (int i = 0; i < AllStatTypes.Length; i++)
+            {
+                if (i < rules.Count)
+                {
+                    if ((StatType)i != rules[i].StatType)
+                    {
+                        rules.Insert(i, CreateDefaultStatRule((StatType)i));
+                    }
+                }
+                else
+                {
+                    rules.Insert(i, CreateDefaultStatRule((StatType)i));
+                }
+            }
+        }
     }
 
     public StatRule GetRule(StatType statType)
@@ -53,11 +78,10 @@ public class StatRulesData : ScriptableObject
 
     private StatRule CreateDefaultStatRule(StatType statType)
     {
-        return new StatRule()
-        {
-            StatType = statType,
-            StatRoundingMode = StatRoundingMode.None,
-            MinValue = 0f
-        };
+        return new StatRule(
+                statType,
+                StatModifierType.Flat,
+                StatRoundingMode.None,
+                0f);
     }
 }

@@ -14,6 +14,31 @@ public class StatData : ScriptableObject
     private void OnValidate()
     {
         statLookup = null;
+        
+        if (stats.Count > AllStatTypes.Length)
+        {
+            for (int i = stats.Count - 1; i >= AllStatTypes.Length; i--)
+            {
+                stats.RemoveAt(i);
+            }
+        }
+        else if (stats.Count < AllStatTypes.Length)
+        {
+            for (int i = 0; i < AllStatTypes.Length; i++)
+            {
+                if (i < stats.Count)
+                {
+                    if ((StatType)i != stats[i].StatType)
+                    {
+                        stats.Insert(i, CreateDefaultStat((StatType)i));
+                    }
+                }
+                else
+                {
+                    stats.Insert(i, CreateDefaultStat((StatType)i));
+                }
+            }
+        }
     }
     
     public Stat GetStat(StatType statType)
@@ -53,10 +78,6 @@ public class StatData : ScriptableObject
 
     private Stat CreateDefaultStat(StatType statType)
     {
-        return new Stat()
-        {
-            StatType = statType,
-            Value = 0f
-        };
+        return new Stat(statType, 0f);
     }
 }

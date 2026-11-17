@@ -36,14 +36,25 @@ public class StatSlot
         isDirty = true;
     }
 
+    public float GetModifierPreview(StatModifier modifier)
+    {
+        if (modifier == null || modifier.StatType != rule.StatType)
+        {
+            Debug.LogError($"StatSlot: {rule.StatType} 스탯 미리보기 적용 실패");
+            return -1f;
+        }
+        
+        return CalculateStatValue(modifier);
+    }
+
     public void AddModifier(StatModifier modifier)
     {
-        if (modifier == null)
+        if (modifier == null || modifier.StatType != rule.StatType)
         {
             Debug.LogError($"StatSlot: {rule.StatType} 스탯 적용 실패");
             return;
         }
-        
+
         isDirty = true;
         modifiers.Add(modifier);
     }
@@ -62,28 +73,57 @@ public class StatSlot
 
     private void ApplyModifiers()
     {
-        if (isDirty)
-        {
-            float flatValue = 0f;
-            float percentValue = 0f;
+        finalValue = CalculateStatValue();
 
-            foreach (StatModifier modifier in modifiers)
+        isDirty = false;
+    }
+
+    private float CalculateStatValue(StatModifier additionalModifier = null)
+    {
+        float flatValue = 0f;
+        float percentAddValue = 0f;
+        float percentMulValue = 1f;
+
+        if (rule.StatModifierType == StatModifierType.Flat)
+        {
+            for (int i = 0; i < modifiers.Count; i++)
             {
-                switch (modifier.StatModifierType)
-                {
-                    case StatModifierType.Flat:
-                        flatValue += modifier.AppliedValue;
-                        break;
-                    case StatModifierType.Percent:
-                        percentValue += modifier.AppliedValue;
-                        break;
-                }
+                flatValue += modifiers[i].InputValue;
             }
 
-            float statValue = (baseValue + flatValue) * (1 + percentValue);
-            finalValue = rule.Apply(statValue);
-
-            isDirty = false;
+            if (additionalModifier != null)
+            {
+                flatValue += additionalModifier.InputValue;
+            }
         }
+        else if (rule.StatModifierType == StatModifierType.PercentAdd)
+        {
+            for (int i = 0; i < modifiers.Count; i++)
+            {
+                percentAddValue += modifiers[i].InputValue / 100f;
+            }
+
+            if (additionalModifier != null)
+            {
+                percentAddValue += additionalModifier.InputValue / 100f;
+            }
+        }
+        else if (rule.StatModifierType == StatModifierType.PercentMul)
+        {
+            for (int i = 0; i < modifiers.Count; i++)
+            {
+                percentMulValue *= 1 + modifiers[i].InputValue / 100f;
+            }
+
+            if (additionalModifier != null)
+            {
+                percentMulValue *= 1 + additionalModifier.InputValue / 100f;
+            }
+        }
+        
+        float statValue = (baseValue + flatValue) * (1 + percentAddValue) * percentMulValue;
+        
+        // Debug.Log($"{rule.StatType} : {finalValue} -> {rule.Apply(statValue)}");
+        return rule.Apply(statValue); 
     }
 }

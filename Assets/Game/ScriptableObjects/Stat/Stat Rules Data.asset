@@ -13,33 +13,53 @@ MonoBehaviour:
   m_Name: Stat Rules Data
   m_EditorClassIdentifier: 
   rules:
-  - StatType: 0
-    StatRoundingMode: 1
-    MinValue: 0
-  - StatType: 1
-    StatRoundingMode: 1
-    MinValue: 0
-  - StatType: 2
-    StatRoundingMode: 0
-    MinValue: 0
-  - StatType: 3
-    StatRoundingMode: 1
-    MinValue: 1
-  - StatType: 4
-    StatRoundingMode: 0
-    MinValue: 0
-  - StatType: 5
-    StatRoundingMode: 0
-    MinValue: 2
-  - StatType: 6
-    StatRoundingMode: 0
-    MinValue: 1
-  - StatType: 7
-    StatRoundingMode: 0
-    MinValue: 0
-  - StatType: 8
-    StatRoundingMode: 0
-    MinValue: 1
-  - StatType: 9
-    StatRoundingMode: 0
-    MinValue: 0
+  - statTypeName: AttackPower
+    statType: 0
+    statModifierType: 1
+    statRoundingMode: 1
+    minValue: 0
+  - statTypeName: Defence
+    statType: 1
+    statModifierType: 0
+    statRoundingMode: 1
+    minValue: 0
+  - statTypeName: CriticalRate
+    statType: 2
+    statModifierType: 0
+    statRoundingMode: 0
+    minValue: 0
+  - statTypeName: MaxHp
+    statType: 3
+    statModifierType: 2
+    statRoundingMode: 1
+    minValue: 1
+  - statTypeName: HpRegeneration
+    statType: 4
+    statModifierType: 0
+    statRoundingMode: 0
+    minValue: 0
+  - statTypeName: MoveSpeed
+    statType: 5
+    statModifierType: 1
+    statRoundingMode: 0
+    minValue: 2
+  - statTypeName: PickupRadius
+    statType: 6
+    statModifierType: 1
+    statRoundingMode: 0
+    minValue: 1
+  - statTypeName: CooldownReduction
+    statType: 7
+    statModifierType: 1
+    statRoundingMode: 0
+    minValue: 0
+  - statTypeName: Area
+    statType: 8
+    statModifierType: 1
+    statRoundingMode: 0
+    minValue: 1
+  - statTypeName: Amount
+    statType: 9
+    statModifierType: 0
+    statRoundingMode: 1
+    minValue: 0

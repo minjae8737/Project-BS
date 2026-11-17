@@ -13,23 +13,33 @@ MonoBehaviour:
   m_Name: Player Stat Data
   m_EditorClassIdentifier: 
   stats:
-  - StatType: 0
-    Value: 10
-  - StatType: 1
-    Value: 5
-  - StatType: 2
-    Value: 5
-  - StatType: 3
-    Value: 100
-  - StatType: 4
-    Value: 0
-  - StatType: 5
-    Value: 5
-  - StatType: 6
-    Value: 5
-  - StatType: 7
-    Value: 0
-  - StatType: 8
-    Value: 1
-  - StatType: 9
-    Value: 0
+  - statTypeName: AttackPower
+    statType: 0
+    value: 10
+  - statTypeName: Defence
+    statType: 1
+    value: 5
+  - statTypeName: CriticalRate
+    statType: 2
+    value: 0
+  - statTypeName: MaxHp
+    statType: 3
+    value: 100
+  - statTypeName: HpRegeneration
+    statType: 4
+    value: 0
+  - statTypeName: MoveSpeed
+    statType: 5
+    value: 5
+  - statTypeName: PickupRadius
+    statType: 6
+    value: 1
+  - statTypeName: CooldownReduction
+    statType: 7
+    value: 0
+  - statTypeName: Area
+    statType: 8
+    value: 1
+  - statTypeName: Amount
+    statType: 9
+    value: 0
