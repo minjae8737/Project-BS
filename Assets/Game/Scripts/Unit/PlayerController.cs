@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         PlayerStatDto statDto = new PlayerStatDto(
             attackPower: stat.AttackPower,
-            attackSpeed: stat.AttackSpeed,
+            attackSpeed: stat.CooldownReduction,
             area: stat.Area,
             amount: stat.Amount
         );
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         movement.Tick(moveDir, stat.MoveSpeed, deltaTime);
 
         // 애니메이션
-        animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseSpeed);
+        animationController.UpdateLocomotion(movement.HorizontalVelocity, stat.BaseMoveSpeed);
         animationController.SetGrounded(movement.IsGrounded);
         animationController.SetVerticalSpeed(movement.VerticalVelocity);
     }

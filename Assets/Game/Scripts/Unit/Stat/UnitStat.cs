@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 public class UnitStat : MonoBehaviour
 {
     [SerializeField] private StatData statData;
-    private Dictionary<StatType, StatSlot> stats;
+    private Dictionary<StatType, StatSlot> statSlots;
     private static readonly StatType[] AllStatTypes = 
         (StatType[])Enum.GetValues(typeof(StatType));
 
@@ -20,17 +20,17 @@ public class UnitStat : MonoBehaviour
         }
         private set
         {
-            hp = (int)Mathf.Clamp(value, 0f, stats[StatType.MaxHp].FinalValue);
+            hp = (int)Mathf.Clamp(value, 0f, statSlots[StatType.MaxHp].FinalValue);
         }
     }
     
-    public float AttackPower => stats[StatType.AttackPower].FinalValue;
-    public float MoveSpeed => stats[StatType.MoveSpeed].FinalValue;
-    public float BaseSpeed => stats[StatType.MoveSpeed].BaseValue;
-    public float PickupRadius => stats[StatType.PickupRadius].FinalValue;
-    public float AttackSpeed => stats[StatType.CooldownReduction].FinalValue / 100f;
-    public float Area => stats[StatType.Area].FinalValue;
-    public int Amount => (int)stats[StatType.Amount].FinalValue;
+    public float AttackPower => statSlots[StatType.AttackPower].FinalValue;
+    public float MoveSpeed => statSlots[StatType.MoveSpeed].FinalValue;
+    public float BaseMoveSpeed => statSlots[StatType.MoveSpeed].BaseValue;
+    public float PickupRadius => statSlots[StatType.PickupRadius].FinalValue;
+    public float CooldownReduction => statSlots[StatType.CooldownReduction].FinalValue / 100f;
+    public float Area => statSlots[StatType.Area].FinalValue;
+    public int Amount => (int)statSlots[StatType.Amount].FinalValue;
     public bool IsDead => hp <= 0;
     
     public event Action Died;
@@ -40,7 +40,7 @@ public class UnitStat : MonoBehaviour
     {
         Assert.IsNotNull(statData, $"{gameObject.name} 에 StatData가 할당되어야 합니다.");
 
-        stats = new();
+        statSlots = new();
     }
     
     public void Init(StatRulesData statRulesData)
@@ -50,10 +50,10 @@ public class UnitStat : MonoBehaviour
             StatRule rule = statRulesData.GetRule(statType);
             Stat stat = statData.GetStat(statType);
             
-            if (!stats.TryGetValue(statType, out StatSlot slot))
+            if (!statSlots.TryGetValue(statType, out StatSlot slot))
             {
                 StatSlot newStatSlot = new(stat.Value, rule);
-                stats.Add(statType, newStatSlot);
+                statSlots.Add(statType, newStatSlot);
             }
             else
             {
@@ -62,14 +62,14 @@ public class UnitStat : MonoBehaviour
             }
         }
 
-        hp = (int)stats[StatType.MaxHp].FinalValue;
+        hp = (int)statSlots[StatType.MaxHp].FinalValue;
     }
 
     public void TakeDamage(float rawDamage)
     {
         if (IsDead) return;
 
-        int damage = DamageCalculator.CalculateDamage(rawDamage, stats[StatType.Defence].FinalValue);
+        int damage = DamageCalculator.CalculateDamage(rawDamage, statSlots[StatType.Defence].FinalValue);
         Hp -= damage;
         
         Damaged?.Invoke(damage);
@@ -78,11 +78,23 @@ public class UnitStat : MonoBehaviour
             Died?.Invoke();
     }
 
-    public void AddModifiers(IReadOnlyList<StatModifier> passiveModifiers)
+    public void AddModifiers(IReadOnlyList<StatModifier> modifiers)
     {
-        for (int i = 0; i < passiveModifiers.Count; i++)
+        float preMaxHp = statSlots[StatType.MaxHp].FinalValue;
+        
+        for (int i = 0; i < modifiers.Count; i++)
         {
-            stats[passiveModifiers[i].StatType].AddModifier(passiveModifiers[i]);
+            statSlots[modifiers[i].StatType].AddModifier(modifiers[i]);
         }
+        
+        float postMaxHp = statSlots[StatType.MaxHp].FinalValue;
+        ApplyMaxHpChange(Mathf.RoundToInt(postMaxHp - preMaxHp));
+    }
+
+    private void ApplyMaxHpChange(int maxHpDelta)
+    {
+        if (IsDead) return;
+        
+        Hp += (int)Mathf.Max(maxHpDelta, 0f); 
     }
 }
