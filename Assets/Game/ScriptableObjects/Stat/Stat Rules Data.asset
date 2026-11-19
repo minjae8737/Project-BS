@@ -25,7 +25,7 @@ MonoBehaviour:
     minValue: 0
   - statTypeName: CriticalRate
     statType: 2
-    statModifierType: 0
+    statModifierType: 1
     statRoundingMode: 0
     minValue: 0
   - statTypeName: MaxHp
@@ -47,10 +47,10 @@ MonoBehaviour:
     statType: 6
     statModifierType: 1
     statRoundingMode: 0
-    minValue: 1
+    minValue: 0
   - statTypeName: CooldownReduction
     statType: 7
-    statModifierType: 1
+    statModifierType: 0
     statRoundingMode: 0
     minValue: 0
   - statTypeName: Area

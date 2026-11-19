@@ -39,7 +39,7 @@ MonoBehaviour:
     value: 0
   - statTypeName: Area
     statType: 8
-    value: 0
+    value: 1
   - statTypeName: Amount
     statType: 9
     value: 0

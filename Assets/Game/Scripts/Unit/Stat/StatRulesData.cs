@@ -13,39 +13,50 @@ public class StatRulesData : ScriptableObject
 
     private void OnValidate()
     {
-        ruleLookup = null;
+        List<StatRule> newRules = new();
 
-        if (rules.Count > AllStatTypes.Length)
+        for (int i = 0; i < AllStatTypes.Length; i++)
         {
-            for (int i = rules.Count - 1; i >= AllStatTypes.Length; i--)
+            bool isAdded = false;
+
+            for (int j = 0; j < rules.Count; j++)
             {
-                rules.RemoveAt(i);
-            }
-        }
-        else if (rules.Count < AllStatTypes.Length)
-        {
-            for (int i = 0; i < AllStatTypes.Length; i++)
-            {
-                if (i < rules.Count)
+                if (rules[j].StatType == AllStatTypes[i])
                 {
-                    if ((StatType)i != rules[i].StatType)
+                    if (!isAdded)
                     {
-                        rules.Insert(i, CreateDefaultStatRule((StatType)i));
+                        newRules.Add(rules[j]);
+                        isAdded = true;
+                    }
+                    else
+                    {
+                        Debug.LogError($"[{name}] {AllStatTypes[i]}은 중복되었습니다.", this);
                     }
                 }
-                else
-                {
-                    rules.Insert(i, CreateDefaultStatRule((StatType)i));
-                }
+            }
+
+            if (!isAdded)
+            {
+                Debug.LogWarning($"[{name}] {AllStatTypes[i]} 규칙이 없어 기본값으로 추가했습니다. 값을 채워 주세요.", this);
+                newRules.Add(CreateDefaultStatRule(AllStatTypes[i]));
             }
         }
+
+        rules = newRules;
+        
+        for (int i = 0; i < rules.Count; i++)
+        {
+            rules[i].RefreshName();
+        }
+        
+        ruleLookup = null;
     }
 
     public StatRule GetRule(StatType statType)
     {
         if (ruleLookup == null)
             BuildLookup();
-        
+
         return ruleLookup[(int)statType];
     }
 
@@ -79,9 +90,9 @@ public class StatRulesData : ScriptableObject
     private StatRule CreateDefaultStatRule(StatType statType)
     {
         return new StatRule(
-                statType,
-                StatModifierType.Flat,
-                StatRoundingMode.None,
-                0f);
+            statType,
+            StatModifierType.Flat,
+            StatRoundingMode.None,
+            0f);
     }
 }

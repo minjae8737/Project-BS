@@ -87,14 +87,42 @@ public class UnitStat : MonoBehaviour
             statSlots[modifiers[i].StatType].AddModifier(modifiers[i]);
         }
         
-        float postMaxHp = statSlots[StatType.MaxHp].FinalValue;
-        ApplyMaxHpChange(Mathf.RoundToInt(postMaxHp - preMaxHp));
+        ApplyMaxHpChange(preMaxHp);
+    }
+    
+    public void RemoveModifiers(IReadOnlyList<StatModifier> modifiers)
+    {
+        float preMaxHp = statSlots[StatType.MaxHp].FinalValue;
+
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            statSlots[modifiers[i].StatType].RemoveModifier(modifiers[i]);
+        }
+        
+        ApplyMaxHpChange(preMaxHp);
     }
 
-    private void ApplyMaxHpChange(int maxHpDelta)
+    private void ApplyMaxHpChange(float preMaxHp)
     {
         if (IsDead) return;
         
-        Hp += (int)Mathf.Max(maxHpDelta, 0f); 
+        float postMaxHp = statSlots[StatType.MaxHp].FinalValue;
+        int maxHpDelta = Mathf.RoundToInt(postMaxHp - preMaxHp);
+        
+        Hp += Mathf.Max(maxHpDelta, 0);
+    }
+    
+    public bool TryGetModifierPreview(StatModifier modifier, out float currentValue, out float resultValue)
+    {
+        if (modifier == null || !statSlots.TryGetValue(modifier.StatType, out var statSlot))
+        {
+            currentValue = 0f;
+            resultValue = 0f;
+            return false;
+        }
+        
+        currentValue = statSlot.FinalValue;
+        
+        return statSlot.TryGetModifierPreview(modifier, out resultValue);
     }
 }

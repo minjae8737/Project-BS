@@ -26,7 +26,7 @@ public enum StatModifierType
 public class Stat
 {
     [SerializeField] private string statTypeName;
-    [SerializeField] private StatType statType;
+    [SerializeField, HideInInspector] private StatType statType;
     [SerializeField] private float value;
  
     public string StatTypeName => statTypeName;
@@ -40,5 +40,10 @@ public class Stat
         statTypeName = statType.ToString();
         this.statType = statType;
         this.value = value;
+    }
+    
+    public void RefreshName()
+    {
+        statTypeName = statType.ToString();
     }
 }

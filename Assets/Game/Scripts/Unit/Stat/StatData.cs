@@ -13,32 +13,43 @@ public class StatData : ScriptableObject
 
     private void OnValidate()
     {
-        statLookup = null;
-        
-        if (stats.Count > AllStatTypes.Length)
+        List<Stat> newStats = new();
+
+        for (int i = 0; i < AllStatTypes.Length; i++)
         {
-            for (int i = stats.Count - 1; i >= AllStatTypes.Length; i--)
+            bool isAdded = false;
+
+            for (int j = 0; j < stats.Count; j++)
             {
-                stats.RemoveAt(i);
-            }
-        }
-        else if (stats.Count < AllStatTypes.Length)
-        {
-            for (int i = 0; i < AllStatTypes.Length; i++)
-            {
-                if (i < stats.Count)
+                if (stats[j].StatType == AllStatTypes[i])
                 {
-                    if ((StatType)i != stats[i].StatType)
+                    if (!isAdded)
                     {
-                        stats.Insert(i, CreateDefaultStat((StatType)i));
+                        newStats.Add(stats[j]);
+                        isAdded = true;
+                    }
+                    else
+                    {
+                        Debug.LogError($"[{name}] {AllStatTypes[i]}은 중복되었습니다.", this);
                     }
                 }
-                else
-                {
-                    stats.Insert(i, CreateDefaultStat((StatType)i));
-                }
+            }
+
+            if (!isAdded)
+            {
+                Debug.LogWarning($"[{name}] {AllStatTypes[i]} 스텟이 없어 기본값으로 추가했습니다. 값을 채워 주세요.", this);
+                newStats.Add(CreateDefaultStat(AllStatTypes[i]));
             }
         }
+
+        stats = newStats;
+        
+        for (int i = 0; i < stats.Count; i++)
+        {
+            stats[i].RefreshName();
+        }
+        
+        statLookup = null;
     }
     
     public Stat GetStat(StatType statType)

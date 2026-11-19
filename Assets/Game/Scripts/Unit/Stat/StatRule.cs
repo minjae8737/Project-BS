@@ -11,7 +11,7 @@ public enum StatRoundingMode
 public class StatRule
 {
     [SerializeField] private string statTypeName;
-    [SerializeField] private StatType statType;
+    [SerializeField, HideInInspector] private StatType statType;
     [SerializeField] private StatModifierType statModifierType;
     [SerializeField] private StatRoundingMode statRoundingMode;
     [SerializeField] private float minValue;
@@ -45,5 +45,10 @@ public class StatRule
         }
 
         return value;
+    }
+    
+    public void RefreshName()
+    {
+        statTypeName = statType.ToString();
     }
 }

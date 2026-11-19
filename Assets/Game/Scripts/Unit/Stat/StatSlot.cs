@@ -36,15 +36,17 @@ public class StatSlot
         isDirty = true;
     }
 
-    public float GetModifierPreview(StatModifier modifier)
+    public bool TryGetModifierPreview(StatModifier modifier, out float resultValue)
     {
         if (modifier == null || modifier.StatType != rule.StatType)
         {
             Debug.LogError($"StatSlot: {rule.StatType} 스탯 미리보기 적용 실패");
-            return -1f;
+            resultValue = -1f;
+            return false;
         }
-        
-        return CalculateStatValue(modifier);
+
+        resultValue = CalculateStatValue(modifier);
+        return true;
     }
 
     public void AddModifier(StatModifier modifier)
@@ -123,7 +125,6 @@ public class StatSlot
         
         float statValue = (baseValue + flatValue) * (1 + percentAddValue) * percentMulValue;
         
-        // Debug.Log($"{rule.StatType} : {finalValue} -> {rule.Apply(statValue)}");
         return rule.Apply(statValue); 
     }
 }

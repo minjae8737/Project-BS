@@ -18,26 +18,21 @@ MonoBehaviour:
   levelBonus:
   - modifiers:
     - statType: 1
-      statModifierType: 1
-      inputValue: 10
+      inputValue: 1
     description: "\uBC29\uC5B4\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 1
-      statModifierType: 1
-      inputValue: 10
+      inputValue: 1
     description: "\uBC29\uC5B4\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 1
-      statModifierType: 1
-      inputValue: 10
+      inputValue: 1
     description: "\uBC29\uC5B4\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 1
-      statModifierType: 1
-      inputValue: 10
+      inputValue: 1
     description: "\uBC29\uC5B4\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 1
-      statModifierType: 1
-      inputValue: 10
+      inputValue: 1
     description: "\uBC29\uC5B4\uB825 +10% \uC99D\uAC00"
