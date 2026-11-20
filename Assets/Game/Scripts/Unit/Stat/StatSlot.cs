@@ -86,45 +86,37 @@ public class StatSlot
         float percentAddValue = 0f;
         float percentMulValue = 1f;
 
-        if (rule.StatModifierType == StatModifierType.Flat)
+        foreach (StatModifier modifier in modifiers)
         {
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                flatValue += modifiers[i].InputValue;
-            }
-
-            if (additionalModifier != null)
-            {
-                flatValue += additionalModifier.InputValue;
-            }
+            Accumulate(modifier);
         }
-        else if (rule.StatModifierType == StatModifierType.PercentAdd)
-        {
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                percentAddValue += modifiers[i].InputValue / 100f;
-            }
 
-            if (additionalModifier != null)
-            {
-                percentAddValue += additionalModifier.InputValue / 100f;
-            }
-        }
-        else if (rule.StatModifierType == StatModifierType.PercentMul)
+        if (additionalModifier != null)
         {
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                percentMulValue *= 1 + modifiers[i].InputValue / 100f;
-            }
-
-            if (additionalModifier != null)
-            {
-                percentMulValue *= 1 + additionalModifier.InputValue / 100f;
-            }
+            Accumulate(additionalModifier);
         }
         
         float statValue = (baseValue + flatValue) * (1 + percentAddValue) * percentMulValue;
-        
-        return rule.Apply(statValue); 
+
+        return rule.Apply(statValue);
+
+        void Accumulate(StatModifier modifier)
+        {
+            switch (rule.StatModifierType)
+            {
+                case StatModifierType.Flat:
+                    flatValue += modifier.InputValue;
+                    break;
+                case StatModifierType.PercentAdd:
+                    percentAddValue += modifier.InputValue / 100f;
+                    break;
+                case StatModifierType.PercentMul:
+                    percentMulValue *= 1 + modifier.InputValue / 100f;
+                    break;
+                default:
+                    Debug.LogError($"[{this} {rule.StatType}] StatModifierType이 계산되지 않는 타입입니다.");
+                    break;
+            }
+        }
     }
 }
