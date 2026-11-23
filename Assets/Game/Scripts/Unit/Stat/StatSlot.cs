@@ -38,9 +38,9 @@ public class StatSlot
 
     public bool TryGetModifierPreview(StatModifier modifier, out float resultValue)
     {
-        if (modifier == null || modifier.StatType != rule.StatType)
+        if (modifier == null || modifier.StatType != rule.Type)
         {
-            Debug.LogError($"StatSlot: {rule.StatType} 스탯 미리보기 적용 실패");
+            Debug.LogError($"StatSlot: {rule.Type} 스탯 미리보기 적용 실패");
             resultValue = -1f;
             return false;
         }
@@ -51,9 +51,9 @@ public class StatSlot
 
     public void AddModifier(StatModifier modifier)
     {
-        if (modifier == null || modifier.StatType != rule.StatType)
+        if (modifier == null || modifier.StatType != rule.Type)
         {
-            Debug.LogError($"StatSlot: {rule.StatType} 스탯 적용 실패");
+            Debug.LogError($"StatSlot: {rule.Type} 스탯 적용 실패");
             return;
         }
 
@@ -114,7 +114,7 @@ public class StatSlot
                     percentMulValue *= 1 + modifier.InputValue / 100f;
                     break;
                 default:
-                    Debug.LogError($"[{this} {rule.StatType}] StatModifierType이 계산되지 않는 타입입니다.");
+                    Debug.LogError($"[{this} {rule.Type}] StatModifierType이 계산되지 않는 타입입니다.");
                     break;
             }
         }

@@ -8,7 +8,7 @@ public enum StatRoundingMode
 }
 
 [Serializable]
-public class StatRule
+public class StatRule : IEnumRow<StatType>
 {
     [SerializeField] private string statTypeName;
     [SerializeField, HideInInspector] private StatType statType;
@@ -17,17 +17,18 @@ public class StatRule
     [SerializeField] private float minValue;
     
     public string StatTypeName => statTypeName;
-    public StatType StatType => statType;
+    public StatType Type => statType;
     public StatModifierType StatModifierType => statModifierType;
     public StatRoundingMode StatRoundingMode => statRoundingMode;
     public float MinValue => minValue;
 
     public StatRule() { }
 
-    public StatRule(StatType statType, StatModifierType statModifierType, StatRoundingMode statRoundingMode, float minValue)
+
+    public StatRule(StatType type, StatModifierType statModifierType, StatRoundingMode statRoundingMode, float minValue)
     {
-        statTypeName = statType.ToString();
-        this.statType = statType;
+        statTypeName = type.ToString();
+        statType = type;
         this.statModifierType = statModifierType;
         this.statRoundingMode = statRoundingMode;
         this.minValue = minValue;
@@ -46,7 +47,7 @@ public class StatRule
 
         return value;
     }
-    
+
     public void RefreshName()
     {
         statTypeName = statType.ToString();

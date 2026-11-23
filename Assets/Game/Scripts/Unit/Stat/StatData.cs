@@ -13,42 +13,8 @@ public class StatData : ScriptableObject
 
     private void OnValidate()
     {
-        List<Stat> newStats = new();
+        EnumRowSynchronizer.SyncToEnum<StatType, Stat>(stats, CreateDefaultStat, this);
 
-        for (int i = 0; i < AllStatTypes.Length; i++)
-        {
-            bool isAdded = false;
-
-            for (int j = 0; j < stats.Count; j++)
-            {
-                if (stats[j].StatType == AllStatTypes[i])
-                {
-                    if (!isAdded)
-                    {
-                        newStats.Add(stats[j]);
-                        isAdded = true;
-                    }
-                    else
-                    {
-                        Debug.LogError($"[{name}] {AllStatTypes[i]}은 중복되었습니다.", this);
-                    }
-                }
-            }
-
-            if (!isAdded)
-            {
-                Debug.LogWarning($"[{name}] {AllStatTypes[i]} 스텟이 없어 기본값으로 추가했습니다. 값을 채워 주세요.", this);
-                newStats.Add(CreateDefaultStat(AllStatTypes[i]));
-            }
-        }
-
-        stats = newStats;
-        
-        for (int i = 0; i < stats.Count; i++)
-        {
-            stats[i].RefreshName();
-        }
-        
         statLookup = null;
     }
     
@@ -66,11 +32,11 @@ public class StatData : ScriptableObject
 
         foreach (Stat stat in stats)
         {
-            int index = (int)stat.StatType;
+            int index = (int)stat.Type;
 
             if (statLookup[index] != null)
             {
-                Debug.LogError($"[{name}] Stat 중복 : {stat.StatType}", this);
+                Debug.LogError($"[{name}] Stat 중복 : {stat.Type}", this);
                 continue;
             }
 

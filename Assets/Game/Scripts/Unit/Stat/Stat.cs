@@ -23,27 +23,28 @@ public enum StatModifierType
 }
 
 [Serializable]
-public class Stat
+public class Stat : IEnumRow<StatType>
 {
     [SerializeField] private string statTypeName;
-    [SerializeField, HideInInspector] private StatType statType;
+    [SerializeField, HideInInspector] private StatType type;
     [SerializeField] private float value;
- 
+
+    public StatType Type => type;
     public string StatTypeName => statTypeName;
-    public StatType StatType => statType;
     public float Value => value;
 
     public Stat() { }
 
-    public Stat(StatType statType, float value)
+
+    public Stat(StatType type, float value)
     {
-        statTypeName = statType.ToString();
-        this.statType = statType;
+        statTypeName = type.ToString();
+        this.type = type;
         this.value = value;
     }
-    
+
     public void RefreshName()
     {
-        statTypeName = statType.ToString();
+        statTypeName = type.ToString();
     }
 }
