@@ -17,6 +17,7 @@ public class StatChangeTextRow<TEnum> : IEnumRow<TEnum> where TEnum : struct, En
     public StatChangeTextRow(TEnum type)
     {
         this.type = type;
+        RefreshName();
     }
 
     public void RefreshName()

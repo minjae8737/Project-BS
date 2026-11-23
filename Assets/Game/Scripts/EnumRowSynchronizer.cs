@@ -63,20 +63,19 @@ public static class EnumRowSynchronizer
         {
             int index = Convert.ToInt32(row.Type);
 
+            if (index < 0 || index >= lookup.Length)
+            {
+                Debug.LogError($"[{context.name}] 중간에 빈값이 존재함. {row.Type}", context);
+                continue;
+            }
+            
             if (lookup[index] != null)
             {
                 Debug.LogWarning($"[{context.name}] 중복 : {row.Type}", context);
                 continue;
             }
 
-            try
-            {
-                lookup[index] = row;
-            }
-            catch (IndexOutOfRangeException e)
-            {
-                Debug.LogError($"[{context.name}] 중간에 빈값이 존재함. {row.Type}", context);
-            }
+            lookup[index] = row;
         }
 
         for (int i = 0; i < lookup.Length; i++)

@@ -32,6 +32,7 @@ public class StatRule : IEnumRow<StatType>
         this.statModifierType = statModifierType;
         this.statRoundingMode = statRoundingMode;
         this.minValue = minValue;
+        RefreshName();
     }
 
     public float Apply(float value)
