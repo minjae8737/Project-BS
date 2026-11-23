@@ -14,32 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
   - statTypeName: AttackPower
-    statType: 0
+    type: 0
     value: 5
   - statTypeName: Defence
-    statType: 1
+    type: 1
     value: 0
   - statTypeName: CriticalRate
-    statType: 2
+    type: 2
     value: 0
   - statTypeName: MaxHp
-    statType: 3
+    type: 3
     value: 20
   - statTypeName: HpRegeneration
-    statType: 4
+    type: 4
     value: 0
   - statTypeName: MoveSpeed
-    statType: 5
+    type: 5
     value: 2
   - statTypeName: PickupRadius
-    statType: 6
+    type: 6
     value: 0
   - statTypeName: CooldownReduction
-    statType: 7
+    type: 7
     value: 0
   - statTypeName: Area
-    statType: 8
+    type: 8
     value: 1
   - statTypeName: Amount
-    statType: 9
+    type: 9
     value: 0

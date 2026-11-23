@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 맨 뒤에만 추가, 중간 값은 지우지 않기(안 쓰면 그대로 두기)
+/// </summary>
 public enum StatType
 {
     AttackPower = 0,        // 공격력

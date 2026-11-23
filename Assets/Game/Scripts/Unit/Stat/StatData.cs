@@ -8,9 +8,6 @@ public class StatData : ScriptableObject
     [SerializeField] private List<Stat> stats = new();
     [NonSerialized] private Stat[] statLookup;
 
-    private static readonly StatType[] AllStatTypes =
-        (StatType[])Enum.GetValues(typeof(StatType));
-
     private void OnValidate()
     {
         EnumRowSynchronizer.SyncToEnum<StatType, Stat>(stats, CreateDefaultStat, this);
@@ -28,29 +25,7 @@ public class StatData : ScriptableObject
 
     private void BuildLookup()
     {
-        statLookup = new Stat[AllStatTypes.Length];
-
-        foreach (Stat stat in stats)
-        {
-            int index = (int)stat.Type;
-
-            if (statLookup[index] != null)
-            {
-                Debug.LogError($"[{name}] Stat 중복 : {stat.Type}", this);
-                continue;
-            }
-
-            statLookup[index] = stat;
-        }
-
-        for (int i = 0; i < statLookup.Length; i++)
-        {
-            if (statLookup[i] != null) continue;
-
-            Debug.LogError($"[{name}] Stat이 존재하지 않음. 기본스텟 추가. : {AllStatTypes[i]}", this);
-
-            statLookup[i] = CreateDefaultStat(AllStatTypes[i]);
-        }
+        statLookup = EnumRowSynchronizer.BuildLookup<StatType, Stat>(stats, CreateDefaultStat, this);
     }
 
     private Stat CreateDefaultStat(StatType statType)

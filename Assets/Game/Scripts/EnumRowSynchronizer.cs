@@ -7,7 +7,7 @@ public static class EnumRowSynchronizer
 {
     public static void SyncToEnum<TEnum, TRow>(List<TRow> rows, Func<TEnum, TRow> createDefault, Object context)
         where TEnum : struct, Enum
-        where TRow : IEnumRow<TEnum>
+        where TRow : class, IEnumRow<TEnum>
     {
         TEnum[] enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
         List<TRow> syncedRows = new();
@@ -50,5 +50,44 @@ public static class EnumRowSynchronizer
         {
             rows[i].RefreshName();
         }
+    }
+
+    public static TRow[] BuildLookup<TEnum, TRow>(List<TRow> rows, Func<TEnum, TRow> createDefault, Object context)
+        where TEnum : struct, Enum
+        where TRow : class, IEnumRow<TEnum>
+    {
+        TEnum[] enumValues = (TEnum[])Enum.GetValues(typeof(TEnum));
+        TRow[] lookup = new TRow[enumValues.Length];
+
+        foreach (TRow row in rows)
+        {
+            int index = Convert.ToInt32(row.Type);
+
+            if (lookup[index] != null)
+            {
+                Debug.LogWarning($"[{context.name}] 중복 : {row.Type}", context);
+                continue;
+            }
+
+            try
+            {
+                lookup[index] = row;
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Debug.LogError($"[{context.name}] 중간에 빈값이 존재함. {row.Type}", context);
+            }
+        }
+
+        for (int i = 0; i < lookup.Length; i++)
+        {
+            if (lookup[i] != null) continue;
+
+            Debug.LogWarning($"[{context.name}] 존재하지 않음. 기본값 추가. : {enumValues[i]}", context);
+
+            lookup[i] = createDefault(enumValues[i]);
+        }
+
+        return lookup;
     }
 }
