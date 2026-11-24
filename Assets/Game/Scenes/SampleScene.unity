@@ -393,6 +393,8 @@ MonoBehaviour:
     levelUpRewardPanel: {fileID: 1421588646}
     rewardOptionGenerator:
       catalog: {fileID: 11400000, guid: 7cbeb32b5e02e4060a4e3763722f4309, type: 2}
+      statChangeTextGenerator:
+        statChangeTextData: {fileID: 11400000, guid: 1c1640c9a9c6c49009696fbba2062d24, type: 2}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

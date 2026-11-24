@@ -27,7 +27,6 @@ public class StatRule : IEnumRow<StatType>
 
     public StatRule(StatType type, StatModifierType statModifierType, StatRoundingMode statRoundingMode, float minValue)
     {
-        statTypeName = type.ToString();
         statType = type;
         this.statModifierType = statModifierType;
         this.statRoundingMode = statRoundingMode;

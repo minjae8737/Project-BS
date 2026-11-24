@@ -41,7 +41,6 @@ public class Stat : IEnumRow<StatType>
 
     public Stat(StatType type, float value)
     {
-        statTypeName = type.ToString();
         this.type = type;
         this.value = value;
         RefreshName();
