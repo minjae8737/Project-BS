@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class SkillData : AbilityData
@@ -14,4 +15,6 @@ public abstract class SkillData : AbilityData
     public LayerMask TargetLayer => targetLayer;
     
     public abstract Skill CreateSkill();
+
+    public abstract bool TryFillStatChanges(int nextLevel, List<StatChange<SkillStatType>> statChanges);
 }

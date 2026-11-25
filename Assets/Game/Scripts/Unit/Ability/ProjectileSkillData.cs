@@ -13,16 +13,19 @@ public struct ProjectileLevelBonus
     [SerializeField, Min(0)] private float sizeRate;
     [SerializeField, TextArea] private string description;
 
+    public float DamagePercent => damageRate;
     public float DamageRate
     {
         get => damageRate / 100f;
     }
 
+    public float CooldownReductionPercent => cooldownReductionRate;
     public float CooldownReductionRate
     {
         get => cooldownReductionRate / 100f;
     }
 
+    public float SpeedPercent => speedRate;
     public float SpeedRate
     {
         get => speedRate / 100f;
@@ -32,6 +35,7 @@ public struct ProjectileLevelBonus
 
     public int Penetration => penetration;
 
+    public float SizePercent => sizeRate;
     public float SizeRate
     {
         get => sizeRate / 100f;
@@ -70,6 +74,89 @@ public class ProjectileSkillData : SkillData
     public override Skill CreateSkill()
     {
         return new ProjectileSkill(this);
+    }
+
+    public override bool TryFillStatChanges(int nextLevel, List<StatChange<SkillStatType>> statChanges)
+    {
+        statChanges.Clear();
+        
+        if (!TryCalculateSkillStats(nextLevel, out var nextSkillStats)) 
+            return false;
+
+        if (!TryCalculateSkillStats(nextLevel - 1, out var currentSkillStats))
+            return false;
+
+        int bonusIndex = nextLevel - 2;
+
+        ProjectileLevelBonus bonus = levelBonus[bonusIndex];
+        
+        if (bonus.DamagePercent > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.DamagePer,
+                bonus.DamagePercent, 
+                currentSkillStats.DamagePer,
+                nextSkillStats.DamagePer
+                );
+            statChanges.Add(statChange);
+        }
+        
+        if (bonus.CooldownReductionPercent > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.CooldownReduction,
+                bonus.CooldownReductionPercent,
+                currentSkillStats.CooldownReductionRate,
+                nextSkillStats.CooldownReductionRate
+                );
+            statChanges.Add(statChange);
+        }
+        
+        if (bonus.SpeedPercent > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.Speed,
+                bonus.SpeedPercent,
+                currentSkillStats.Speed,
+                nextSkillStats.Speed
+            );
+            statChanges.Add(statChange);
+        }
+        
+        if (bonus.Quantity > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.Quantity,
+                bonus.Quantity,
+                currentSkillStats.Quantity,
+                nextSkillStats.Quantity
+            );
+            statChanges.Add(statChange);
+        }
+        
+        if (bonus.Penetration > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.Penetration,
+                bonus.Penetration,
+                currentSkillStats.Penetration,
+                nextSkillStats.Penetration
+            );
+            statChanges.Add(statChange);
+        }
+        
+        if (bonus.SizePercent > 0)
+        {
+            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                SkillStatType.Size,
+                bonus.SizePercent,
+                currentSkillStats.Size,
+                nextSkillStats.Size
+            );
+            statChanges.Add(statChange);
+        }
+        
+        return true;
     }
 
     private void OnValidate()
