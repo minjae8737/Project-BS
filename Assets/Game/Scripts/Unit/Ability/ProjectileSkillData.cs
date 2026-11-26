@@ -78,6 +78,11 @@ public class ProjectileSkillData : SkillData
 
     public override bool TryFillStatChanges(int nextLevel, List<StatChange<SkillStatType>> statChanges)
     {
+        if (statChanges == null)
+        {
+            Debug.LogError($"[{name}] statChanges가 null입니다.", this);
+            return false;
+        }
         statChanges.Clear();
         
         if (!TryCalculateSkillStats(nextLevel, out var nextSkillStats)) 
@@ -89,81 +94,35 @@ public class ProjectileSkillData : SkillData
         int bonusIndex = nextLevel - 2;
 
         ProjectileLevelBonus bonus = levelBonus[bonusIndex];
-        
-        if (bonus.DamagePercent > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.DamagePer,
-                bonus.DamagePercent, 
-                currentSkillStats.DamagePer,
-                nextSkillStats.DamagePer
-                );
-            statChanges.Add(statChange);
-        }
-        
-        if (bonus.CooldownReductionPercent > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.CooldownReduction,
-                bonus.CooldownReductionPercent,
-                currentSkillStats.CooldownReductionRate,
-                nextSkillStats.CooldownReductionRate
-                );
-            statChanges.Add(statChange);
-        }
-        
-        if (bonus.SpeedPercent > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.Speed,
-                bonus.SpeedPercent,
-                currentSkillStats.Speed,
-                nextSkillStats.Speed
-            );
-            statChanges.Add(statChange);
-        }
-        
-        if (bonus.Quantity > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.Quantity,
-                bonus.Quantity,
-                currentSkillStats.Quantity,
-                nextSkillStats.Quantity
-            );
-            statChanges.Add(statChange);
-        }
-        
-        if (bonus.Penetration > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.Penetration,
-                bonus.Penetration,
-                currentSkillStats.Penetration,
-                nextSkillStats.Penetration
-            );
-            statChanges.Add(statChange);
-        }
-        
-        if (bonus.SizePercent > 0)
-        {
-            StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
-                SkillStatType.Size,
-                bonus.SizePercent,
-                currentSkillStats.Size,
-                nextSkillStats.Size
-            );
-            statChanges.Add(statChange);
-        }
+        AddIfIncreased(SkillStatType.DamagePer, bonus.DamagePercent, currentSkillStats.DamagePer, nextSkillStats.DamagePer);
+        AddIfIncreased(SkillStatType.CooldownReduction, bonus.CooldownReductionPercent, currentSkillStats.CooldownReductionRate, nextSkillStats.CooldownReductionRate);
+        AddIfIncreased(SkillStatType.Speed, bonus.SpeedPercent, currentSkillStats.Speed, nextSkillStats.Speed);
+        AddIfIncreased(SkillStatType.Quantity, bonus.Quantity, currentSkillStats.Quantity, nextSkillStats.Quantity);
+        AddIfIncreased(SkillStatType.Penetration, bonus.Penetration, currentSkillStats.Penetration, nextSkillStats.Penetration);
+        AddIfIncreased(SkillStatType.Size, bonus.SizePercent, currentSkillStats.Size, nextSkillStats.Size);
         
         return true;
+
+        void AddIfIncreased(SkillStatType skillStatType, float inputValue, float currentValue, float afterValue)
+        {
+            if (inputValue > 0)
+            {
+                StatChange<SkillStatType> statChange = new StatChange<SkillStatType>(
+                    skillStatType,
+                    inputValue,
+                    currentValue,
+                    afterValue
+                );
+                statChanges.Add(statChange);
+            }
+        }
     }
 
     private void OnValidate()
     {
         if (FiringModeData == null)
         {
-            Debug.LogError($"SkillData {DisplayName} 의 FiringModeData가 비어있습니다.", this);
+            Debug.LogError($"[{name}] {DisplayName} 의 FiringModeData가 비어있습니다.", this);
         }
         
         if (levelBonus.Count > BonusRowCount)
