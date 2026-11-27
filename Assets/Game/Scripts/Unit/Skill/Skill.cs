@@ -22,7 +22,7 @@ public abstract class Skill
 
     public void Tick(SkillContext context, float deltaTime)
     {
-        float cooldownReductionRate = Mathf.Min(CurrentCooldownReductionRate + context.PlayerStatDto.AttackSpeed, MaxCooldownReductionRate);
+        float cooldownReductionRate = Mathf.Min(CurrentCooldownReductionRate + context.PlayerStatDto.CooldownReduction, MaxCooldownReductionRate);
         float cooldown = data.Cooldown * (1 - cooldownReductionRate);
 
         if (CanExecute(cooldown, deltaTime))

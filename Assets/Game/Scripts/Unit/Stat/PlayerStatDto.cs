@@ -1,14 +1,14 @@
 public struct PlayerStatDto
 {
-    public float AttackPower;   // 공격력
-    public float AttackSpeed;   // 공격 속도
-    public float Area;          // 효과 크기
-    public int Amount;          // 투사체 수
+    public float AttackPower;         // 공격력
+    public float CooldownReduction;   // 쿨타임 감소
+    public float Area;                // 효과 크기
+    public int Amount;                // 개수
 
-    public PlayerStatDto(float attackPower, float attackSpeed, float area, int amount)
+    public PlayerStatDto(float attackPower, float cooldownReduction, float area, int amount)
     {
         AttackPower = attackPower;
-        AttackSpeed = attackSpeed;
+        CooldownReduction = cooldownReduction;
         Area = area;
         Amount = amount;
     }

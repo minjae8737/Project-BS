@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class UnitStat : MonoBehaviour
+public class UnitStat : MonoBehaviour, IStatPreviewProvider
 {
     [SerializeField] private StatData statData;
     private Dictionary<StatType, StatSlot> statSlots;

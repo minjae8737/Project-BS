@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public Vector3 TargetPos => skillTarget.transform.position;
     public Vector3 Pos => transform.position;
     public IReadOnlyPlayerAbilities Abilities => abilities;
+    public IStatPreviewProvider StatPreviewProvider => stat;
 
     private void Awake()
     {
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         PlayerStatDto statDto = new PlayerStatDto(
             attackPower: stat.AttackPower,
-            attackSpeed: stat.CooldownReduction,
+            cooldownReduction: stat.CooldownReduction,
             area: stat.Area,
             amount: stat.Amount
         );
@@ -157,6 +158,11 @@ public class PlayerController : MonoBehaviour, IDamageable
                 Debug.LogError($"[PlayerController] ApplyAbility {abilityData.DisplayName} 잘못된 데이터 타입입니다.", this);
                 break;
         }
+    }
+    
+    public bool TryGetStatPreview(StatModifier modifier, out float currentValue, out float resultValue)
+    {
+        return stat.TryGetModifierPreview(modifier, out currentValue, out resultValue);
     }
 
     private void HandleDamaged(int damage)

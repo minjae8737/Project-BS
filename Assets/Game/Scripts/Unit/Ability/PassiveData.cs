@@ -43,10 +43,11 @@ public class PassiveData : AbilityData
 
     public override string GetLevelBonusDescription(int level)
     {
-        if (level > MaxLevel || level >= LevelBonus.Count) return string.Empty;
-        if (level <= 0) return Description;
-
         int bonusIndex = level - 1;
+        
+        if (level <= 0) return Description;
+        if (bonusIndex < 0 || bonusIndex >= LevelBonus.Count) return string.Empty;
+
         return LevelBonus[bonusIndex].Description;
     }
 
@@ -62,5 +63,54 @@ public class PassiveData : AbilityData
         statModifiers = LevelBonus[bonusIndex].Modifiers;
 
         return true;
+    }
+
+    public bool TryFillStatChanges(int nextLevel, List<StatChange<StatType>> statChanges, IStatPreviewProvider previewProvider)
+    {
+        if (statChanges == null )
+        {
+            Debug.LogError($"[{name}] statChanges가 null입니다.", this);
+            return false;
+        }
+        
+        statChanges.Clear();
+
+        if (previewProvider == null)
+        {
+            Debug.LogError($"[{name}] IStatPreviewProvider가 null입니다.", this);
+            return false;
+        }
+
+        if (!TryGetLevelBonus(nextLevel, out var statModifiers))
+            return false;
+
+        for (int i = 0; i < statModifiers.Count; i++)
+        {
+            StatModifier statModifier = statModifiers[i];
+            
+            if (!previewProvider.TryGetModifierPreview(statModifier, out float currentValue, out float resultValue))
+            {
+                Debug.LogError($"[{name}] {statModifier.StatType}스텟의 Preview를 얻지 못했습니다.", this);
+                continue;
+            }
+            
+            AddIfIncreased(statModifier.StatType, statModifier.InputValue, currentValue, resultValue);
+        }
+        
+        return true;
+
+        void AddIfIncreased(StatType statType, float inputValue, float currentValue, float afterValue)
+        {
+            if (inputValue > 0)
+            {
+                StatChange<StatType> statChange = new StatChange<StatType>(
+                    statType,
+                    inputValue,
+                    currentValue,
+                    afterValue
+                );
+                statChanges.Add(statChange);
+            }
+        }
     }
 }
