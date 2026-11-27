@@ -159,11 +159,6 @@ public class PlayerController : MonoBehaviour, IDamageable
                 break;
         }
     }
-    
-    public bool TryGetStatPreview(StatModifier modifier, out float currentValue, out float resultValue)
-    {
-        return stat.TryGetModifierPreview(modifier, out currentValue, out resultValue);
-    }
 
     private void HandleDamaged(int damage)
     {

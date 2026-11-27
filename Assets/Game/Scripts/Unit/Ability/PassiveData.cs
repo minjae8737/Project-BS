@@ -6,10 +6,8 @@ using UnityEngine;
 public class PassiveLevelBonus
 {
     [SerializeField, Tooltip("이 레벨에서 더해지는 양")] private List<StatModifier> modifiers;
-    [SerializeField, TextArea, Tooltip("레벨별 증가량")] private string description;
     
     public IReadOnlyList<StatModifier> Modifiers => modifiers;
-    public string Description => description;
 }
 
 [CreateAssetMenu(menuName = "Ability/Passive")]
@@ -39,16 +37,6 @@ public class PassiveData : AbilityData
                 levelBonus.Add(new PassiveLevelBonus());
             }
         }
-    }
-
-    public override string GetLevelBonusDescription(int level)
-    {
-        int bonusIndex = level - 1;
-        
-        if (level <= 0) return Description;
-        if (bonusIndex < 0 || bonusIndex >= LevelBonus.Count) return string.Empty;
-
-        return LevelBonus[bonusIndex].Description;
     }
 
     public bool TryGetLevelBonus(int level, out IReadOnlyList<StatModifier> statModifiers)

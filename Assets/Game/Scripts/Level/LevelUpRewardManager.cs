@@ -9,12 +9,15 @@ public class LevelUpRewardManager
 {
     [SerializeField] private LevelUpRewardPanel levelUpRewardPanel;
     [SerializeField] private RewardOptionGenerator rewardOptionGenerator;
+    [SerializeField] private StatChangeTextGenerator statChangeTextGenerator;
 
     private PlayerController playerController;
     private CancellationToken token;
     private UniTaskCompletionSource<int> selectionTcs;
     private int pendingRewardCount;
     private bool isRunning;
+    private List<StatChange<SkillStatType>> skillStatChanges = new();
+    private List<StatChange<StatType>> statChanges = new();
 
     public void Init(CancellationToken token, PlayerController playerController)
     {
@@ -56,6 +59,7 @@ public class LevelUpRewardManager
                     continue;
                 }
                 
+                FillDescriptions(rewardOptions);
                 ShowOptions(rewardOptions);
                 
                 int rewardIndex = await tcs.Task.AttachExternalCancellation(token);
@@ -84,6 +88,46 @@ public class LevelUpRewardManager
     {
         rewardOptionGenerator.TryCreateRewardOptions(playerController.Abilities, out var rewardOptions);
         return rewardOptions;
+    }
+
+    private void FillDescriptions(List<RewardOption> rewardOptions)
+    {
+        foreach (RewardOption rewardOption in rewardOptions)
+        {
+            if (rewardOption.NextLevel <= 1)
+            {
+                rewardOption.SetDescription(rewardOption.Data.Description);
+            }
+            else
+            {
+                switch (rewardOption.Data)
+                {
+                    case SkillData skillData: 
+                        if (!skillData.TryFillStatChanges(rewardOption.NextLevel, skillStatChanges))
+                        {
+                            Debug.LogWarning($"[{rewardOption.Data.name}] 기본 설명으로 대체합니다.", rewardOption.Data);
+                            rewardOption.SetDescription(skillData.Description);
+                            break;
+                        }
+                        string skillStatText = statChangeTextGenerator.BuildSkillStatText(skillStatChanges);
+                        rewardOption.SetDescription(skillStatText);
+                        break;
+                    case PassiveData passiveData:
+                        if (!passiveData.TryFillStatChanges(rewardOption.NextLevel, statChanges, playerController.StatPreviewProvider))
+                        {
+                            Debug.LogWarning($"[{rewardOption.Data.name}] 기본 설명으로 대체합니다.", rewardOption.Data);
+                            rewardOption.SetDescription(passiveData.Description);
+                            break;
+                        }
+                        string statText = statChangeTextGenerator.BuildStatText(statChanges);
+                        rewardOption.SetDescription(statText);
+                        break;
+                    default:
+                        Debug.LogError($"[{rewardOption.Data.name}] 잘못된 AbilityType 입니다.", rewardOption.Data);
+                        break;
+                }
+            }
+        }
     }
 
     private void ShowOptions(List<RewardOption> rewardOptions)

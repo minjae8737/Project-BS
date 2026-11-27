@@ -11,7 +11,6 @@ public struct ProjectileLevelBonus
     [SerializeField, Min(0)] private int quantity;
     [SerializeField, Min(0)] private int penetration;
     [SerializeField, Min(0)] private float sizeRate;
-    [SerializeField, TextArea] private string description;
 
     public float DamagePercent => damageRate;
     public float DamageRate
@@ -40,8 +39,6 @@ public struct ProjectileLevelBonus
     {
         get => sizeRate / 100f;
     }
-
-    public string Description => description;
 }
 
 [CreateAssetMenu(menuName = "Ability/Projectile")]
@@ -141,16 +138,6 @@ public class ProjectileSkillData : SkillData
                 levelBonus.Add(new ProjectileLevelBonus());
             }
         }
-    }
-
-    public override string GetLevelBonusDescription(int level)
-    {
-        int bonusIndex = level - 2;
-
-        if (level <= 1) return Description;
-        if (bonusIndex < 0 || bonusIndex >= LevelBonus.Count) return string.Empty;
-
-        return LevelBonus[bonusIndex].Description;
     }
 
     public bool TryCalculateSkillStats(int level, out ProjectileSkillStats skillStats)

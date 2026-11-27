@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class RewardOptionGenerator
 {
     [SerializeField] private AbilityCatalogData catalog;
-    [SerializeField] private StatChangeTextGenerator statChangeTextGenerator;
 
     private const int MaxOptionCount = 3;
     

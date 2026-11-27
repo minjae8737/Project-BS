@@ -14,30 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveData
   displayName: "\uACF5\uACA9\uB825"
   icon: {fileID: 0}
-  description: "\uACF5\uACA9\uB825 \uC99D\uAC00"
+  description: "\uC8FC\uB294 \uD53C\uD574\uB7C9\uC774 \uB298\uC5B4\uB0A9\uB2C8\uB2E4."
   levelBonus:
   - modifiers:
     - statType: 0
-      statModifierType: 1
       inputValue: 10
-    description: "\uACF5\uACA9\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 0
-      statModifierType: 1
       inputValue: 10
-    description: "\uACF5\uACA9\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 0
-      statModifierType: 1
       inputValue: 10
-    description: "\uACF5\uACA9\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 0
-      statModifierType: 1
       inputValue: 10
-    description: "\uACF5\uACA9\uB825 +10% \uC99D\uAC00"
   - modifiers:
     - statType: 0
-      statModifierType: 1
       inputValue: 10
-    description: "\uACF5\uACA9\uB825 +10% \uC99D\uAC00"
